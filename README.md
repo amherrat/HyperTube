@@ -1,6 +1,6 @@
 # hypertube
 
-> spa
+> HyperTube
 
 ## Build Setup
 
