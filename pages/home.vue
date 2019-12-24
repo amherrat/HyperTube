@@ -34,26 +34,65 @@
 <script>
 import axios from 'axios';
 
+
+
 export default {
-  data() {
+  data : () =>  {
     return {
       films: [],
-      page: 0,
+      page: 1,
       limit: 50
     };
   },
   mounted() {
-    axios.get(`https://yts.lt/api/v2/list_movies.json?sort=seeds&limit=${this.limit}`)
+    axios.get(`https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${this.page}`)
          .then(res => {
            let data = res.data;
            if (data.status === "ok")
            {
-             this.page = data.data.page_number;
              this.films = data.data.movies;
-             console.log(data);
+             this.page = this.page + 1;
            }
+           this.scroll(this);
          })
          .catch(err => {});
+  },
+ 
+  destroyed () {
+    window.removeEventListener('scroll', this.scroll);
+  },
+  methods : {
+    
+    scroll (state) {
+        window.addEventListener(
+      'scroll',
+      function()
+      {
+          var scrollTop = document.documentElement.scrollTop ||
+              document.body.scrollTop;
+          var offsetHeight = document.body.offsetHeight;
+          var clientHeight = document.documentElement.clientHeight;
+          const ele = document.querySelector('body');
+          if (ele.scrollHeight == scrollTop + clientHeight)
+          {
+                window.outerHeight = window.outerHeight + window.outerHeight;
+                axios.get(`https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${state.page}`)
+                .then(res => {
+                  let data = res.data;
+                  if (data.status === "ok")
+                  {
+                    state.films = [...state.films, ...data.data.movies];
+                    state.page = state.page + 1;
+                  }
+                })
+                .catch(err => {console.log(err);});
+          }
+      },
+      false
+    );
+
+     
+    }
   },
   components: {
   }
@@ -61,7 +100,7 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (max-width: 900px){
+@media only screen and (max-width: 900px){
   .details{
     font-size: 2px !important;
   }
