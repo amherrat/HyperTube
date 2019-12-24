@@ -5,17 +5,17 @@
         <div class="img" ref="back" :style="selectedImg"></div>
       </div>
       <div class="cover">
-        <img class="fade" :src="moviedata.large_cover_image" />
+        <img class="fadein" :src="moviedata.large_cover_image" />
       </div>
       <div class="content">
         <div class="title">{{moviedata.title}}</div>
         <div class="info">
-          <div class="shadow genre">{{genre}}</div>
-          <div class="shadow year">
+          <div class="_shadow genre">{{genre}}</div>
+          <div class="_shadow year">
             <i class="icon icon-calendar"></i>
             {{moviedata.year}}
           </div>
-          <div class="shadow length">
+          <div class="_shadow length">
             <i class="icon icon-clock"></i>
             {{moviedata.runtime}} min
           </div>
@@ -26,12 +26,12 @@
               :value="moviedata.rating"
               :disabled="true"
             >
-              <span class="shadow">{{ moviedata.rating }}</span>
+              <span class="_shadow">{{ moviedata.rating }}</span>
             </at-rate>
           </div>
           <div>
             <a target="_blank" :href="'https://www.imdb.com/title/'+moviedata.imdb_code+'/reviews'">
-              <at-button class="shadow" size="smaller" hollow>
+              <at-button class="_shadow" size="smaller" hollow>
                 <span class="readbutton">Read Reviews</span>
               </at-button>
             </a>
@@ -60,7 +60,7 @@
             :pivot-y="0.5"
             :width="640"
             :height="360"
-            name="hello-world"
+            name="yt_trailer"
           >
             <iframe
               width="640"
@@ -68,7 +68,6 @@
               frameborder="0"
               :src="'https://www.youtube.com/embed/'+moviedata.yt_trailer_code+'?rel=0&amp;wmode=transparent&amp;border=0&amp;autoplay=1&amp;iv_load_policy=3'"
               name="1576779635664"
-              class="cboxIframe"
               allow="autoplay"
               allowfullscreen="true"
             ></iframe>
@@ -76,7 +75,7 @@
         </div>
         <div v-if="moviedata.cast" class="cast">
           <div class="title_Cast">Cast</div>
-          <div class="shadow profile" v-for="(cast, i) in moviedata.cast" :key="i">
+          <div class="_shadow profile" v-for="(cast, i) in moviedata.cast" :key="i">
             <a :href="'https://www.imdb.com/name/nm'+cast.imdb_code" target="_blank">
               <img
                 :src="cast.url_small_image ? cast.url_small_image : '/default-profile.png'"
@@ -155,7 +154,7 @@ export default {
       } else this.$Message.error("please select first!");
     },
     opentrailer() {
-      this.$modal.show("hello-world");
+      this.$modal.show("yt_trailer");
     },
     getMovieData(id) {
       this.$axios
@@ -203,7 +202,12 @@ export default {
   top: -65px;
   left: 0;
 }
-.fade {
+.yt_video {
+  width: 640px;
+  height: 360px;
+}
+.fadein {
+  opacity: 0.5;
   mask-image: -webkit-gradient(
     linear,
     right top,
@@ -236,6 +240,7 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 .content {
   position: absolute;
@@ -277,7 +282,7 @@ export default {
   font-size: 1rem;
   font-weight: 300;
 }
-.shadow {
+._shadow {
   text-shadow: 0 0 5px #abd6dfff, 0 0 #abd6dfff, 0 0 #abd6dfff, 0 0 #abd6dfff;
 }
 
@@ -385,7 +390,7 @@ export default {
 }
 
 .watchbutton {
-  margin: 2%;
+  margin: 25px;
   opacity: 0.9;
 }
 
@@ -413,16 +418,19 @@ export default {
 @media (max-width: 600px) {
   .cover img {
     position: fixed;
-    max-width: 400px;
+    max-width: 450px;
     max-height: 750px;
   }
   .content {
     left: 5%;
+    padding-bottom: 50%;
   }
   .title {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
-
+  .fademodal {
+    display: none;
+  }
   .trailer {
     width: 320px;
     height: 200px;
@@ -431,10 +439,41 @@ export default {
     width: 320px;
     height: 200px;
   }
+  .short_synopsis {
+    margin-top: 25px;
+    width: 90%;
+  }
 }
 @media (max-width: 404px) {
-  .footer div {
-    margin-top: 3px;
+  .selecttorrent {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  .watchbutton{
+    margin-top: 20px;
+  }
+}
+@media (max-width: 350px) {
+  .title {
+    font-size: 2.3rem;
+  }
+  .content{
+    margin-top: 20px;
+  }
+  .selecttorrent {
+    padding-top: 20px;
+    padding-bottom: 1px;
+  }
+  .watchbutton{
+    margin-top: 5px;
+  }
+  .trailer {
+    width: 261px;
+    height: 127px;
+  }
+  .ytvideo {
+    width: 261px;
+    height: 127px;
   }
 }
 </style>
