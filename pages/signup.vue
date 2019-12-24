@@ -1,46 +1,5 @@
 <template>
-  <!-- <div v-if="!confirm" class="columns is-centered">
-    <div class="is-half">
-      <form class="box" @submit.prevent="Signup">
-        <b-field label="Full Name" :type="Errors.fullname.err" :message="Errors.fullname.msg">
-          <b-input v-model="fullname" maxlength="30"></b-input>
-        </b-field>
-        <b-field :type="Errors.date.err" :message="Errors.date.msg" label="Birthdate">
-          <b-datepicker v-model="date" placeholder="Click to select..."></b-datepicker>
-        </b-field>
-        <b-field label="Username" :type="Errors.username.err" :message="Errors.username.msg">
-          <b-input v-model="username" maxlength="30" autocomplete="new-username"></b-input>
-        </b-field>
-        <b-field label="Email" :type="Errors.email.err" :message="Errors.email.msg">
-          <b-input type="email" v-model="email" maxlength="50" autocomplete="new-mail"></b-input>
-        </b-field>
-        <b-field label="Password" :type="Errors.password.err" :message="Errors.password.msg">
-          <b-input
-            type="password"
-            v-model="password"
-            maxlength="30"
-            autocomplete="new-password"
-            password-reveal
-          ></b-input>
-        </b-field>
-        <b-message v-if="err" type="is-danger">
-          YOU HAVE AN ERROR PLEASE TRY AGAIN!
-          <br />OR RELOAD PAGE!
-        </b-message>
-        <div class="level-right">
-          <button type="submit" class="button is-success">Submit</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div class="columns is-centered" v-else>
-    <div class="box has-text-success has-text-centered">
-      <p
-        class="has-text-weight-bold is-size-4"
-      >Please Click link on your email, to confirm your account!</p>
-    </div>
-  </div>-->
-  <div class="classic-form-page">
+<div class="classic-form-page">
     <mdb-mask class="d-flex gradient justify-content-center align-items-center">
       <mdb-container>
         <mdb-row>
@@ -153,9 +112,6 @@
                       />
                     </mdb-col>
                   </mdb-row>
-                  <p class="font-small blue-text d-flex justify-content-end mb-5">
-                    <a class="ml-1" @click="ForgetPassword(true)">Forget Password?</a>
-                  </p>
                   <div class="text-center mb-3">
                     <mdb-btn gradient="aqua" block type="submit">Sign up</mdb-btn>
                   </div>
@@ -170,12 +126,8 @@
 </template>
 
 <script>
-import FilePondDemo from "../components/FilePondDemo.vue";
 export default {
   name: "Signup",
-  components: {
-    FilePondDemo
-  },
   data() {
     return {
       image: "",
@@ -186,8 +138,6 @@ export default {
         mail: "",
         password: ""
       },
-      err: false,
-      confirm: false,
       validation: {
         login: {
           valid: false,
@@ -218,7 +168,7 @@ export default {
     };
   },
   mounted() {
-    //if (localStorage.token) this.$router.push({ path: "/dashboard" });
+    if (localStorage.token) this.$router.push({ path: "/home" });
   },
   methods: {
     validateForm() {
@@ -241,7 +191,7 @@ export default {
       this.isValidForm().then((res) => {
         this.$axios
           .post("/api/signup", {
-            login: this.customValues.login,
+            login: this.customValues.login.toLowerCase(),
             fname: this.customValues.fname,
             lname: this.customValues.lname,
             mail: this.customValues.mail,
@@ -283,7 +233,7 @@ export default {
           !String(this.customValues[key]).match(
             /^[a-zA-Z]+([_-]?[a-zA-Z0-9])*$/g
           ) ||
-          this.customValues[key].length > 30 ||
+          this.customValues[key].length > 15 ||
           this.customValues[key].length < 3
         ) {
           this.validation[key].valid = false;

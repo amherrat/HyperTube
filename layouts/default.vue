@@ -37,12 +37,11 @@ body, html {
   background-image: url('/hyperbg.jpg');
   /*background-color: black;*/
   /* Full height */
-  height: 100%;
-
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+min-height: 100%;
+background-repeat: no-repeat;
+background-attachment: fixed;
+background-position: center;
+background-size: cover;
 }
 .full{
   height: 90vh;

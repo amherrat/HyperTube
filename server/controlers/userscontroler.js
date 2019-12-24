@@ -38,7 +38,7 @@ function validate_signup(user) {
       //user_name check
       if (
         !String(user.login).match(/^[a-z]+([_-]?[a-z0-9])*$/g) ||
-        user.login.length > 30 ||
+        user.login.length > 15 ||
         user.login.length < 3
       )
         errors = ({error: "login",msg : "login is invalid"});
@@ -162,7 +162,7 @@ exports.Login = function(req, res) {
   var user = req.body;
   var errors = validate_login(user);
   if (Object.keys(errors).length != 0) {
-    return res.json({
+    return res.status(400).json({
       success: false,
       errors: errors
     });
@@ -178,7 +178,7 @@ exports.Login = function(req, res) {
         });
       },
       err => {
-        return res.json({
+        return res.status(200).json({
           success: false,
           errors: err
         });
@@ -191,7 +191,7 @@ exports.signup = function(req, res) {
   var new_user = new User(req.body);
   var errors = validate_signup(req.body);
   if (Object.keys(errors).length != 0)
-    return res.json({
+    return res.status(400).json({
       success: false,
       errors: errors
     });
@@ -199,14 +199,14 @@ exports.signup = function(req, res) {
     try {
       User.find({ login: new_user.login }, (err, result) => {
         if (result.length)
-          return res.json({
+          return res.status(200).json({
             success: false,
             errors: "login already exist"
           });
         else
           User.find({ mail: new_user.mail }, (err, result) => {
             if (result.length)
-              return res.json({
+              return res.status(200).json({
                 success: false,
                 errors: "mail already exist"
               });
@@ -226,7 +226,7 @@ exports.signup = function(req, res) {
                     '">Click Here</a><br>Or Open this link on your browser:<br>' +
                     link;
                   send_mail(new_user.mail, sbj, msg); // sending email to user
-                  return res.json({
+                  return res.status(201).json({
                     success: true,
                     signup: result
                   });
@@ -463,25 +463,35 @@ exports.changePassword = (req, res) => {
   }
 };
 
-exports.Addlastconnection = username => {
-  try {
-    Users.Addlastconnection(username, (err, res) => {
-      if (err) return;
-      return res;
-    });
-  } catch (err) {}
-};
-exports.Getlastconnection = async username => {
-  var last;
-  try {
-    await Users.Getlastconnection(username).then(
-      res => {
-        last = res[0].last_connection;
-      },
-      err => {
-        /*console.log(err)*/
+exports.userdata = (req, res) => {
+  var login = req.params.login.toLowerCase();
+  if (!login) {
+          return res.status(400).json({
+              success: false,
+              error: 'username undefined'
+          });
+      } else if (!String(login).match(/^[a-z]+([_-]?[a-z0-9])*$/g) || login.length > 50) {
+          return res.status(400).json({
+              success: false,
+              error: 'username is wrong'
+          });
       }
-    );
-  } catch (err) {}
-  return last;
+      try{
+         User.findOne({login : login}).then(
+           result => {
+            console.log(result);
+            if(result)
+              {
+                return res.status(200).json({
+                success: true,
+                data: { user: result}
+                });
+           }else
+            return res.status(200).json({
+            success: false,
+            error: 'user not found!'
+            });
+          }
+         )
+      }catch (err) {}
 };

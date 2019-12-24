@@ -2,8 +2,10 @@ const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
+const passport = require('passport')
 ip = require("ip");
-//const db = require('./db/db');
+app.set('view engine', 'ejs');
+app.use(passport.initialize());
 var bodyParser = require('body-parser')
 const cors = require('cors');
 global.appSecret = "Hyperwebappsecret";

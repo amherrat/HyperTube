@@ -8,6 +8,13 @@
 
 export default {
   components: {
+  },
+  mounted()
+  {
+    console.log("Mounted");
+  },
+  created(){
+    if (!localStorage.token) this.$router.push({ path: "/login" });
   }
 };
 </script>

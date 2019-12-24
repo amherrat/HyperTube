@@ -24,8 +24,9 @@ const schema = {
   token: { type: mongoose.SchemaTypes.String, required: true },
   profil: {
     type: mongoose.SchemaTypes.String,
-    default: "http://" + host + ":3000"
+    default: "http://" + host + ":3000/default-profile.png"
   },
+  googleId:{type: mongoose.SchemaTypes.String},
   verified: { type: Number, default: 0 }
 };
 const collectionName = "users";

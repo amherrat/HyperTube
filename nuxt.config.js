@@ -25,7 +25,7 @@ module.exports = {
   css: [
     'bootstrap-css-only/css/bootstrap.min.css',
     'mdbvue/lib/css/mdb.min.css',
-    { src: 'at-ui-style', lang: 'css' }
+    //{ src: 'at-ui-style', lang: 'css' }
   ],
 
   /*

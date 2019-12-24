@@ -9,7 +9,7 @@
             <h6
               class="mb-4"
             >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem repellendus quasi fuga nesciunt dolorum nulla magnam veniam sapiente, fugiat! Commodi sequi non animi ea dolor molestiae, quisquam iste, maiores. Nulla.</h6>
-             <nuxt-link to="/signup"><mdb-btn outline="white" color="white" >Register Now</mdb-btn> </nuxt-link>
+             <nuxt-link to="/signup"><mdb-btn outline="white" color="white" >Register Now</mdb-btn></nuxt-link>
           </div>
           <mdb-col md="6" xl="5" class="mb-4">
             <mdb-card id="classic-card">
@@ -38,26 +38,27 @@
                     :invalidFeedback="validation.password.invalidFeedback"
                   />
                   <p class="font-small blue-text d-flex justify-content-end mb-5">
-                    <a class="ml-1" @click="ForgetPassword(true)">Forget Password?</a>
+                    <nuxt-link to="forgotpassword">Forget Password?</nuxt-link>
+                    <!-- <a class="ml-1" @click="ForgetPassword()">Forget Password?</a> -->
                   </p>
                   <div class="text-center mb-3">
                     <mdb-btn gradient="aqua" block type="submit">Sign In</mdb-btn>
                   </div>
+                </form>
                   <p
                     class="font-small dark-white-text text-right d-flex justify-content-center mb-3 pt-2"
                   >or Sign in with:</p>
                   <mdb-row center class="my-3">
-                    <mdb-btn color="light-blue" class="mr-md-3 z-depth-1a">
-                      <font-awesome-icon :icon="['fab', 'google']" size="3x" />
-                    </mdb-btn>
-                    <mdb-btn color="black" class="mr-md-3 z-depth-1a">
+                     <a href="api/auth/google"><mdb-btn color="light-blue" class="mr-md-3 z-depth-1a">
+                     <font-awesome-icon :icon="['fab', 'google']" size="3x" />
+                    </mdb-btn></a>
+                    <mdb-btn color="black" class="mr-md-3 z-depth-1a" @click="GoogleLogin()">
                       <img src="/42logo.svg" alt="Logo" height="42px" />
                     </mdb-btn>
                     <mdb-btn color="dark-green" class="mr-md-3 z-depth-1a">
                       <font-awesome-icon :icon="['fab', 'spotify']" size="3x" />
                     </mdb-btn>
                   </mdb-row>
-                </form>
               </mdb-card-body>
             </mdb-card>
           </mdb-col>
@@ -94,8 +95,46 @@ export default {
       }
     };
   },
-  mounted() {},
+  mounted() {
+        if (localStorage.token) this.$router.push({ path: "/home" });
+  },
   methods: {
+    GoogleLogin()
+    {
+      this.$axios
+            .get("api/auth/google")
+             .then(res => {
+               console.log(res);
+               
+            //   if (!res.data.success) {
+            //     console.log(res.data.errors);
+            //     if(res.data.errors)
+            //     {
+            //     if (res.data.errors.error === "login") {
+            //           this.validation.login.valid = false;
+            //           this.validation.login.invalidFeedback = res.data.errors.msg;
+            //           //this.validation.login.validated = true;
+            //     } else if (res.data.errors.error === "password") {
+            //           this.validation.password.valid = false;
+            //           this.validation.password.invalidFeedback = res.data.errors.msg;
+            //          // this.validation.login.validated = true;
+            //     } 
+            //     else if (res.data.errors.error === "mail") {
+            //           this.validation.login.valid = false;
+            //           this.validation.login.invalidFeedback = res.data.errors.msg;
+            //           //this.validation.login.validated = true;
+            //     }
+            //     }
+            //   } else {
+            //     // success
+            //     localStorage.setItem("token", res.data.token);
+            //     console.log("DONE")
+            //   }
+            })
+            .catch(err => console.log(err));
+      console.log("HNA");
+
+    },
     Login() {
       //this.validateForm();
       //console.log(this.customValues.login, this.customValues.password);
@@ -136,7 +175,7 @@ export default {
         }
       ).catch(err=> {
       })
-        console.log("DONE WALO");
+        console.log("tried to log");
       //}
     },
      isValidForm() {
