@@ -22,14 +22,17 @@ module.exports = {
   /*
   ** Global CSS
   */
- css: [
-  'bootstrap-css-only/css/bootstrap.min.css',
-  'mdbvue/lib/css/mdb.min.css'],
+  css: [
+    'bootstrap-css-only/css/bootstrap.min.css',
+    'mdbvue/lib/css/mdb.min.css',
+    { src: 'at-ui-style', lang: 'css' }
+  ],
+
   /*
   ** Plugins to load before mounting the App
   */
- plugins: ['@/plugins/mdb-vue',
- '@/plugins/icons-vue'],
+  plugins: ['@/plugins/mdb-vue',
+    '@/plugins/icons-vue', '~/plugins/xgplayer', '~/plugins/AtUI', '~/plugins/vmodal'],
   /*
   ** Nuxt.js dev-modules
   */
@@ -42,9 +45,9 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: ['nuxt-buefy',
-  '@nuxtjs/axios'
+    '@nuxtjs/axios'
   ],
-  buefy: {css:false },
+  buefy: { css: false },
   /*
   ** Build configuration
   */
@@ -52,10 +55,10 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
-     extend(config, ctx) {}
-   //,
-  //  transpile: [
-  //    'mdbvue/lib/components'
-  //  ]
+    extend(config, ctx) { }
+    //,
+    //  transpile: [
+    //    'mdbvue/lib/components'
+    //  ]
   }
 }

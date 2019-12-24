@@ -36,6 +36,9 @@ async function start () {
   // API routes
   app.use('/api', require('./router'));
   
+  // Torrent stream
+  app.use('/torrent/:hash', require('./TorrentStream'));
+
   // Give nuxt middleware to express
   app.use(nuxt.render)
   
