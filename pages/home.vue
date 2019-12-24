@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid" id="padd">
     <div class=" clssss row" id="all">
-      <div v-for="film in this.films" v-bind:key="film.id" class=" col-lg-2 col-md-2 col-sm-3 col-4"  style="padding-left: 0px; padding-right: 0;">
+      <div v-for="film in this.films" v-bind:key="film.id" class=" col-lg-2 col-md-3 col-sm-4 col-4"  style="padding-left: 0px; padding-right: 0;">
          <div class="card">
             <div class="image">
               <img :src="film.medium_cover_image" />
