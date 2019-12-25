@@ -6,6 +6,7 @@ import scrollBehavior from './router.scrollBehavior.js'
 const _c8958564 = () => interopDefault(import('../pages/forgotpassword.vue' /* webpackChunkName: "pages/forgotpassword" */))
 const _08b044ef = () => interopDefault(import('../pages/home.vue' /* webpackChunkName: "pages/home" */))
 const _2b3d3f89 = () => interopDefault(import('../pages/login.vue' /* webpackChunkName: "pages/login" */))
+const _ed088bcc = () => interopDefault(import('../pages/logout.vue' /* webpackChunkName: "pages/logout" */))
 const _0a580a6f = () => interopDefault(import('../pages/reset.vue' /* webpackChunkName: "pages/reset" */))
 const _ee76c2b0 = () => interopDefault(import('../pages/signup.vue' /* webpackChunkName: "pages/signup" */))
 const _dab11228 = () => interopDefault(import('../pages/signupd.vue' /* webpackChunkName: "pages/signupd" */))
@@ -36,6 +37,10 @@ export const routerOptions = {
     path: "/login",
     component: _2b3d3f89,
     name: "login"
+  }, {
+    path: "/logout",
+    component: _ed088bcc,
+    name: "logout"
   }, {
     path: "/reset",
     component: _0a580a6f,

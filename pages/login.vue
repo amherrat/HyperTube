@@ -52,9 +52,9 @@
                      <a href="api/auth/google"><mdb-btn color="light-blue" class="mr-md-3 z-depth-1a">
                      <font-awesome-icon :icon="['fab', 'google']" size="3x" />
                     </mdb-btn></a>
-                    <mdb-btn color="black" class="mr-md-3 z-depth-1a" @click="GoogleLogin()">
+                    <a href="api/auth/42"> <mdb-btn color="black" class="mr-md-3 z-depth-1a" @click="GoogleLogin()">
                       <img src="/42logo.svg" alt="Logo" height="42px" />
-                    </mdb-btn>
+                    </mdb-btn></a>
                     <mdb-btn color="dark-green" class="mr-md-3 z-depth-1a">
                       <font-awesome-icon :icon="['fab', 'spotify']" size="3x" />
                     </mdb-btn>

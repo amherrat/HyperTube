@@ -25,8 +25,8 @@
     </mdb-container>-->
     <div class="footer-copyright text-center py-3" style="opacity: 0.8">
       <mdb-container fluid>
-        &copy; 2018 Copyright:
-        <a href="/">Hyper Tube</a>
+        &copy; 2020 Copyright:
+        <a href="https://github.com/cmarouan">Hyp</a><a href="https://github.com/amherrat">erT</a><a href="https://github.com/adouz">ube</a>
       </mdb-container>
     </div>
   </mdb-footer>

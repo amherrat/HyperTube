@@ -45,6 +45,7 @@ export default {
     };
   },
   mounted() {
+    if (!localStorage.token) this.$router.push({ path: "/login" });
     axios.get(`https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${this.page}`)
          .then(res => {
            let data = res.data;

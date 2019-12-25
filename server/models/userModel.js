@@ -26,6 +26,7 @@ const schema = {
     type: mongoose.SchemaTypes.String,
     default: "http://" + host + ":3000/default-profile.png"
   },
+  FortytowId:{type: mongoose.SchemaTypes.String},
   googleId:{type: mongoose.SchemaTypes.String},
   verified: { type: Number, default: 0 }
 };
