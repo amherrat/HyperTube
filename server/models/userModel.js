@@ -14,7 +14,7 @@ const schema = {
     //,select: false
   },
   fname: { type: mongoose.SchemaTypes.String, required: true },
-  lname: { type: mongoose.SchemaTypes.String, required: true },
+  lname: { type: mongoose.SchemaTypes.String, /*required: true */},
   mail: {
     type: mongoose.SchemaTypes.String,
     required: true,
@@ -28,6 +28,7 @@ const schema = {
   },
   FortytowId:{type: mongoose.SchemaTypes.String},
   googleId:{type: mongoose.SchemaTypes.String},
+  spotifyId:{type: mongoose.SchemaTypes.String},
   verified: { type: Number, default: 0 }
 };
 const collectionName = "users";

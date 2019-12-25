@@ -42,6 +42,7 @@
     "passport": "^0.4.1",
     "passport-42": "^1.2.6",
     "passport-google-oauth20": "^2.0.0",
+    "passport-spotify": "^1.1.0",
     "torrent-stream": "^1.2.0",
     "vue-core-image-upload": "^2.4.11",
     "vue-filepond": "^5.1.3",

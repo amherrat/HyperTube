@@ -31,8 +31,8 @@ passport.use(
         fname: profile.name.givenName,
         lname: profile.name.familyName ? profile.name.familyName : "none",
         mail: profile.emails[0].value,
-        password: profile.id,
-        profil: profile.photos[0].value,
+        password: profile.id+"tkharbi9a",
+        profil: profile.photos[0] ? profile.photos[0].value : "http://" + host + ":3000/default-profile.png",
         googleId: profile.id,
         verified: profile.emails[0].verified
       });
@@ -89,6 +89,7 @@ passport.use(
                   })
                   .catch(err => {
                     console.log("PRBLM >>>", err);
+                    return done("something went wrong", null);
                   });
               }
             });
