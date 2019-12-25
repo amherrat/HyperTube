@@ -25,14 +25,14 @@ module.exports = {
   css: [
     'bootstrap-css-only/css/bootstrap.min.css',
     'mdbvue/lib/css/mdb.min.css',
-    //{ src: 'at-ui-style', lang: 'css' }
+    // { src: 'at-ui-style', lang: 'css' }
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: ['@/plugins/mdb-vue',
-    '@/plugins/icons-vue', '~/plugins/xgplayer', '~/plugins/AtUI', '~/plugins/vmodal'],
+    '@/plugins/icons-vue', '~/plugins/xgplayer', '~/plugins/vmodal'],
   /*
   ** Nuxt.js dev-modules
   */

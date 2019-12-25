@@ -19,35 +19,28 @@
             <i class="icon icon-clock"></i>
             {{moviedata.runtime}} min
           </div>
-          <div class="rate">
-            <at-rate
-              :allow-half="true"
-              :show-text="true"
-              :value="moviedata.rating"
-              :disabled="true"
-            >
-              <span class="_shadow">{{ moviedata.rating }}</span>
-            </at-rate>
-          </div>
           <div>
             <a target="_blank" :href="'https://www.imdb.com/title/'+moviedata.imdb_code+'/reviews'">
-              <at-button class="_shadow" size="smaller" hollow>
+              <button type="button" class="read_reviews _shadow">
                 <span class="readbutton">Read Reviews</span>
-              </at-button>
+              </button>
             </a>
+          </div>
+          <div class="_rate">
+            <star-rating
+              :inline="true"
+              :star-size="20"
+              :read-only="true"
+              :glow="2"
+              :rating="moviedata.rating/2"
+              :show-rating="false"
+              :increment="0.5"
+            ></star-rating>
+            <span class="_shadow">{{moviedata.rating}}</span>
           </div>
         </div>
         <div class="about">
           <div class="short_synopsis">{{moviedata.description_full}}</div>
-          <!-- <iframe
-          width="520"
-          height="315"
-          frameborder="0"
-          src="https://www.youtube.com/embed/t433PEQGErc?rel=0&amp;wmode=transparent&amp;border=0&amp;autoplay=1&amp;iv_load_policy=3"
-          name="1576779635664"
-          class="cboxIframe"
-          allowfullscreen="true"
-          ></iframe>-->
           <div v-if="moviedata.yt_trailer_code" class="trailer" @click="opentrailer">
             <div class="ytvideo" :style="'background-image:url('+images[1]+')'">
               <img src="/play2.png" class="playbutton" />
@@ -91,31 +84,61 @@
       </div>
       <div class="footer">
         <div>
-          <at-select class="selecttorrent" v-model="selectedTorrent" placement="top">
-            <at-option
+          <mdb-btn-group>
+            <mdb-btn
               v-for="(torrent, x) in torrents"
+              color="dark"
               :key="x"
-              :value="x"
-              :label="torrent.quality"
+              @click="TorrentSelect(x)"
+              size="sm"
+              :active="selectedTorrentIndex === x ? true : false"
             >
               <span>{{torrent.quality}}</span>
               <span v-if="torrent.seeds > 500" class="peers peers-good">
+                <font-awesome-icon :icon="['fas', 'wifi']" size="1x" />
                 <i class="icon icon-battery-charging"></i>
                 {{torrent.peers+'/'+torrent.seeds}}
               </span>
               <span v-if="torrent.seeds > 150 && torrent.seeds < 500" class="peers peers-mid">
-                <i class="icon icon-battery-charging"></i>
+                <font-awesome-icon :icon="['fas', 'wifi']" size="1x" />
                 {{torrent.peers+'/'+torrent.seeds}}
               </span>
               <span v-if="torrent.seeds < 150" class="peers peers-bad">
-                <i class="icon icon-battery-charging"></i>
+                <font-awesome-icon :icon="['fas', 'wifi']" size="1x" />
                 {{torrent.peers+'/'+torrent.seeds}}
               </span>
-            </at-option>
-          </at-select>
+            </mdb-btn>
+          </mdb-btn-group>
+          <!-- <mdb-dropdown dropup>
+            <mdb-dropdown-toggle slot="toggle" gradient="blue">{{selectedTorrent}}</mdb-dropdown-toggle>
+            <mdb-dropdown-menu>
+              <mdb-dropdown-item
+                v-for="(torrent, x) in torrents"
+                :key="x"
+                @click="TorrentSelect(x)"
+              >
+                <span>{{torrent.quality}}</span>
+                <span v-if="torrent.seeds > 500" class="peers peers-good">
+                  <font-awesome-icon :icon="['fas', 'wifi']" size="1x" />
+                  <i class="icon icon-battery-charging"></i>
+                  {{torrent.peers+'/'+torrent.seeds}}
+                </span>
+                <span v-if="torrent.seeds > 150 && torrent.seeds < 500" class="peers peers-mid">
+                  <font-awesome-icon :icon="['fas', 'wifi']" size="1x" />
+                  {{torrent.peers+'/'+torrent.seeds}}
+                </span>
+                <span v-if="torrent.seeds < 150" class="peers peers-bad">
+                  <font-awesome-icon :icon="['fas', 'wifi']" size="1x" />
+                  {{torrent.peers+'/'+torrent.seeds}}
+                </span>
+              </mdb-dropdown-item>
+            </mdb-dropdown-menu>
+          </mdb-dropdown>-->
         </div>
         <div class="watchbutton">
-          <at-button icon="icon-play-circle" size="large" @click="gowatch">WATCH NOW</at-button>
+          <mdb-btn :disabled="selectedTorrent ? false : true" gradient="blue" @click="gowatch">
+            <font-awesome-icon :icon="['fas', 'play']" size="1x" />&nbsp;&nbsp;WATCH NOW
+          </mdb-btn>
         </div>
       </div>
     </div>
@@ -123,10 +146,15 @@
 </template>
 
 <script>
+import StarRating from "vue-star-rating";
 export default {
+  components: {
+    StarRating
+  },
   data() {
     return {
       selectedTorrent: null,
+      selectedTorrentIndex: null,
       value1: 4.1,
       images: [],
       selectedImg: "",
@@ -143,15 +171,19 @@ export default {
     this.getMovieData(this.$route.params.id);
   },
   methods: {
+    TorrentSelect(x) {
+      this.selectedTorrent = this.torrents[x].quality;
+      this.selectedTorrentIndex = x;
+    },
     gowatch() {
-      if (this.selectedTorrent !== null) {
-        if (this.torrents[this.selectedTorrent]) {
+      if (this.selectedTorrentIndex !== null) {
+        if (this.torrents[this.selectedTorrentIndex]) {
           console.log("redirect to:");
           this.$router.push(
-            "/video/" + this.torrents[this.selectedTorrent].hash
+            "/video/" + this.torrents[this.selectedTorrentIndex].hash
           );
-        } else this.$Message.error("Error!");
-      } else this.$Message.error("please select first!");
+        }
+      }
     },
     opentrailer() {
       this.$modal.show("yt_trailer");
@@ -194,8 +226,22 @@ export default {
   }
 };
 </script>
-
 <style scoped>
+.read_reviews {
+  display: inline-block;
+  outline: 0;
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
+  border: 1px solid #c5d9e8;
+  border-radius: 4px;
+  user-select: none;
+  cursor: pointer;
+  font-size: 10px;
+  padding: 2px 10px;
+  background: none;
+  color: #3f536e;
+}
 .cover img {
   position: absolute;
   height: calc(100% + 65px);
@@ -273,13 +319,14 @@ export default {
 
 .info {
   padding: 10px 0 35px;
+  vertical-align: middle;
 }
 
 .info div {
   float: left;
   margin-right: 20px;
   color: white;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 300;
 }
 ._shadow {
@@ -369,7 +416,7 @@ export default {
 .footer {
   position: absolute;
   background: rgba(0, 0, 0, 0.7);
-  height: 100px;
+  height: 150px;
   width: 100%;
   bottom: 0;
   left: 0;
@@ -390,7 +437,7 @@ export default {
 }
 
 .watchbutton {
-  margin: 25px;
+  margin-top: 20px;
   opacity: 0.9;
 }
 
@@ -443,29 +490,35 @@ export default {
     margin-top: 25px;
     width: 90%;
   }
+  .watchbutton {
+    margin-top: 0;
+  }
+  .footer {
+    height: 165px;
+  }
 }
 @media (max-width: 404px) {
   .selecttorrent {
     padding-top: 20px;
-    padding-bottom: 20px;
+    padding-bottom: 0px;
   }
-  .watchbutton{
-    margin-top: 20px;
+  .watchbutton {
+    margin-top: 0;
   }
 }
 @media (max-width: 350px) {
   .title {
     font-size: 2.3rem;
   }
-  .content{
+  .content {
     margin-top: 20px;
   }
   .selecttorrent {
     padding-top: 20px;
-    padding-bottom: 1px;
+    padding-bottom: 0;
   }
-  .watchbutton{
-    margin-top: 5px;
+  .watchbutton {
+    margin-top: 0;
   }
   .trailer {
     width: 261px;

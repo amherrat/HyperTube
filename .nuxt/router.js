@@ -3,18 +3,18 @@ import Router from 'vue-router'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-const _c8958564 = () => interopDefault(import('../pages/forgotpassword.vue' /* webpackChunkName: "pages/forgotpassword" */))
-const _08b044ef = () => interopDefault(import('../pages/home.vue' /* webpackChunkName: "pages/home" */))
-const _2b3d3f89 = () => interopDefault(import('../pages/login.vue' /* webpackChunkName: "pages/login" */))
-const _ed088bcc = () => interopDefault(import('../pages/logout.vue' /* webpackChunkName: "pages/logout" */))
-const _0a580a6f = () => interopDefault(import('../pages/reset.vue' /* webpackChunkName: "pages/reset" */))
-const _ee76c2b0 = () => interopDefault(import('../pages/signup.vue' /* webpackChunkName: "pages/signup" */))
-const _dab11228 = () => interopDefault(import('../pages/signupd.vue' /* webpackChunkName: "pages/signupd" */))
-const _4f4a7850 = () => interopDefault(import('../pages/trash.vue' /* webpackChunkName: "pages/trash" */))
-const _69a31d89 = () => interopDefault(import('../pages/verify.vue' /* webpackChunkName: "pages/verify" */))
-const _6f5b8d0a = () => interopDefault(import('../pages/movie/_id.vue' /* webpackChunkName: "pages/movie/_id" */))
-const _3564fd79 = () => interopDefault(import('../pages/video/_hash.vue' /* webpackChunkName: "pages/video/_hash" */))
-const _61959c72 = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
+const _16c288ea = () => interopDefault(import('../pages/forgotpassword.vue' /* webpackChunkName: "pages/forgotpassword" */))
+const _0cc3b8ea = () => interopDefault(import('../pages/home.vue' /* webpackChunkName: "pages/home" */))
+const _580b346d = () => interopDefault(import('../pages/login.vue' /* webpackChunkName: "pages/login" */))
+const _13273c94 = () => interopDefault(import('../pages/logout.vue' /* webpackChunkName: "pages/logout" */))
+const _3725ff53 = () => interopDefault(import('../pages/reset.vue' /* webpackChunkName: "pages/reset" */))
+const _14957378 = () => interopDefault(import('../pages/signup.vue' /* webpackChunkName: "pages/signup" */))
+const _78687a60 = () => interopDefault(import('../pages/signupd.vue' /* webpackChunkName: "pages/signupd" */))
+const _0528b8bc = () => interopDefault(import('../pages/trash.vue' /* webpackChunkName: "pages/trash" */))
+const _52d875b6 = () => interopDefault(import('../pages/verify.vue' /* webpackChunkName: "pages/verify" */))
+const _41931c5f = () => interopDefault(import('../pages/movie/_id.vue' /* webpackChunkName: "pages/movie/_id" */))
+const _61f8b75d = () => interopDefault(import('../pages/video/_hash.vue' /* webpackChunkName: "pages/video/_hash" */))
+const _e338dd54 = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
 
 Vue.use(Router)
 
@@ -27,51 +27,51 @@ export const routerOptions = {
 
   routes: [{
     path: "/forgotpassword",
-    component: _c8958564,
+    component: _16c288ea,
     name: "forgotpassword"
   }, {
     path: "/home",
-    component: _08b044ef,
+    component: _0cc3b8ea,
     name: "home"
   }, {
     path: "/login",
-    component: _2b3d3f89,
+    component: _580b346d,
     name: "login"
   }, {
     path: "/logout",
-    component: _ed088bcc,
+    component: _13273c94,
     name: "logout"
   }, {
     path: "/reset",
-    component: _0a580a6f,
+    component: _3725ff53,
     name: "reset"
   }, {
     path: "/signup",
-    component: _ee76c2b0,
+    component: _14957378,
     name: "signup"
   }, {
     path: "/signupd",
-    component: _dab11228,
+    component: _78687a60,
     name: "signupd"
   }, {
     path: "/trash",
-    component: _4f4a7850,
+    component: _0528b8bc,
     name: "trash"
   }, {
     path: "/verify",
-    component: _69a31d89,
+    component: _52d875b6,
     name: "verify"
   }, {
     path: "/movie/:id?",
-    component: _6f5b8d0a,
+    component: _41931c5f,
     name: "movie-id"
   }, {
     path: "/video/:hash?",
-    component: _3564fd79,
+    component: _61f8b75d,
     name: "video-hash"
   }, {
     path: "/",
-    component: _61959c72,
+    component: _e338dd54,
     name: "index"
   }],
 

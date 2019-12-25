@@ -2,7 +2,7 @@
   <div class="bg">
     <Navbar v-if="pages1.indexOf($route.name) > -1"/>
     <LogedNavbar v-else-if="pages2.indexOf($route.name) > -1"/>
-    <br>
+    <!-- <br> -->
     <nuxt class="full"/>
     <Footer/>
   </div>
@@ -21,7 +21,7 @@ export default {
     return {
       err: false,
       pages1: ["login", "signup", "verify", "reset","index"],
-      pages2: ["home"]
+      pages2: ["home", "movie-id", "video-hash"]
     };
   }
 };
