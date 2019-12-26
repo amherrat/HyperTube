@@ -1,7 +1,9 @@
 <template>
   <div class="container-fluid" id="padd">
-    
-    <div class="row" id="searchEngine">
+    <div v-on:click="filterbar()" v-show="!this.filterbarshow">
+      <center><font-awesome-icon style="color: red;" :icon="['fas', 'angle-double-down']" size="2x"/></center>
+    </div>
+    <div class="row" id="searchEngine" v-show="this.filterbarshow">
         <div class="col-md-2"></div>
         <div class="col-md-8">
             <h1 style="text-align: center;">Search&Filter engine</h1>
@@ -121,6 +123,7 @@ export default {
     return {
       films: [],
       term: '',
+      filterbarshow: false,
       choosedQuality: 'All',
       choosedGenre: 'All',
       choosedRate: 0,
@@ -164,6 +167,9 @@ export default {
     window.removeEventListener('scroll', this.scroll);
   },
   methods : {
+    filterbar () {
+      this.filterbarshow = !this.filterbarshow;
+    },
     search () {
       this.filmsExist = 0;
       this.films = [];
@@ -174,7 +180,7 @@ export default {
   //query_term		String	0	Used for movie search, matching on: Movie Title/IMDb Code, Actor Name/IMDb Code, Director Name/IMDb Code
   //genre		String	All	Used to filter by a given genre (See http://www.imdb.com/genre/ for full list)
       let link;
-      if (this.choosedQuality === "All" && this.choosedRate === 0 && this.term === '' && this.choosedGenre === "All" )
+      if (this.choosedQuality === "All" && this.choosedRate === 0 && this.term === '' && this.choosedGenre === "All")
         link = `https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${this.page}`;
       else
       {
@@ -201,8 +207,10 @@ export default {
           this.page = 1;
         }
         this.filmsExist = 1;
+        this.filterbarshow = false;
       })
       .catch(err => {
+        this.filterbarshow = false;
         this.filmsExist = 1;
         console.log(err);
       });
