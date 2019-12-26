@@ -9,7 +9,7 @@
               <div class="form-row">
                 <div class="col-md-12">
                   <label for="searchTerm"><h3>Your term</h3></label>
-                  <input type="text" class="form-control" id="searchTerm" placeholder="Your term">
+                  <input type="text" class="form-control"  v-model="term" id="searchTerm" placeholder="Your term">
                 </div>
               </div>
               <br />
@@ -19,7 +19,7 @@
                   <div class="col-md-3">
                     <div class="form-group">
                       <label for="quality">Quality</label>
-                      <select id="quality" class="form-control">
+                      <select v-model="choosedQuality" id="quality" class="form-control">
                         <option selected>All</option>
                         <option v-for="(qua, index) in this.quality" v-bind:key="index">{{qua}}</option>
                       </select>
@@ -28,7 +28,7 @@
                   <div class="col-md-3">
                     <div class="form-group">
                       <label for="genre">Genre</label>
-                      <select id="genre" class="form-control">
+                      <select id="genre" v-model="choosedGenre" class="form-control">
                         <option v-for="(gen, index) in this.genre" v-bind:key="index">{{gen}}</option>
                       </select>
                     </div>
@@ -36,8 +36,8 @@
                   <div class="col-md-3">
                     <div class="form-group">
                       <label for="rating">Rating</label>
-                      <select id="rating" class="form-control">
-                        <option selected>All</option>
+                      <select id="rating" v-model="choosedRate" class="form-control">
+                        <option selected>0</option>
                         <option v-for="(rate, index) in this.rating" v-bind:key="index">{{rate}}</option>
                       </select>
                     </div>
@@ -77,8 +77,8 @@
       <div v-if="!this.filmsExist" style="margin-left: 58vh; margin-top: 8vh;" class="spinner-border text-danger" role="status">
         <span class="sr-only">Loading...</span>
       </div>
-      <div v-for="(film, index) in this.films" v-bind:key="index" class=" col-lg-2 col-md-3 col-sm-4 col-4"  style="padding-left: 0px; padding-right: 0;">
-         <div class="card">
+      <div v-for="(film, index) in this.films" v-bind:key="index" ref="comCard" id="comCard" class="col-lg-2 col-md-3 col-sm-4 col-4"  style="padding-left: 0px; padding-right: 0;">
+         <div class="card" ref="mycard" id="mycard">
             <div class="image">
               <img :src="film.medium_cover_image" />
             </div>
@@ -120,26 +120,41 @@ export default {
   data : () =>  {
     return {
       films: [],
-      quality: ["3D", "720px", "1080px"],
+      term: '',
+      choosedQuality: 'All',
+      choosedGenre: 'All',
+      choosedRate: 0,
+      quality: ["3D", "720p", "1080p"],
       genre: ["All", "Action", "Adventure", "Animation", "Biography", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "Film-Noir", "Game-Show", "History", "Horror", "Music", "Mystery", "News", "Reality-TV", "Romance", "Sci-Fi", "Sport", "Talk-Show", "Thriller", "War", "Western"],
-      rating: ["1+", "2+", "3+", "4+", "5+", "6+", "7+", "8+", "9+"],
+      rating: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
       page: 1,
       filmsExist: 0,
       limit: 50,
-      loadDone: 1
+      loadDone: 1,
+      activeScroll: 1
     };
   },
   mounted() {
     if (!localStorage.token) this.$router.push({ path: "/login" });
     axios.get(`https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${this.page}`)
          .then(res => {
+           
            let data = res.data;
            if (data.status === "ok")
            {
              this.films = data.data.movies;
+             console.log(this.films);
              this.filmsExist = 1;
              this.page = this.page + 1;
            }
+           
+          //  if (card.offsetHeight < compo.offsetHeight){
+          //     console.log("douuuuz");
+          //     card.style.height = '100%';
+          //   }
+          //   else{
+          //     console.log("weld nass");
+          //   }
            this.scroll(this);
          })
          .catch(err => {});
@@ -151,14 +166,23 @@ export default {
   methods : {
     search () {
       this.filmsExist = 0;
-      this.films = []
-      let term = "togo";
-      axios.get(`https://yts.lt/api/v2/list_movies.json?query_term=${term}`)
+      this.films = [];
+      this.page = 0;
+      console.log(this.choosedQuality, this.choosedRate, this.choosedGenre);
+
+      let link;
+      if (this.choosedQuality === "All" && this.choosedRate === 0 && this.term === 0 && this.choosedGenre === "All" )
+        link = `https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${this.page}`;
+      else
+        link = `https://yts.lt/api/v2/list_movies.json?query_term=${this.term}&quality=${this.choosedQuality}&minimum_rating=${this.choosedRate}&genre=${this.choosedGenre}`;
+      axios.get(link)
       .then(res => {
+          console.log(res.data);
         let data = res.data;
-        if (data.status === "ok")
+        if (data.status === "ok" && data.data.movies)
         {
-          this.films = [...this.films, ...data.data.movies];
+          this.activeScroll = 0;
+          this.films = data.data.movies;
           this.page = 1;
         }
         this.filmsExist = 1;
@@ -176,8 +200,9 @@ export default {
           var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
           var clientHeight = document.documentElement.clientHeight;
           const ele = document.querySelector('body');
-          if (ele.scrollHeight <= scrollTop + clientHeight)
+          if (ele.scrollHeight <= scrollTop + clientHeight && state.activeScroll === 1)
           {
+            state.page = state.page + 1;
             state.loadDone = 0;
             window.outerHeight = window.outerHeight + window.outerHeight;
             axios.get(`https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${state.page}`)
@@ -186,7 +211,6 @@ export default {
               if (data.status === "ok")
               {
                 state.films = [...state.films, ...data.data.movies];
-                state.page = state.page + 1;
               }
               state.loadDone = 1;
             })
@@ -208,11 +232,7 @@ export default {
 </script>
 
 <style scoped>
-@media only screen and (max-width: 900px){
-  .details{
-    font-size: 2px !important;
-  }
-}
+
 .clssss{
   padding-bottom: 150px;
   margin-bottom: 100px;
