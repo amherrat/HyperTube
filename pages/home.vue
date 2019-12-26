@@ -169,12 +169,16 @@ export default {
       this.films = [];
       this.page = 0;
       console.log(this.choosedQuality, this.choosedRate, this.choosedGenre);
-
+  //quality		String (720p, 1080p, 3D)	All	Used to filter by a given quality
+  //minimum_rating		Integer between 0 - 9 (inclusive)	0	Used to filter movie by a given minimum IMDb rating
+  //query_term		String	0	Used for movie search, matching on: Movie Title/IMDb Code, Actor Name/IMDb Code, Director Name/IMDb Code
+  //genre		String	All	Used to filter by a given genre (See http://www.imdb.com/genre/ for full list)
       let link;
-      if (this.choosedQuality === "All" && this.choosedRate === 0 && this.term === 0 && this.choosedGenre === "All" )
+      if (this.choosedQuality === "All" && this.choosedRate === 0 && this.term === '' && this.choosedGenre === "All" )
         link = `https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${this.page}`;
       else
         link = `https://yts.lt/api/v2/list_movies.json?query_term=${this.term}&quality=${this.choosedQuality}&minimum_rating=${this.choosedRate}&genre=${this.choosedGenre}`;
+      console.log(link);
       axios.get(link)
       .then(res => {
           console.log(res.data);
