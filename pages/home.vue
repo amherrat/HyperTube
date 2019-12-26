@@ -177,7 +177,18 @@ export default {
       if (this.choosedQuality === "All" && this.choosedRate === 0 && this.term === '' && this.choosedGenre === "All" )
         link = `https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${this.page}`;
       else
+      {
+        this.activeScroll = 0;
+        if ( this.choosedGenre === "All" )
+          this.choosedGenre = 0;
+        if (this.choosedQuality === "All")
+          this.choosedQuality = 0;
         link = `https://yts.lt/api/v2/list_movies.json?query_term=${this.term}&quality=${this.choosedQuality}&minimum_rating=${this.choosedRate}&genre=${this.choosedGenre}`;
+        if (this.choosedGenre === 0)
+          this.choosedGenre = "All";
+        if (this.choosedQuality === 0)
+          this.choosedQuality = "All";
+      }
       console.log(link);
       axios.get(link)
       .then(res => {
@@ -185,7 +196,7 @@ export default {
         let data = res.data;
         if (data.status === "ok" && data.data.movies)
         {
-          this.activeScroll = 0;
+          
           this.films = data.data.movies;
           this.page = 1;
         }
