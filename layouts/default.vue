@@ -30,19 +30,13 @@ export default {
 <style>
 body, html {
   height: 100%;
+  background-color: black;
 }
 
 .bg {
   /* The image used */
-  background-image: url('/hyperbg.jpg');
-  /* Full height */
-  min-height: 100vh;
-  background-attachment: scroll;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  overflow-x: hidden;
-  overflow-y: scroll;
+
+
 }
 .full{
   height: 90vh;

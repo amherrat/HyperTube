@@ -1,7 +1,83 @@
 <template>
   <div class="container-fluid" id="padd">
-    <div class=" clssss row" id="all">
-      <div v-for="film in this.films" v-bind:key="film.id" class=" col-lg-2 col-md-3 col-sm-4 col-4"  style="padding-left: 0px; padding-right: 0;">
+    
+    <div class="row" id="searchEngine">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <h1 style="text-align: center;">Search&Filter engine</h1>
+            <form>
+              <div class="form-row">
+                <div class="col-md-12">
+                  <label for="searchTerm"><h3>Your term</h3></label>
+                  <input type="text" class="form-control" id="searchTerm" placeholder="Your term">
+                </div>
+              </div>
+              <br />
+              
+              <div class="class-row">
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="quality">Quality</label>
+                      <select id="quality" class="form-control">
+                        <option selected>All</option>
+                        <option v-for="(qua, index) in this.quality" v-bind:key="index">{{qua}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="genre">Genre</label>
+                      <select id="genre" class="form-control">
+                        <option v-for="(gen, index) in this.genre" v-bind:key="index">{{gen}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="rating">Rating</label>
+                      <select id="rating" class="form-control">
+                        <option selected>All</option>
+                        <option v-for="(rate, index) in this.rating" v-bind:key="index">{{rate}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="order">Order</label>
+                      <select id="order" class="form-control">
+                        <option selected>None</option>
+                        <option>...</option>
+                        <option>...</option>
+                        <option>...</option>
+                        <option>...</option>
+                        <option>...</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4" />
+                <div class="col-md-4">
+                  <center>
+                    <button v-on:click="search()" type="button" style="color: black;width: 100%;" class="btn btn-danger">
+                      <font-awesome-icon :icon="['fas', 'search']" size="1x"/>
+                      Done
+                    </button>
+                  </center>
+                </div>
+                <div class="col-md-4" />
+              </div>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="clssss row" id="all">
+      <div v-if="!this.filmsExist" style="margin-left: 58vh; margin-top: 8vh;" class="spinner-border text-danger" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div v-for="(film, index) in this.films" v-bind:key="index" class=" col-lg-2 col-md-3 col-sm-4 col-4"  style="padding-left: 0px; padding-right: 0;">
          <div class="card">
             <div class="image">
               <img :src="film.medium_cover_image" />
@@ -27,6 +103,10 @@
             </div>
           </div>
       </div>
+      
+      <div v-if="!this.loadDone" style="margin-left: 58vh; margin-top: 8vh;" class="spinner-border text-danger" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
     </div>
   </div>
 </template>
@@ -40,8 +120,13 @@ export default {
   data : () =>  {
     return {
       films: [],
+      quality: ["3D", "720px", "1080px"],
+      genre: ["All", "Action", "Adventure", "Animation", "Biography", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "Film-Noir", "Game-Show", "History", "Horror", "Music", "Mystery", "News", "Reality-TV", "Romance", "Sci-Fi", "Sport", "Talk-Show", "Thriller", "War", "Western"],
+      rating: ["1+", "2+", "3+", "4+", "5+", "6+", "7+", "8+", "9+"],
       page: 1,
-      limit: 50
+      filmsExist: 0,
+      limit: 50,
+      loadDone: 1
     };
   },
   mounted() {
@@ -52,6 +137,7 @@ export default {
            if (data.status === "ok")
            {
              this.films = data.data.movies;
+             this.filmsExist = 1;
              this.page = this.page + 1;
            }
            this.scroll(this);
@@ -63,30 +149,51 @@ export default {
     window.removeEventListener('scroll', this.scroll);
   },
   methods : {
-    
+    search () {
+      this.filmsExist = 0;
+      this.films = []
+      let term = "togo";
+      axios.get(`https://yts.lt/api/v2/list_movies.json?query_term=${term}`)
+      .then(res => {
+        let data = res.data;
+        if (data.status === "ok")
+        {
+          this.films = [...this.films, ...data.data.movies];
+          this.page = 1;
+        }
+        this.filmsExist = 1;
+      })
+      .catch(err => {
+        this.filmsExist = 1;
+        console.log(err);
+      });
+    },
     scroll (state) {
         window.addEventListener(
       'scroll',
       function()
       {
-          var scrollTop = document.documentElement.scrollTop ||
-              document.body.scrollTop;
-          var offsetHeight = document.body.offsetHeight;
+          var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
           var clientHeight = document.documentElement.clientHeight;
           const ele = document.querySelector('body');
-          if (ele.scrollHeight == scrollTop + clientHeight)
+          if (ele.scrollHeight <= scrollTop + clientHeight)
           {
-                window.outerHeight = window.outerHeight + window.outerHeight;
-                axios.get(`https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${state.page}`)
-                .then(res => {
-                  let data = res.data;
-                  if (data.status === "ok")
-                  {
-                    state.films = [...state.films, ...data.data.movies];
-                    state.page = state.page + 1;
-                  }
-                })
-                .catch(err => {console.log(err);});
+            state.loadDone = 0;
+            window.outerHeight = window.outerHeight + window.outerHeight;
+            axios.get(`https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${state.page}`)
+            .then(res => {
+              let data = res.data;
+              if (data.status === "ok")
+              {
+                state.films = [...state.films, ...data.data.movies];
+                state.page = state.page + 1;
+              }
+              state.loadDone = 1;
+            })
+            .catch(err => {
+              state.loadDone = 1;
+              console.log(err);
+            });
           }
       },
       false
@@ -111,6 +218,20 @@ export default {
   margin-bottom: 100px;
 
 }
+
+#searchEngine{
+  background-image: linear-gradient( to left, 
+  rgba(0,0,0,0.41176) 0%,
+   rgba(36, 22, 21, 0.02745) 0%, 
+   rgba(230, 59, 48, 0.6) 21%, 
+   rgb(132, 124, 124) 52%, 
+   rgba(148,28,28,0.98039) 78%,
+    #0c0a0a 100% );
+  color: aliceblue;
+  padding: 3vh;
+  font-family: auto;
+  color: black;
+}
   #all {
     
     height: 90vh;
@@ -121,7 +242,7 @@ export default {
     position: relative;
     transform: translate(1%,0%);
     width: 100%;
-    height:100%;
+
     background: #000;
     padding: 0px;
 }
