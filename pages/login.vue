@@ -96,7 +96,7 @@ export default {
     };
   },
   mounted() {
-        if (localStorage.token) this.$router.push({ path: "/home" });
+       // if (localStorage.token) this.$router.push({ path: "/home" });
   },
   methods: {
     GoogleLogin()

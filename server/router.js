@@ -3,21 +3,25 @@ var router = express.Router();
 const User = require('./controlers/userscontroler');
 const Images = require('./controlers/imagescontroler');
 const Validate = require('./controlers/validatecontroler');
-var jwt = require('../middleware/jwtMiddleware');
 const Googlepassport = require('./controlers/googlecontroler');
 const FortyTwopassport = require('./controlers/42controler');
 const Spotifypassport = require('./controlers/spotifycontroler');
+const jwt = require('jsonwebtoken');
+const jwttoken = require('../middleware/jwtMiddleware');
+
 router.post('/signup', User.signup);
 router.post('/confirm', Validate.confirm);
 router.post('/create_profile_img', Images.create_a_image);
 router.post('/authenticate', User.Login);
 
 router.get('/userdata/:login', User.userdata);
-router.get('/whoAmi/:token',jwt, (req,res) => {
+
+router.get('/whoAmi/:token',jwttoken, (req,res) => {
+  console.log(req.token);
   res.json({
-      status: 200,
-      data: req.jwt
-   });
+    success: true,
+    data: req.jwt
+  });
 });
 
 /*Google*/

@@ -138,10 +138,8 @@ export default {
     };
   },
   mounted() {
-    if (!localStorage.token) this.$router.push({ path: "/login" });
     axios.get(`https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${this.page}`)
          .then(res => {
-           
            let data = res.data;
            if (data.status === "ok")
            {
@@ -150,14 +148,6 @@ export default {
              this.filmsExist = 1;
              this.page = this.page + 1;
            }
-           
-          //  if (card.offsetHeight < compo.offsetHeight){
-          //     console.log("douuuuz");
-          //     card.style.height = '100%';
-          //   }
-          //   else{
-          //     console.log("weld nass");
-          //   }
            this.scroll(this);
          })
          .catch(err => {});

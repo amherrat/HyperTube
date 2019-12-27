@@ -1,5 +1,5 @@
 var jwt = require('jsonwebtoken');
-const jwtMidleware = (req, res, next) => {
+const jwt1 = (req, res, next) => {
     let token = req.body.token || req.query.token || req.headers["x-access-token"] || req.params.token;
     if (token){
         try {
@@ -25,5 +25,4 @@ const jwtMidleware = (req, res, next) => {
         });
     }
 }
-
-export default jwtMidleware;
+module.exports = jwt1;
