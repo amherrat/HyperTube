@@ -77,7 +77,11 @@ export default {
    this.$axios
     .get(`/api/whoAmi/${localStorage.token}`)
     .then(res => {
-      this.$store.dispatch("getdata", res.data.data.user);
+      console.log(res.data.success);
+      if(res.data.success)
+        this.$store.dispatch("getdata", res.data.data.user);
+      else
+        this.$router.push("/login");
     })
     .catch(err => console.log(err));
   },
