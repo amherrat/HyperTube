@@ -62,7 +62,24 @@
   </mdb-navbar>
 </template>
 <script>
-export default {};
+export default {
+  data : () =>  {
+    return {
+      
+    };
+  },
+  created() {
+   this.$axios
+    .get(`/api/whoAmi/${localStorage.token}`)
+    .then(res => {
+      this.$store.dispatch("getdata", res.data.data.user);
+    })
+    .catch(err => console.log(err));
+  },
+  methods: {
+    
+  }
+};
 </script>
 <style scoped>
 .profile-icon-toggle {

@@ -3,7 +3,7 @@ var router = express.Router();
 const User = require('./controlers/userscontroler');
 const Images = require('./controlers/imagescontroler');
 const Validate = require('./controlers/validatecontroler');
-//var jwt = require('../middleware/jwtMiddleware').jwtMidleware;
+var jwt = require('../middleware/jwtMiddleware');
 const Googlepassport = require('./controlers/googlecontroler');
 const FortyTwopassport = require('./controlers/42controler');
 const Spotifypassport = require('./controlers/spotifycontroler');
@@ -13,6 +13,13 @@ router.post('/create_profile_img', Images.create_a_image);
 router.post('/authenticate', User.Login);
 
 router.get('/userdata/:login', User.userdata);
+router.get('/whoAmi/:token',jwt, (req,res) => {
+  res.json({
+      status: 200,
+      data: req.jwt
+   });
+});
+
 /*Google*/
 router.get('/auth/google', Googlepassport.authenticate('google', { scope: ['profile','email'] }));
 router.get('/auth/google/callback', Googlepassport.authenticate('google', { failureRedirect: '/login' }),

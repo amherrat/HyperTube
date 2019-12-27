@@ -7,31 +7,24 @@ const createStore = () => {
         },
         mutations: {
             changedata(state, data) {
-                console.log('mutations changedata ');
-                console.log(data);
+                //console.log('mutations changedata ');
+                //console.log(data);
                 state.data = data;
-                return;
             }
         },
         actions: {
             getdata({ commit }, username) {
-                return new Promise(async (resolve, reject) => {
-                    console.log('actions getdata ', username);
-                    await this.$axios.$get('/api/userdata/' + username).then(async (res) => {
-                        console.log(res.data.user);
-                        await commit('changedata', res.data.user);
-                        resolve();
+                    //console.log('actions getdata ', username);
+                    this.$axios.$get('/api/userdata/' + username).then((res) => {
+                        //console.log(res.data.user);
+                        commit('changedata', res.data.user);
                     }).catch(err => {
                         console.error(err);
-                        reject();
                     });
-                });
             }
         },
         getters: {
-            getdata: state => {
-                return state.data;
-            }
+            getdata: (state) => (state.data),
         }
     });
 }
