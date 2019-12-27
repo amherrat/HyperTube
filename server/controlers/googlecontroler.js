@@ -34,7 +34,7 @@ passport.use(
         password: profile.id+"tkharbi9a",
         profil: profile.photos[0] ? profile.photos[0].value : "http://" + host + ":3000/default-profile.png",
         googleId: profile.id,
-        verified: profile.emails[0].verified
+        verified: profile.emails[0].verified //here will be checked:/
       });
       console.log(user);
       /*Create usere if dosnt exist*/

@@ -31,7 +31,7 @@ passport.use(
         profil: profile.photos[0] ? profile.photos[0].value : "http://" + host + ":3000/default-profile.png",
         password: profile.id+"tkharbi9a",
         spotifyId: profile.id,
-        verified: 1 //We should discuss this
+        verified: 1 //we will consider 42 and spotify as verfied :/
       });
       console.log(user);
       /*Create usere if dosnt exist*/

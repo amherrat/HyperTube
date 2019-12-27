@@ -100,8 +100,7 @@ export default {
   margin: 0px;
 }
 .young-1337 {
-      margin-bottom: 10px;
-  background-image: -webkit-gradient(
+    background-image: -webkit-gradient(
     linear,
     left top,
     right top,

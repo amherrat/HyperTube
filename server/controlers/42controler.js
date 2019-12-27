@@ -30,7 +30,7 @@ passport.use(new FortyTwoStrategy({
         password: profile.id+"tkharbi9a",
         profil: profile.photos[0].value,
         FortytowId: profile.id,
-        verified: profile.emails[0].verified
+        verified: 1
       });
       console.log(user);
       /*Create usere if dosnt exist*/

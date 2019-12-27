@@ -30,7 +30,6 @@ export default {};
 </script>
 <style scoped>
 .young-1337 {
-  margin-bottom: 10px;
   background-image: -webkit-gradient(
     linear,
     left top,
