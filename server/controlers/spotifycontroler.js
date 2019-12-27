@@ -39,7 +39,7 @@ passport.use(
         User.find({ mail: user.mail }, (err, result) => {
           if (result.length) {
             if (result[0].spotifyId === user.spotifyId) {
-              let payload = { user: user.login, userid: result._id };
+              let payload = { user: result[0].login, userid: result[0]._id };
               let token = jwt.sign(payload, appSecret);
               console.log("Loged in mail using spotifyId section");
               return done(null, token);
@@ -50,11 +50,11 @@ passport.use(
                 { useFindAndModify: false }
               )
                 .exec()
-                .then(user => {
+                .then(userRes => {
                   console.log("Loged in mail by adding spotifyId section");
-                  if(user)
+                  if(userRes)
                   {
-                    let payload = { user: user.login, userid: result._id };
+                    let payload = { user: userRes.login, userid: userRes._id };
                     let token = jwt.sign(payload, appSecret);
                     return done(null, token);
                   }else
@@ -66,7 +66,7 @@ passport.use(
               if (result[0]) {
                 console.log(result[0].spotifyId, user.spotifyId);
                 if (result[0].spotifyId === user.spotifyId) {
-                  let payload = { user: user.login, userid: result._id };
+                  let payload = { user: result[0].login, userid: result[0]._id };
                   let token = jwt.sign(payload, appSecret);
                   console.log(
                     "Loged in login using spotifyId verification section"
