@@ -25,7 +25,7 @@ passport.use(
       // console.log("IMG URL => ",profile.photos[0].value);
       /*Check Values Impo Email fname spotifyId */
       var user = new User({
-        login: profile.username,
+        login: "u"+String(Math.round(new Date().getTime()/1000)), //profil.username
         fname: profile.displayName,
         mail: profile.emails[0].value,
         profil: profile.photos[0] ? profile.photos[0].value : "http://" + host + ":3000/default-profile.png",
