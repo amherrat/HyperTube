@@ -24,7 +24,7 @@ const schema = {
   token: { type: mongoose.SchemaTypes.String, required: true },
   profil: {
     type: mongoose.SchemaTypes.String,
-    default: "http://" + host + ":3000/default-profile.png"
+    default: "http://0.0.0.0:3000/default-profile.png"
   },
   FortytowId:{type: mongoose.SchemaTypes.String},
   googleId:{type: mongoose.SchemaTypes.String},
