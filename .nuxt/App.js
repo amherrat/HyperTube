@@ -12,6 +12,8 @@ import '../node_modules/bootstrap-css-only/css/bootstrap.min.css'
 
 import '../node_modules/mdbvue/lib/css/mdb.min.css'
 
+import '../node_modules/element-ui/lib/theme-chalk/index.css'
+
 import _6f6c098b from '../layouts/default.vue'
 
 const layouts = { "_default": _6f6c098b }

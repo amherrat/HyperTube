@@ -8,11 +8,13 @@ const _08b044ef = () => interopDefault(import('../pages/home.vue' /* webpackChun
 const _2b3d3f89 = () => interopDefault(import('../pages/login.vue' /* webpackChunkName: "pages/login" */))
 const _ed088bcc = () => interopDefault(import('../pages/logout.vue' /* webpackChunkName: "pages/logout" */))
 const _0a580a6f = () => interopDefault(import('../pages/reset.vue' /* webpackChunkName: "pages/reset" */))
+const _10798e33 = () => interopDefault(import('../pages/settings.vue' /* webpackChunkName: "pages/settings" */))
 const _ee76c2b0 = () => interopDefault(import('../pages/signup.vue' /* webpackChunkName: "pages/signup" */))
 const _dab11228 = () => interopDefault(import('../pages/signupd.vue' /* webpackChunkName: "pages/signupd" */))
 const _4f4a7850 = () => interopDefault(import('../pages/trash.vue' /* webpackChunkName: "pages/trash" */))
 const _69a31d89 = () => interopDefault(import('../pages/verify.vue' /* webpackChunkName: "pages/verify" */))
 const _6f5b8d0a = () => interopDefault(import('../pages/movie/_id.vue' /* webpackChunkName: "pages/movie/_id" */))
+const _08d239c0 = () => interopDefault(import('../pages/profile/_login.vue' /* webpackChunkName: "pages/profile/_login" */))
 const _3564fd79 = () => interopDefault(import('../pages/video/_hash.vue' /* webpackChunkName: "pages/video/_hash" */))
 const _61959c72 = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
 
@@ -46,6 +48,10 @@ export const routerOptions = {
     component: _0a580a6f,
     name: "reset"
   }, {
+    path: "/settings",
+    component: _10798e33,
+    name: "settings"
+  }, {
     path: "/signup",
     component: _ee76c2b0,
     name: "signup"
@@ -65,6 +71,10 @@ export const routerOptions = {
     path: "/movie/:id?",
     component: _6f5b8d0a,
     name: "movie-id"
+  }, {
+    path: "/profile/:login?",
+    component: _08d239c0,
+    name: "profile-login"
   }, {
     path: "/video/:hash?",
     component: _3564fd79,

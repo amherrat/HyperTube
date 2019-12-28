@@ -18,6 +18,7 @@ import nuxt_plugin_mdbvue_d85af420 from 'nuxt_plugin_mdbvue_d85af420' // Source:
 import nuxt_plugin_iconsvue_4ea730df from 'nuxt_plugin_iconsvue_4ea730df' // Source: ../plugins/icons-vue (mode: 'all')
 import nuxt_plugin_xgplayer_9af67ff4 from 'nuxt_plugin_xgplayer_9af67ff4' // Source: ../plugins/xgplayer (mode: 'all')
 import nuxt_plugin_vmodal_30f40226 from 'nuxt_plugin_vmodal_30f40226' // Source: ../plugins/vmodal (mode: 'all')
+import nuxt_plugin_elementvue_2d948402 from 'nuxt_plugin_elementvue_2d948402' // Source: ../plugins/element-vue (mode: 'all')
 
 // Component: <ClientOnly>
 Vue.component(ClientOnly.name, ClientOnly)
@@ -192,6 +193,10 @@ async function createApp (ssrContext) {
 
   if (typeof nuxt_plugin_vmodal_30f40226 === 'function') {
     await nuxt_plugin_vmodal_30f40226(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_elementvue_2d948402 === 'function') {
+    await nuxt_plugin_elementvue_2d948402(app.context, inject)
   }
 
   // If server-side, wait for async component to be resolved first

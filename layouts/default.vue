@@ -21,7 +21,7 @@ export default {
     return {
       err: false,
       pages1: ["login", "signup", "verify", "reset","index"],
-      pages2: ["home", "movie-id", "video-hash"]
+      pages2: ["home", "movie-id", "video-hash","profile-login","settings"]
     };
   }
 };
