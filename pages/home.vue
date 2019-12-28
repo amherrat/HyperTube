@@ -165,10 +165,6 @@ export default {
       this.films = [];
       this.page = 0;
       console.log(this.choosedQuality, this.choosedRate, this.choosedGenre);
-  //quality		String (720p, 1080p, 3D)	All	Used to filter by a given quality
-  //minimum_rating		Integer between 0 - 9 (inclusive)	0	Used to filter movie by a given minimum IMDb rating
-  //query_term		String	0	Used for movie search, matching on: Movie Title/IMDb Code, Actor Name/IMDb Code, Director Name/IMDb Code
-  //genre		String	All	Used to filter by a given genre (See http://www.imdb.com/genre/ for full list)
       let link;
       if (this.choosedQuality === "All" && this.choosedRate === 0 && this.term === '' && this.choosedGenre === "All")
         link = `https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${this.page}`;
@@ -213,12 +209,28 @@ export default {
           var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
           var clientHeight = document.documentElement.clientHeight;
           const ele = document.querySelector('body');
-          if (ele.scrollHeight <= scrollTop + clientHeight && state.activeScroll === 1)
+          if (ele.scrollHeight <= scrollTop + clientHeight/* && state.activeScroll === 1*/)
           {
             state.page = state.page + 1;
             state.loadDone = 0;
             window.outerHeight = window.outerHeight + window.outerHeight;
-            axios.get(`https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${state.page}`)
+            let link = "";
+            if (state.activeScroll === 1 && state.choosedQuality === "All" && state.choosedRate === 0 && state.term === '' && state.choosedGenre === "All")
+              link = `https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${state.page}`;
+            else
+            {
+              if ( state.choosedGenre === "All" )
+                state.choosedGenre = 0;
+              if (state.choosedQuality === "All")
+                state.choosedQuality = 0;
+              link = `https://yts.lt/api/v2/list_movies.json?page=${state.page}&query_term=${state.term}&quality=${state.choosedQuality}&minimum_rating=${state.choosedRate}&genre=${state.choosedGenre}`;
+              console.log("here", link);
+              if (state.choosedGenre === 0)
+                state.choosedGenre = "All";
+              if (state.choosedQuality === 0)
+                state.choosedQuality = "All";
+            }
+            axios.get(link)
             .then(res => {
               let data = res.data;
               if (data.status === "ok")
@@ -231,6 +243,10 @@ export default {
               state.loadDone = 1;
               console.log(err);
             });
+          }
+          else
+          {
+            
           }
       },
       false
