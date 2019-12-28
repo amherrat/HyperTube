@@ -1,5 +1,13 @@
 <template>
   <div class="container-fluid" id="padd">
+      <el-slider
+            v-model="filmyear"
+            range
+            show-stops
+            :min="1950"
+            :max="2020"
+            @change="FilterBy"
+          ></el-slider>
     <div v-on:click="filterbar()" v-show="!this.filterbarshow">
       <center><font-awesome-icon style="color: red;" :icon="['fas', 'angle-double-down']" size="2x"/></center>
     </div>
@@ -121,6 +129,7 @@ import axios from 'axios';
 export default {
   data : () =>  {
     return {
+      filmyear: [2000,2019],
       films: [],
       term: '',
       filterbarshow: false,
