@@ -2,10 +2,22 @@
   <div>
     <div class="back">
       <div class="video">
-        <xgplayer :options="playerOptions">Your browser does not support HTML5 video.</xgplayer>
+        <xgplayer v-if="done" :options="playerOptions">Your browser does not support HTML5 video.</xgplayer>
+        <div v-else class="loading spinner-grow text-danger" style="width: 5rem; height: 5rem;" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+        <!-- <video width="400" controls>
+          <source :src="playerOptions.url" type="video/mp4" />
+          <source :src="playerOptions.url" type="video/ogg" />
+          <track src="http://dl.opensubtitles.org/en/download/subformat-vtt/src-api/vrf-19d90c58/sid-U4Erxsm,FRUJohVBDHUjD4oNCj3/filead/1956586043" kind="captions" label="English" srclang="en" default>
+        </video>
+        <video width="400" controls>
+          <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+          <source src="https://www.w3schools.com/html/mov_bbb.ogg" type="video/ogg" />Your browser does not support HTML5 video.
+        </video>-->
       </div>
       <!-- <div class="input_button">
-          <at-button type="success" hollow class="comment_button">Success</at-button>
+          <at-button type="success" hollow class="cosmment_button">Success</at-button>
       </div>-->
       <div class="comments">
         <div class="input_comment">
@@ -13,7 +25,7 @@
             <img src="/default-profile.png" width="60px" height="60px" />
           </div>
           <div class="input_textarea">
-            <input v-model="inputComment" class="textarea" v-on:keyup.enter="NewComment()"/>
+            <input v-model="inputComment" class="textarea" v-on:keyup.enter="NewComment()" />
             <!-- <at-textarea v-model="inputComment" placeholder="Please input..." class="textarea"  v-on:keyup.enter="NewComment()"></at-textarea> -->
           </div>
         </div>
@@ -41,23 +53,80 @@
 </template>
 <script>
 export default {
-  validate({ params }) {
+  validate({ params, query }) {
     var hash = params.hash.toLowerCase();
+    if (!query.id) return false;
     return /([0-9a-f]{6})([0-9a-f]{34})/.test(hash);
+  },
+  beforeRouteEnter(to, from, next) {
+    console.log(from);
+    console.log(to);
+    next();
   },
   data() {
     return {
+      done: false,
+      movie_details: [],
       inputComment: "",
       playerOptions: {
         url: "http://localhost:3000/torrent/" + this.$route.params.hash,
         poster:
           "https://hcdevilsadvocate.com/wp-content/uploads/2019/01/netflix-background-9.jpg",
         volume: 0,
+        textTrack: [],
+        textTrackStyle: {
+          "background-color": "#000",
+          color: "#fff",
+          "font-size": "26px"
+        },
         // pip: true, picture-in-picture
         // autoplay: true,
         width: "100%" // Depends on its wrapper element.
       }
     };
+  },
+  created() {
+    var id = this.$route.query.id;
+    this.$axios
+      .$get(
+        "https://yts.lt/api/v2/movie_details.json?with_images=true&movie_id=" +
+          id
+      )
+      .then(res => {
+        this.movie_details = res.data.movie;
+        console.log(res.data.movie);
+        var imdbid = res.data.movie.imdb_code;
+        this.playerOptions.poster = res.data.movie.large_screenshot_image3;
+        this.$axios
+          .$get("/api/subtitles/" + imdbid)
+          .then(res => {
+            console.log("subtitles");
+            console.log(res);
+            for (let lang in res) {
+              if (["en", "ar", "fr", "es"].includes(res[lang].langcode)) {
+                console.log(res[lang].langcode);
+                this.playerOptions.textTrack.push({
+                  src: res[lang].vtt,
+                  kind: "captions",
+                  label: res[lang].lang,
+                  srclang: res[lang].langcode,
+                  default: res[lang].langcode === "en" ? true : false
+                });
+                this.done = true;
+              }
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    // this.$axios.$get('/subtitles/'+imdbid).then(res =>{
+
+    // }).catch();
   },
   mounted() {
     console.log(this.$route.params.hash);
@@ -76,7 +145,6 @@ export default {
   background: black;
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
 }
 
 .textarea {
@@ -92,6 +160,7 @@ export default {
   left: 0;
   right: 0;
   padding: 20px 0;
+  padding-bottom: 80px;
 }
 
 .input_profile {
@@ -150,6 +219,12 @@ export default {
   display: block;
   margin: 0 auto;
   padding-top: 20px;
+}
+
+.loading{
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
 
 @media (max-width: 600px) {

@@ -147,6 +147,7 @@
 
 <script>
 import StarRating from "vue-star-rating";
+
 export default {
   components: {
     StarRating
@@ -167,6 +168,9 @@ export default {
     return /^[0-9]*$/.test(params.id) && /^(?!0*$).*$/.test(params.id);
   },
   mounted() {
+    this.$store.dispatch("getdata", "adouz").then(() => {
+      console.log(this.$store.getters.getdata);
+    });
     this.backImages();
     this.getMovieData(this.$route.params.id);
   },
@@ -179,8 +183,7 @@ export default {
       if (this.selectedTorrentIndex !== null) {
         if (this.torrents[this.selectedTorrentIndex]) {
           console.log("redirect to:");
-          this.$router.push(
-            "/video/" + this.torrents[this.selectedTorrentIndex].hash
+          this.$router.push({ name: "video-hash", params: {hash: this.torrents[this.selectedTorrentIndex].hash}, query: { id: this.$route.params.id } }
           );
         }
       }
@@ -416,7 +419,7 @@ export default {
 .footer {
   position: absolute;
   background: rgba(0, 0, 0, 0.7);
-  height: 150px;
+  padding-bottom: 70px;
   width: 100%;
   bottom: 0;
   left: 0;
@@ -492,9 +495,6 @@ export default {
   }
   .watchbutton {
     margin-top: 0;
-  }
-  .footer {
-    height: 165px;
   }
 }
 @media (max-width: 404px) {
