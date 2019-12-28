@@ -3,7 +3,12 @@
     <div class="back">
       <div class="video">
         <xgplayer v-if="done" :options="playerOptions">Your browser does not support HTML5 video.</xgplayer>
-        <div v-else class="loading spinner-grow text-danger" style="width: 5rem; height: 5rem;" role="status">
+        <div
+          v-else
+          class="loading spinner-grow text-danger"
+          style="width: 5rem; height: 5rem;"
+          role="status"
+        >
           <span class="sr-only">Loading...</span>
         </div>
         <!-- <video width="400" controls>
@@ -19,7 +24,7 @@
       <!-- <div class="input_button">
           <at-button type="success" hollow class="cosmment_button">Success</at-button>
       </div>-->
-      <div class="comments">
+      <div v-if="done" class="comments">
         <div class="input_comment">
           <div class="input_profile">
             <img src="/default-profile.png" width="60px" height="60px" />
@@ -56,12 +61,11 @@ export default {
   validate({ params, query }) {
     var hash = params.hash.toLowerCase();
     if (!query.id) return false;
-    return /([0-9a-f]{6})([0-9a-f]{34})/.test(hash);
-  },
-  beforeRouteEnter(to, from, next) {
-    console.log(from);
-    console.log(to);
-    next();
+    return (
+      /^[0-9]*$/.test(query.id) &&
+      /^(?!0*$).*$/.test(query.id) &&
+      /([0-9a-f]{6})([0-9a-f]{34})/.test(hash)
+    );
   },
   data() {
     return {
@@ -123,10 +127,6 @@ export default {
       .catch(err => {
         console.log(err);
       });
-
-    // this.$axios.$get('/subtitles/'+imdbid).then(res =>{
-
-    // }).catch();
   },
   mounted() {
     console.log(this.$route.params.hash);
@@ -221,10 +221,10 @@ export default {
   padding-top: 20px;
 }
 
-.loading{
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
+.loading {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }
 
 @media (max-width: 600px) {
