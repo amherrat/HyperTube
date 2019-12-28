@@ -15,12 +15,9 @@ var trackers = [
     'udp://tracker.leechers-paradise.org:6969'
 ]
 var engines = [];
-// create stream with fs 
-// var stream =fs.createReadStream(filepath, {start: start,end: end});
-// stream.pipe();
 //torrent-stream
 var VideoStream = async function (req, res) {
-    //1bb1f95ef15df0f6720313166c26eb7773691be3
+    //1bb1f95ef15df0f6720313166c26eb7773691be3 - 6 underground mkv
     console.log(req.params.hash);
     var hash = String(req.params.hash).toLowerCase();
     console.log('here!!', hash);
@@ -49,14 +46,14 @@ var VideoStream = async function (req, res) {
                 console.log(req.headers.range);
                 const ranges = parseRange(len, req.headers.range, { combine: true });
                 console.log('ranges ', ranges);
-                if (ranges === -1)
-                    console.log('ranges -1 signals a malformed header string');
-                if (ranges === -2)
-                    console.log('ranges -2 signals an unsatisfiable range');
-                if (ranges.type !== 'bytes')
-                    console.log('ranges -1');
-                if (ranges.length > 1)
-                    console.log('ranges.length > 1');
+                // if (ranges === -1)
+                //     console.log('ranges -1 signals a malformed header string');
+                // if (ranges === -2)
+                //     console.log('ranges -2 signals an unsatisfiable range');
+                // if (ranges.type !== 'bytes')
+                //     console.log('ranges -1');
+                // if (ranges.length > 1)
+                //     console.log('ranges.length > 1');
                 if (ranges.type === 'bytes' && ranges !== -1 && ranges !== -2) {
                     console.log('ranges');
                     const range = ranges[0];
@@ -135,7 +132,6 @@ var VideoStream = async function (req, res) {
             engine.on('error', function (err, info) {
                 console.log(err, info);
             });
-            console.log('valid sha1: ' + hash);
         } else
             res.end();
     } else
