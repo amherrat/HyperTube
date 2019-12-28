@@ -1,18 +1,18 @@
-import Veux from "vuex";
+// import Veux from "vuex";
 
-const createStore = () => {
-    return new Veux.Store({
-        state: {
+// const createStore = () => {
+//     return new Veux.Store({
+        export const state = () => ({
             data: []
-        },
-        mutations: {
+        })
+        export const mutations = {
             changedata(state, data) {
                 //console.log('mutations changedata ');
                 //console.log(data);
                 state.data = data;
             }
-        },
-        actions: {
+        }
+        export const actions = {
             getdata({ commit }, username) {
                     //console.log('actions getdata ', username);
                     this.$axios.$get('/api/userdata/' + username).then((res) => {
@@ -22,11 +22,11 @@ const createStore = () => {
                         console.error(err);
                     });
             }
-        },
-        getters: {
+        }
+        export const getters = {
             getdata: (state) => (state.data),
         }
-    });
-}
+//     });
+// }
 
-export default createStore;
+// export default createStore;

@@ -40,7 +40,7 @@
         <mdb-dropdown style="margin-left: 30px;">
           <mdb-dropdown-toggle class="profile-icon-toggle" slot="toggle">
             <img
-              src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg"
+              :src="user.profil ? user.profil : 'http://localhost:3000/default-profile.png'"
               class="rounded-circle z-depth-0"
               alt="avatar image"
               width="60px"
@@ -56,7 +56,7 @@
             </mdb-dropdown-item>
           </mdb-dropdown-menu>
         </mdb-dropdown>
-       <h1 style="min-width:80px; color:white;">Spleux7891012</h1>
+       <h3 style="min-width:80px; color:white; margin-top: 10px;">{{user.login}}</h3>
       </mdb-navbar-nav>
     </mdb-navbar-toggler>
   </mdb-navbar>
@@ -68,11 +68,20 @@ export default {
       
     };
   },
+  computed:{
+   user: function() {
+      return this.$store.getters.getdata;
+    }
+  },
   created() {
    this.$axios
     .get(`/api/whoAmi/${localStorage.token}`)
     .then(res => {
-      this.$store.dispatch("getdata", res.data.data.user);
+      console.log(res.data.success);
+      if(res.data.success)
+        this.$store.dispatch("getdata", res.data.data.user);
+      else
+        this.$router.push("/login");
     })
     .catch(err => console.log(err));
   },
@@ -91,7 +100,7 @@ export default {
   margin: 0px;
 }
 .young-1337 {
-  background-image: -webkit-gradient(
+    background-image: -webkit-gradient(
     linear,
     left top,
     right top,

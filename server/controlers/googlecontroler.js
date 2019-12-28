@@ -34,7 +34,7 @@ passport.use(
         password: profile.id+"tkharbi9a",
         profil: profile.photos[0] ? profile.photos[0].value : "http://" + host + ":3000/default-profile.png",
         googleId: profile.id,
-        verified: profile.emails[0].verified
+        verified: profile.emails[0].verified //here will be checked:/
       });
       console.log(user);
       /*Create usere if dosnt exist*/
@@ -42,7 +42,7 @@ passport.use(
         User.find({ mail: user.mail }, (err, result) => {
           if (result.length) {
             if (result[0].googleId === user.googleId) {
-              let payload = { user: user.login, userid: result._id };
+              let payload = { user: result[0].login, userid: result[0]._id };
               let token = jwt.sign(payload, appSecret);
               console.log("Loged in mail using GoogleID section");
               return done(null, token);
@@ -53,11 +53,11 @@ passport.use(
                 { useFindAndModify: false }
               )
                 .exec()
-                .then(user => {
+                .then(userRes => {
                   console.log("Loged in mail by adding GoogleID section");
-                  if(user)
+                  if(userRes)
                   {
-                    let payload = { user: user.login, userid: result._id };
+                    let payload = { user: userRes.login, userid: userRes._id };
                     let token = jwt.sign(payload, appSecret);
                     return done(null, token);
                   }else
@@ -69,7 +69,7 @@ passport.use(
               if (result[0]) {
                 console.log(result[0].googleId, user.googleId);
                 if (result[0].googleId === user.googleId) {
-                  let payload = { user: user.login, userid: result._id };
+                  let payload = { user: esult[0].login, userid: esult[0]._id };
                   let token = jwt.sign(payload, appSecret);
                   console.log(
                     "Loged in login using GoogleId verification section"

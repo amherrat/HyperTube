@@ -52,7 +52,7 @@
                      <a href="api/auth/google"><mdb-btn color="light-blue" class="mr-md-3 z-depth-1a">
                      <font-awesome-icon :icon="['fab', 'google']" size="3x" />
                     </mdb-btn></a>
-                    <a href="api/auth/42"> <mdb-btn color="black" class="mr-md-3 z-depth-1a" @click="GoogleLogin()">
+                    <a href="api/auth/42"> <mdb-btn color="black" class="mr-md-3 z-depth-1a">
                       <img src="/42logo.svg" alt="Logo" height="42px" />
                     </mdb-btn></a>
                     <a href="api/auth/spotify"><mdb-btn color="dark-green" class="mr-md-3 z-depth-1a">
@@ -99,45 +99,7 @@ export default {
        // if (localStorage.token) this.$router.push({ path: "/home" });
   },
   methods: {
-    GoogleLogin()
-    {
-      this.$axios
-            .get("api/auth/google")
-             .then(res => {
-               console.log(res);
-               
-            //   if (!res.data.success) {
-            //     console.log(res.data.errors);
-            //     if(res.data.errors)
-            //     {
-            //     if (res.data.errors.error === "login") {
-            //           this.validation.login.valid = false;
-            //           this.validation.login.invalidFeedback = res.data.errors.msg;
-            //           //this.validation.login.validated = true;
-            //     } else if (res.data.errors.error === "password") {
-            //           this.validation.password.valid = false;
-            //           this.validation.password.invalidFeedback = res.data.errors.msg;
-            //          // this.validation.login.validated = true;
-            //     } 
-            //     else if (res.data.errors.error === "mail") {
-            //           this.validation.login.valid = false;
-            //           this.validation.login.invalidFeedback = res.data.errors.msg;
-            //           //this.validation.login.validated = true;
-            //     }
-            //     }
-            //   } else {
-            //     // success
-            //     localStorage.setItem("token", res.data.token);
-            //     console.log("DONE")
-            //   }
-            })
-            .catch(err => console.log(err));
-      console.log("HNA");
-
-    },
     Login() {
-      //this.validateForm();
-      //console.log(this.customValues.login, this.customValues.password);
       this.isValidForm().then(
         res => {
           this.$axios

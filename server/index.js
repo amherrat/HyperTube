@@ -6,7 +6,7 @@ const passport = require('passport')
 ip = require("ip");
 app.set('view engine', 'ejs');
 app.use(passport.initialize());
-var bodyParser = require('body-parser')
+const bodyParser = require('body-parser')
 const cors = require('cors');
 global.appSecret = "Hyperwebappsecret";
 global.host = ip.address();
@@ -32,9 +32,22 @@ async function start () {
   // Use Body Parser and Cors
   var jsonParser = bodyParser.json()
   var urlencodedParser = bodyParser.urlencoded({ extended: false })
-  app.use(jsonParser,urlencodedParser);
+  app.use(jsonParser, urlencodedParser);
   app.use(cors());
-  
+  app.get(/%/, (req, res) =>{
+    res.redirect('/');
+  });
+  app.use((err, req, res, next) => {
+    // This check makes sure this is a JSON parsing issue, but it might be
+    // coming from any middleware, not just body-parser:
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        //console.error(err);
+        return res.sendStatus(400); // Bad request
+        //return res.end();
+    }
+    next();
+  });
+
   // API routes
   app.use('/api', require('./router'));
   

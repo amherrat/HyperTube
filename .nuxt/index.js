@@ -8,11 +8,12 @@ import NuxtError from './components/nuxt-error.vue'
 import Nuxt from './components/nuxt.js'
 import App from './App.js'
 import { setContext, getLocation, getRouteData, normalizeError } from './utils'
+import { createStore } from './store.js'
 
 /* Plugins */
 
-import nuxt_plugin_axios_46d8ef88 from 'nuxt_plugin_axios_46d8ef88' // Source: ./axios.js (mode: 'all')
-import nuxt_plugin_buefy_08b7eed9 from 'nuxt_plugin_buefy_08b7eed9' // Source: ./buefy.js (mode: 'all')
+import nuxt_plugin_axios_55eb10ec from 'nuxt_plugin_axios_55eb10ec' // Source: ./axios.js (mode: 'all')
+import nuxt_plugin_buefy_17ca103d from 'nuxt_plugin_buefy_17ca103d' // Source: ./buefy.js (mode: 'all')
 import nuxt_plugin_mdbvue_d85af420 from 'nuxt_plugin_mdbvue_d85af420' // Source: ../plugins/mdb-vue (mode: 'all')
 import nuxt_plugin_iconsvue_4ea730df from 'nuxt_plugin_iconsvue_4ea730df' // Source: ../plugins/icons-vue (mode: 'all')
 import nuxt_plugin_xgplayer_9af67ff4 from 'nuxt_plugin_xgplayer_9af67ff4' // Source: ../plugins/xgplayer (mode: 'all')
@@ -50,11 +51,16 @@ const defaultTransition = {"name":"page","mode":"out-in","appear":true,"appearCl
 async function createApp (ssrContext) {
   const router = await createRouter(ssrContext)
 
+  const store = createStore(ssrContext)
+  // Add this.$router into store actions/mutations
+  store.$router = router
+
   // Create Root instance
 
   // here we inject the router and store to all child components,
   // making them available everywhere as `this.$router` and `this.$store`.
   const app = {
+    store,
     router,
     nuxt: {
       defaultTransition,
@@ -96,6 +102,9 @@ async function createApp (ssrContext) {
     ...App
   }
 
+  // Make app available into store via this.app
+  store.app = app
+
   const next = ssrContext ? ssrContext.next : location => app.router.push(location)
   // Resolve route
   let route
@@ -108,6 +117,7 @@ async function createApp (ssrContext) {
 
   // Set context to app.context
   await setContext(app, {
+    store,
     route,
     next,
     error: app.nuxt.error.bind(app),
@@ -130,6 +140,9 @@ async function createApp (ssrContext) {
     // Add into app
     app[key] = value
 
+    // Add into store
+    store[key] = app[key]
+
     // Check if plugin not already installed
     const installKey = '__nuxt_' + key + '_installed__'
     if (Vue[installKey]) {
@@ -148,14 +161,21 @@ async function createApp (ssrContext) {
     })
   }
 
-  // Plugin execution
-
-  if (typeof nuxt_plugin_axios_46d8ef88 === 'function') {
-    await nuxt_plugin_axios_46d8ef88(app.context, inject)
+  if (process.client) {
+    // Replace store state before plugins execution
+    if (window.__NUXT__ && window.__NUXT__.state) {
+      store.replaceState(window.__NUXT__.state)
+    }
   }
 
-  if (typeof nuxt_plugin_buefy_08b7eed9 === 'function') {
-    await nuxt_plugin_buefy_08b7eed9(app.context, inject)
+  // Plugin execution
+
+  if (typeof nuxt_plugin_axios_55eb10ec === 'function') {
+    await nuxt_plugin_axios_55eb10ec(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_buefy_17ca103d === 'function') {
+    await nuxt_plugin_buefy_17ca103d(app.context, inject)
   }
 
   if (typeof nuxt_plugin_mdbvue_d85af420 === 'function') {
@@ -192,6 +212,7 @@ async function createApp (ssrContext) {
   }
 
   return {
+    store,
     app,
     router
   }

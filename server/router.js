@@ -6,8 +6,7 @@ const Validate = require('./controlers/validatecontroler');
 const Googlepassport = require('./controlers/googlecontroler');
 const FortyTwopassport = require('./controlers/42controler');
 const Spotifypassport = require('./controlers/spotifycontroler');
-const jwt = require('jsonwebtoken');
-const jwttoken = require('../middleware/jwtMiddleware');
+const jwttoken = require('./jwtMiddleware');
 
 router.post('/signup', User.signup);
 router.post('/confirm', Validate.confirm);
@@ -17,7 +16,7 @@ router.post('/authenticate', User.Login);
 router.get('/userdata/:login', User.userdata);
 
 router.get('/whoAmi/:token',jwttoken, (req,res) => {
-  console.log(req.token);
+  console.log(req.jwt);
   res.json({
     success: true,
     data: req.jwt
