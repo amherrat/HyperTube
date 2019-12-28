@@ -32,7 +32,12 @@ body, html {
   height: 100%;
   background-color: black;
 }
-
+.el-slider__bar{
+  background-color: #ff3636;
+}
+.el-slider__button{
+  border: 2px solid #ff3636;
+}
 .bg {
   /* The image used */
 

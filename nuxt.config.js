@@ -25,6 +25,7 @@ module.exports = {
   css: [
     'bootstrap-css-only/css/bootstrap.min.css',
     'mdbvue/lib/css/mdb.min.css',
+    'element-ui/lib/theme-chalk/index.css'
     // { src: 'at-ui-style', lang: 'css' }
   ],
 
@@ -32,7 +33,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: ['@/plugins/mdb-vue',
-    '@/plugins/icons-vue', '~/plugins/xgplayer', '~/plugins/vmodal'],
+    '@/plugins/icons-vue', '~/plugins/xgplayer', '~/plugins/vmodal','~/plugins/element-vue'],
   /*
   ** Nuxt.js dev-modules
   */

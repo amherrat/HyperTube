@@ -1,5 +1,16 @@
 <template>
   <div class="container-fluid" id="padd">
+    <div class="block">
+      <el-slider
+        v-model="filmyear"
+        range
+        show-stops
+        :max="2020"
+        :min="1950"
+        v-on:change="yearGap()">
+        
+      </el-slider>
+    </div>
     <div v-on:click="filterbar()" v-show="!this.filterbarshow">
       <center><font-awesome-icon style="color: red;" :icon="['fas', 'angle-double-down']" size="2x"/></center>
     </div>
@@ -46,14 +57,10 @@
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <label for="order">Order</label>
-                      <select id="order" class="form-control">
+                      <label for="sortby">Sort by</label>
+                      <select id="sortby" v-model="sortvalue" class="form-control">
                         <option selected>None</option>
-                        <option>...</option>
-                        <option>...</option>
-                        <option>...</option>
-                        <option>...</option>
-                        <option>...</option>
+                        <option v-for="(ele, index) in this.sortby" v-bind:key="index">{{ele}}</option>
                       </select>
                     </div>
                   </div>
@@ -76,7 +83,7 @@
         <div class="col-md-2"></div>
     </div>
     <div class="clssss row" id="all">
-      <div v-if="!this.filmsExist" style="margin-left: 58vh; margin-top: 8vh;" class="spinner-border text-danger" role="status">
+      <div v-if="!this.filmsExist" style="margin-left: 49%; margin-top: 8vh;" class="spinner-border text-danger" role="status">
         <span class="sr-only">Loading...</span>
       </div>
       <div v-for="(film, index) in this.films" v-bind:key="index" ref="comCard" id="comCard" class="col-lg-2 col-md-3 col-sm-4 col-4"  style="padding-left: 0px; padding-right: 0;">
@@ -121,12 +128,16 @@ import axios from 'axios';
 export default {
   data : () =>  {
     return {
+      filmyear: [1950,2020],
+      allFilm: [],
       films: [],
       term: '',
       filterbarshow: false,
       choosedQuality: 'All',
       choosedGenre: 'All',
       choosedRate: 0,
+      sortvalue: 'None',
+      sortby: ["year", "rating", "peers", "seeds", "download_count"],
       quality: ["3D", "720p", "1080p"],
       genre: ["All", "Action", "Adventure", "Animation", "Biography", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "Film-Noir", "Game-Show", "History", "Horror", "Music", "Mystery", "News", "Reality-TV", "Romance", "Sci-Fi", "Sport", "Talk-Show", "Thriller", "War", "Western"],
       rating: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
@@ -144,7 +155,7 @@ export default {
            if (data.status === "ok")
            {
              this.films = data.data.movies;
-             console.log(this.films);
+             this.allFilm = data.data.movies;
              this.filmsExist = 1;
              this.page = this.page + 1;
            }
@@ -157,6 +168,13 @@ export default {
     window.removeEventListener('scroll', this.scroll);
   },
   methods : {
+    yearGap () {
+      let all = this.allFilm;
+      let min = this.filmyear[0];
+      let max = this.filmyear[1];
+      let showed = all.filter(film => film.year >= min && film.year <= max);
+      this.films = showed;
+    },
     filterbar () {
       this.filterbarshow = !this.filterbarshow;
     },
@@ -164,32 +182,36 @@ export default {
       this.filmsExist = 0;
       this.films = [];
       this.page = 0;
-      console.log(this.choosedQuality, this.choosedRate, this.choosedGenre);
       let link;
-      if (this.choosedQuality === "All" && this.choosedRate === 0 && this.term === '' && this.choosedGenre === "All")
+      
+      if (this.choosedQuality === "All" && this.sortvalue === "None" && this.choosedRate === 0 && this.term === '' && this.choosedGenre === "All")
         link = `https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${this.page}`;
       else
       {
         this.activeScroll = 0;
+        if ( this.sortvalue === "None" )
+          this.sortvalue = "date_added";
         if ( this.choosedGenre === "All" )
           this.choosedGenre = 0;
         if (this.choosedQuality === "All")
           this.choosedQuality = 0;
-        link = `https://yts.lt/api/v2/list_movies.json?query_term=${this.term}&quality=${this.choosedQuality}&minimum_rating=${this.choosedRate}&genre=${this.choosedGenre}`;
+        link = `https://yts.lt/api/v2/list_movies.json?sort_by=${this.sortvalue}&query_term=${this.term}&quality=${this.choosedQuality}&minimum_rating=${this.choosedRate}&genre=${this.choosedGenre}`;
         if (this.choosedGenre === 0)
           this.choosedGenre = "All";
         if (this.choosedQuality === 0)
           this.choosedQuality = "All";
+        if ( this.sortvalue === "date_added" )
+          this.sortvalue = "None";
       }
-      console.log(link);
       axios.get(link)
       .then(res => {
-          console.log(res.data);
         let data = res.data;
         if (data.status === "ok" && data.data.movies)
         {
-          
-          this.films = data.data.movies;
+          let min = this.filmyear[0];
+          let max = this.filmyear[1];
+          this.films = data.data.movies.filter(film => film.year >= min && film.year <= max);
+          this.allFilm = data.data.movies;
           this.page = 1;
         }
         this.filmsExist = 1;
@@ -209,7 +231,7 @@ export default {
           var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
           var clientHeight = document.documentElement.clientHeight;
           const ele = document.querySelector('body');
-          if (ele.scrollHeight <= scrollTop + clientHeight/* && state.activeScroll === 1*/)
+          if (ele.scrollHeight <= (scrollTop + clientHeight + 150)/* && state.activeScroll === 1*/)
           {
             state.page = state.page + 1;
             state.loadDone = 0;
@@ -221,21 +243,29 @@ export default {
             {
               if ( state.choosedGenre === "All" )
                 state.choosedGenre = 0;
+              if ( state.sortvalue === "None" )
+                state.sortvalue = "date_added";
               if (state.choosedQuality === "All")
                 state.choosedQuality = 0;
-              link = `https://yts.lt/api/v2/list_movies.json?page=${state.page}&query_term=${state.term}&quality=${state.choosedQuality}&minimum_rating=${state.choosedRate}&genre=${state.choosedGenre}`;
+              link = `https://yts.lt/api/v2/list_movies.json?sort_by=${state.sortvalue}&page=${state.page}&query_term=${state.term}&quality=${state.choosedQuality}&minimum_rating=${state.choosedRate}&genre=${state.choosedGenre}`;
               console.log("here", link);
               if (state.choosedGenre === 0)
                 state.choosedGenre = "All";
               if (state.choosedQuality === 0)
                 state.choosedQuality = "All";
+              if ( state.sortvalue === "date_added" )
+                state.sortvalue = "None";
             }
             axios.get(link)
             .then(res => {
               let data = res.data;
               if (data.status === "ok")
               {
+                state.allFilm = [...state.allFilm, ...data.data.movies];
                 state.films = [...state.films, ...data.data.movies];
+                let min = state.filmyear[0];
+                let max = state.filmyear[1];
+                state.films = state.films.filter(film => film.year >= min && film.year <= max);
               }
               state.loadDone = 1;
             })
@@ -258,16 +288,20 @@ export default {
   components: {
   }
 };
+
 </script>
 
 <style scoped>
+
 
 .clssss{
   padding-bottom: 150px;
   margin-bottom: 100px;
 
 }
-
+.color_slider .el-slider__runway .el-slider__bar {
+    background-color: red !important;
+}
 #searchEngine{
   background-image: linear-gradient( to left, 
   rgba(0,0,0,0.41176) 0%,
