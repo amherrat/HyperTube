@@ -93,18 +93,17 @@
             </div>
             <div class="details">
               <div class="center">
-                <h1 >{{film.title}}
+                <h1 id="infos">{{film.title.substring(0,20)}}
                 <br />
                 <br />
-                <span style="color: #ffe066 ;">{{film.rating}}&nbsp;<font-awesome-icon style="color: #ffe066 " :icon="['fas', 'star']" size="1x"/></span>
+                <span style="color: #ffe066 ;">{{film.rating}}&nbsp;<font-awesome-icon id="iconStyle" style="color: #ffe066 " :icon="['fas', 'star']" size="1x"/></span>
                 <br />
                 <br />
-                <span style="color: #ffe066 ; ">{{film.year}}&nbsp;<font-awesome-icon style="color: #ffe066 " :icon="['fas', 'clock']" size="1x"/></span>
+                <span style="color: #ffe066 ; ">{{film.year}}&nbsp;<font-awesome-icon id="iconStyle" style="color: #ffe066 " :icon="['fas', 'clock']" size="1x"/></span>
                 <br />
                 <br />
                 <nuxt-link :to="'/movie/'+ film.id">
-                <span style="color: #ffe066 ; cursor:pointer;"><font-awesome-icon style="color: #ffe066 " :icon="['far', 'eye']" size="2x"/></span>
-
+                  <span style="color: #ffe066 ; cursor:pointer;"><font-awesome-icon id="iconStyle" style="color: #ffe066 " :icon="['far', 'eye']" size="2x"/></span>
                 </nuxt-link>
                 </h1>
                   <p></p>
@@ -293,6 +292,23 @@ export default {
 
 <style scoped>
 
+@media (max-width: 600px) {
+  #infos{
+    font-size: 15px;
+  }
+  #iconStyle{
+    font-size: 15px;
+  }
+  .card .details .center {
+    padding: 0px !important;
+    text-align: center;
+    background: rgb(255,0,0,0.8)	;
+    position: absolute;
+    top: 50%;
+    height: 100%;
+    width:100%;
+  }
+}
 
 .clssss{
   padding-bottom: 150px;
