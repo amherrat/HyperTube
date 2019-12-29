@@ -99,30 +99,53 @@ export default {
       .then(res => {
         this.movie_details = res.data.movie;
         console.log(res.data.movie);
-        var imdbid = res.data.movie.imdb_code;
-        this.playerOptions.poster = res.data.movie.large_screenshot_image3;
-        this.$axios
-          .$get("/api/subtitles/" + imdbid)
-          .then(res => {
-            console.log("subtitles");
-            console.log(res);
-            for (let lang in res) {
-              if (["en", "ar", "fr", "es"].includes(res[lang].langcode)) {
-                console.log(res[lang].langcode);
-                this.playerOptions.textTrack.push({
-                  src: res[lang].vtt,
-                  kind: "captions",
-                  label: res[lang].lang,
-                  srclang: res[lang].langcode,
-                  default: res[lang].langcode === "en" ? true : false
-                });
-                this.done = true;
+        var fine = 0;
+        // check if hash is from movie id
+        for (let index in res.data.movie.torrents) {
+          if (
+            res.data.movie.torrents[index].hash.includes(
+              this.$route.params.hash
+            )
+          )
+            fine = 1;
+        }
+        if (fine) {
+          var imdbid = res.data.movie.imdb_code;
+          this.playerOptions.poster = res.data.movie.large_screenshot_image3;
+          this.$axios
+            .$get("/api/subtitles/" + imdbid)
+            .then(res => {
+              console.log("subtitles");
+              console.log(res);
+              for (let lang in res) {
+                if (["en", "ar", "fr", "es"].includes(res[lang].langcode)) {
+                  console.log(res[lang].langcode);
+                  this.playerOptions.textTrack.push({
+                    src: res[lang].vtt,
+                    kind: "captions",
+                    label: res[lang].lang,
+                    srclang: res[lang].langcode,
+                    default: res[lang].langcode === "en" ? true : false
+                  });
+                }
               }
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          });
+              this.done = true;
+            })
+            .catch(err => {
+              console.log(err);
+            });
+          this.$axios
+            .$post("/api/addvideo", {
+              hash: this.$route.params.hash,
+              imdbid: imdbid
+            })
+            .then(res => {
+              console.log(res);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        } else this.$router.push({ name: "home" });
       })
       .catch(err => {
         console.log(err);
