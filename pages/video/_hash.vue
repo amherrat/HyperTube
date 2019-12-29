@@ -94,16 +94,14 @@ export default {
               console.log("subtitles");
               console.log(res);
               for (let lang in res) {
-                if (["en", "ar", "fr", "es"].includes(res[lang].langcode)) {
-                  console.log(res[lang].langcode);
-                  this.playerOptions.textTrack.push({
-                    src: res[lang].vtt,
-                    kind: "captions",
-                    label: res[lang].lang,
-                    srclang: res[lang].langcode,
-                    default: res[lang].langcode === "en" ? true : false
-                  });
-                }
+                console.log(res[lang].langShort);
+                this.playerOptions.textTrack.push({
+                  src: res[lang].path.replace("/Volumes/Storage/goinfre/adouz/hyperTube/static",""),
+                  kind: "captions",
+                  label: res[lang].lang,
+                  srclang: res[lang].langShort,
+                  default: res[lang].langShort === "en" ? true : false
+                });
               }
               this.done = true;
             })
