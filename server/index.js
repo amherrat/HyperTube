@@ -13,8 +13,11 @@ global.host = ip.address();
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
 config.dev = process.env.NODE_ENV !== 'production'
-
-async function start () {
+var fs = require('fs');
+var cron = require('node-cron');
+var rimraf = require("rimraf");
+var videosModel = require('./models/videosModel');
+async function start() {
   // Init Nuxt.js
   const nuxt = new Nuxt(config)
 
@@ -28,35 +31,64 @@ async function start () {
     await nuxt.ready()
   }
 
-  
+
   // Use Body Parser and Cors
   var jsonParser = bodyParser.json()
   var urlencodedParser = bodyParser.urlencoded({ extended: false })
   app.use(jsonParser, urlencodedParser);
   app.use(cors());
-  app.get(/%/, (req, res) =>{
+  app.get(/%/, (req, res) => {
     res.redirect('/');
   });
   app.use((err, req, res, next) => {
     // This check makes sure this is a JSON parsing issue, but it might be
     // coming from any middleware, not just body-parser:
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-        //console.error(err);
-        return res.sendStatus(400); // Bad request
-        //return res.end();
+      //console.error(err);
+      return res.sendStatus(400); // Bad request
+      //return res.end();
     }
     next();
   });
 
   // API routes
   app.use('/api', require('./router'));
-  
+
+  //remove unwatched videos for 30days or more (0 1 * * *)
+  cron.schedule('0 1 * * *', () => {
+    // last time watched from database
+    var videos = videosModel.getVideos();
+    videos.then((res) => {
+      for (var key in res) {
+        var file = __dirname + '/torrent-stream/' + res[key].hash;
+        // console.log(res[key]);
+        var diffrent_in_time = new Date().getTime() - new Date(res[key].last_watch).getTime();
+        var diffrent_in_days = diffrent_in_time / (1000 * 3600 * 24);
+        // console.log(`${file} opened for ${diffrent_in_days} day`);
+        if (Math.floor(diffrent_in_days) >= 30) {
+          if (fs.existsSync(file))
+            rimraf.sync(file);
+          videosModel.deleteVideo(res[key].hash);
+        }
+      }
+    },
+      (err) => {
+        console.log(err);
+      }
+    );
+  });
+  // Completely remove all saved data for this torrent
+  // engine.remove(function (params) {
+  //   console.log('remove');
+  //   console.log(params);
+  // });
+
   // Torrent stream
   app.use('/torrent/:hash', require('./TorrentStream'));
 
   // Give nuxt middleware to express
   app.use(nuxt.render)
-  
+
   // Listen the server
   app.listen(port, host)
   consola.ready({
