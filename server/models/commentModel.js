@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 const commentSchema = new mongoose.Schema({
     username: String,
-    id_film: Number,
+    id_film: String,
     hash_film: String,
     comment: String,
     date: Date,
