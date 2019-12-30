@@ -112,6 +112,20 @@
                       />
                     </mdb-col>
                   </mdb-row>
+                  <mdb-row>
+                    <mdb-col>
+                      <mdb-input
+                        type="password"
+                        label="confirm password"
+                        v-model="customValues.confirmpassword"
+                        :customValidation="validation.confirmpassword.validated"
+                        :isValid="validation.confirmpassword.valid"
+                        @change="validate('confirmpassword')"
+                        validFeedback="password look's good."
+                        :invalidFeedback="validation.confirmpassword.invalidFeedback"
+                      />
+                    </mdb-col>
+                  </mdb-row>
                   <div class="text-center mb-3">
                     <mdb-btn gradient="aqua" block type="submit">Sign up</mdb-btn>
                   </div>
@@ -136,7 +150,8 @@ export default {
         fname: "",
         lname: "",
         mail: "",
-        password: ""
+        password: "",
+        confirmpassword: ""
       },
       validation: {
         login: {
@@ -160,6 +175,11 @@ export default {
           invalidFeedback: ""
         },
         password: {
+          valid: false,
+          validated: false,
+          invalidFeedback: ""
+        },
+        confirmpassword: {
           valid: false,
           validated: false,
           invalidFeedback: ""
@@ -211,16 +231,8 @@ export default {
                   this.validation.mail.invalidFeedback = "mail already exist";
                   this.validation.mail.validated = true;
                 }
-                //     this.Errors.username.err = "is-danger";
-                //     this.Errors.username.msg = "this username already exists";
-                //   } else if (res.data.error === "mail exist") {
-                //     this.Errors.email.err = "is-danger";
-                //     this.Errors.email.msg = "this email already exists";
-                //   }
-                // } else this.err = true;
               } else {
                 console.log(res.data);
-                //this.confirm = true;
               }
             }
           })
@@ -320,6 +332,31 @@ export default {
               break;
             }
             this.validation[key].valid = true;
+          }
+        } else {
+          this.validation[key].valid = false;
+          this.validation[key].invalidFeedback =
+            "Password too short. Type at least 8 letters.";
+        }
+        this.validation[key].validated = true;
+      }
+      //Confirm password
+      if (key === "confirmpassword") {
+        if (this.customValues[key].length > 7) {
+          for (let item of regexer) {
+            if (!String(this.customValues[key]).match(item.regex)) {
+              this.validation[key].valid = false;
+              this.validation[key].invalidFeedback = item.error;
+              break;
+            }
+            if (this.customValues[key].match(this.customValues.password))
+              this.validation[key].valid = true;
+              else
+              {
+                this.validation[key].valid = false;
+                  this.validation[key].invalidFeedback =
+                    "Passwords doesn't match.";
+              }
           }
         } else {
           this.validation[key].valid = false;

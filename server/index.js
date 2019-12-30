@@ -3,6 +3,7 @@ const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
 const passport = require('passport')
+const path = require('path')
 ip = require("ip");
 app.set('view engine', 'ejs');
 app.use(passport.initialize());
@@ -96,5 +97,8 @@ async function start() {
     badge: true
   })
 }
+
+const dir = path.join(__dirname , '../uploads');
+app.use('/uploads', express.static(dir));
 
 start()

@@ -21,7 +21,7 @@ export default {
     return {
       err: false,
       pages1: ["login", "signup", "verify", "reset","index"],
-      pages2: ["home", "movie-id", "video-hash","profile-login","settings"]
+      pages2: ["home", "movie-id", "video-hash","profile-login","settings","settings-update_password"]
     };
   }
 };
@@ -45,5 +45,8 @@ body, html {
 }
 .full{
   height: 90vh;
+}
+.picture-preview{
+  background-color: transparent !important;
 }
 </style>

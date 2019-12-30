@@ -41,7 +41,7 @@ function validate_signup(user) {
         user.login.length > 15 ||
         user.login.length < 3
       )
-        errors = ({error: "login",msg : "login is invalid"});
+        errors = { error: "login", msg: "login is invalid" };
       //first name check
       if (
         !String(user.fname).match(
@@ -49,7 +49,7 @@ function validate_signup(user) {
         ) ||
         user.fname.length > 30
       )
-        errors = ({error: "fname",msg : "First name is invalid"});
+        errors = { error: "fname", msg: "First name is invalid" };
       //last name check
       if (
         !String(user.lname).match(
@@ -57,7 +57,7 @@ function validate_signup(user) {
         ) ||
         user.lname.length > 30
       )
-      errors = ({error: "lname",msg : "Last name is invalid"});
+        errors = { error: "lname", msg: "Last name is invalid" };
       //check password
       if (
         !String(user.password).match(
@@ -65,7 +65,7 @@ function validate_signup(user) {
         ) ||
         user.password.length > 30
       )
-      errors=({error:"password",msg:"password invalid"});
+        errors = { error: "password", msg: "password invalid" };
       //check mail
       if (
         !String(user.mail).match(
@@ -73,7 +73,7 @@ function validate_signup(user) {
         ) ||
         user.mail.length > 50
       )
-      errors = ({error: "mail",msg : "Email is invalid"});
+        errors = { error: "mail", msg: "Email is invalid" };
     } else errors.error = "one of fields is Empty.";
   } else {
     errors.error = "empty request";
@@ -90,7 +90,7 @@ function validate_login(data) {
         data.login.length > 30 ||
         data.login.length < 3
       ) {
-        errors=({error:"login",msg:"login invalid"});
+        errors = { error: "login", msg: "login invalid" };
       }
       if (
         !String(data.password).match(
@@ -98,7 +98,7 @@ function validate_login(data) {
         ) ||
         data.password.length > 30
       ) {
-        errors=({error:"password",msg:"password invalid"});
+        errors = { error: "password", msg: "password invalid" };
       }
     } else {
       errors.error = "one of fields is Empty.";
@@ -111,52 +111,77 @@ function validate_login(data) {
 
 function validate_update(data) {
   let errors = {};
-  if (data.login && data.oldpassword && data.mail) {
+  if (data.login && data.fname && data.lname && data.mail) {
+    //login check
     if (
       !String(data.login).match(/^[a-z]+([_-]?[a-z0-9])*$/g) ||
       data.login.length > 30 ||
       data.login.length < 3
     ) {
-      errors = ({error: "login",msg : "login is invalid"});
+      errors = { error: "login", msg: "login is invalid" };
     }
+    //first name check
     if (
-      !String(data.oldpassword).match(
-        /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,30}$/g
+      !String(data.fname).match(
+        /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g
       ) ||
-      data.oldpassword.length > 30
-    ) {
-      errors=({error:"password",msg:"password invalid"});
-    }
+      data.fname.length > 30
+    )
+      errors = { error: "fname", msg: "First name is invalid" };
+    //last name check
+    if (
+      !String(data.lname).match(
+        /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g
+      ) ||
+      data.lname.length > 30
+    )
+      errors = { error: "lname", msg: "Last name is invalid" };
+    //mail check
     if (
       !String(data.mail).match(
         /^[\-0-9a-zA-Z\.\+_]+@[\-0-9a-zA-Z\.\+_]+\.[a-zA-Z]{2,}$/
       ) ||
       data.mail.length > 50
     ) {
-      errors = ({error: "mail",msg : "Email is invalid"});
-    }
-    if (data.password) {
-      if (
-        !String(data.password).match(
-          /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{6,30}$/g
-        ) ||
-        data.password.length > 30
-      )
-      errors=({error:"password",msg:"password invalid"});
+      errors = { error: "mail", msg: "Email is invalid" };
     }
   } else errors.fields = "one of fields is Empty.";
   return errors;
 }
 
-exports.list_all_users = function(req, res) {
-  try {
-    Users.getAllUsers(function(err, users) {
-      if (err) res.send(err);
-      //console.log('res', users);
-      res.send(users);
-    });
-  } catch (err) {}
-};
+function validate_update_password(data) {
+  let errors = {};
+  if (data.oldpassword && data.password) {
+    if (
+      !String(data.oldpassword).match(
+        /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,30}$/g
+      ) ||
+      data.oldpassword.length > 30
+    ) {
+      errors = { error: "password", msg: "password invalid" };
+    }
+    if (data.password) {
+      if (
+        !String(data.password).match(
+          /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,30}$/g
+        ) ||
+        data.password.length > 30
+      )
+        errors = { error: "password", msg: "password invalid" };
+    }
+  } else errors.fields = "one of fields is Empty.";
+  return errors;
+}
+
+// exports.list_all_users = function(req, res) {
+//   try {
+//     Users.getAllUsers(function(err, users) {
+//       if (err) res.send(err);
+//       //console.log('res', users);
+//       res.send(users);
+//     });
+//   } catch (err) {}
+// };
 
 exports.Login = function(req, res) {
   var user = req.body;
@@ -174,7 +199,7 @@ exports.Login = function(req, res) {
         let token = jwt.sign(payload, appSecret);
         return res.status(200).json({
           success: true,
-          token : token
+          token: token
         });
       },
       err => {
@@ -211,14 +236,20 @@ exports.signup = function(req, res) {
                 errors: "mail already exist"
               });
             else {
-              let payload = {user: new_user.login};
+              let payload = { user: new_user.login };
               let token = jwt.sign(payload, appSecret);
               new_user.token = token;
               new_user
                 .save()
                 .then(result => {
                   //send mail to new user
-                  var link ="http://"+host+":3000/verify?t=" +token +"&u=" +new_user.mail;
+                  var link =
+                    "http://" +
+                    host +
+                    ":3000/verify?t=" +
+                    token +
+                    "&u=" +
+                    new_user.mail;
                   var sbj = "HyperTube | Confirm Your E-mail";
                   var msg =
                     'Please click link below to verify your E-mail:</br><a href="' +
@@ -240,258 +271,245 @@ exports.signup = function(req, res) {
     } catch (err) {}
 };
 
-var usersupdate = function(users) {
-  if (users.user_name) this.user_name = users.user_name.toLowerCase();
-  if (users.user_password)
-    this.user_password = require("crypto")
-      .createHash("sha256")
-      .update(users.user_password)
-      .digest("hex");
-  if (users.user_mail) this.user_mail = users.user_mail;
-};
-
 exports.update_account = function(req, res) {
-  var userid = req.jwt.userid;
-  var username = req.jwt.user;
-  var users = new usersupdate(req.body);
-  var passwd = req.body.user_oldpassword;
-  //console.log("Tried");
-  var errors = validate_update(req.body);
+  var login = req.jwt.user;
+  var newuser = req.body;
+  var errors = validate_update(newuser);
   if (Object.keys(errors).length != 0)
-    return res.json({
+    return res.status(200).json({
       success: false,
       errors: errors
     });
   else {
     try {
-      Users.authID(userid, function(err, sqlres) {
-        if (err) {
-          //console.log("Users.auth:: SQL ERROR::", err);
-          return res.end();
-        } else {
-          if (sqlres.length) {
-            var db_password = sqlres[0].user_password;
-            var userpassowrd = require("crypto")
-              .createHash("sha256")
-              .update(passwd)
-              .digest("hex");
-            if (
-              String(db_password).match(userpassowrd) &&
-              username === sqlres[0].user_name
-            ) {
-              try {
-                Users.auth(users.user_name, (err, sqlres1) => {
-                  //console.log('res1');
-                  //console.log(sqlres1);
-                  if (err) return res.end();
-                  else if (sqlres1.length) {
-                    //console.log('xe');
-                    if (sqlres1[0].user_name !== username)
-                      //not his username
-                      return res.json({
-                        username: username,
-                        reason: "taken username",
-                        success: true
-                      });
-                  }
-                  //console.log('ge');
-                  try {
-                    Users.updateById(userid, users, function(err, sqlres) {
-                      //console.log('res');
-                      //console.log(sqlres);
-                      if (err) {
-                        return res.json({
-                          success: false
+      User.find({ login: login }, (err, result) => {
+        if (result.length) {
+          User.find({ login: newuser.login }, (err, resultus) => {
+            if (!resultus.length || resultus[0].login === login) {
+              User.find({ mail: newuser.mail }, (err, result) => {
+                if (!result.length || result[0].login === login) {
+                  User.findOneAndUpdate(
+                    { login: login },
+                    {
+                      login: newuser.login,
+                      fname: newuser.fname,
+                      lname: newuser.lname,
+                      mail: newuser.mail
+                    },
+                    { useFindAndModify: false }
+                  )
+                    .exec()
+                    .then(userRes => {
+                      if (userRes) {
+                        let payload = { user: newuser.login };
+                        let token = jwt.sign(payload, appSecret);
+                        return res.status(201).json({
+                          success: true,
+                          update: token
                         });
-                      }
-                      if (sqlres.affectedRows) {
-                        // token
-                        let payload = { user: users.user_name, userid: userid };
-                        let token = jwt.sign(payload, appSecret, {
-                          expiresIn: "25min"
-                        });
-                        return res.json({
-                          username: users.user_name,
-                          token: token,
-                          success: true
+                      } else {
+                        return res.status(200).json({
+                          success: false,
+                          errors: "something went wrong"
                         });
                       }
                     });
-                  } catch (err) {}
-                });
-              } catch (err) {}
-            } else {
-              return res.json({
-                success: false
+                } else
+                  return res.status(200).json({
+                    success: false,
+                    errors: "mail already exist"
+                  });
               });
-            }
-          }
-        }
+            } else
+              return res.status(200).json({
+                success: false,
+                errors: "login already exist"
+              });
+          });
+        } else
+          return res.status(200).json({
+            success: false,
+            errors: "user dosn't exist"
+          });
       });
     } catch (err) {}
   }
 };
 
-exports.update_a_user = function(req, res) {
-  var users = new Users(req.body);
-  var userId = req.jwt.userid;
-  //data = nonull(users);
-  var errors = is_validForUpdate(req.body);
-  //console.log(errors);
+exports.update_account_password = function(req, res) {
+  var login = req.jwt.user;
+  var password = req.body;
+  var errors = validate_update_password(password);
   if (Object.keys(errors).length != 0)
-    return res.json({
+    return res.status(200).json({
       success: false,
       errors: errors
     });
   else {
     try {
-      Users.updateById(userId, users, function(err, sqlres) {
-        if (err) {
-          return res.json({
-            success: false
+      User.authenticate(login, password.oldpassword).then(
+        result => {
+          if(result){
+          User.findOneAndUpdate(
+            { login: login},
+            {
+              password: password.password
+            },
+            { useFindAndModify: false }
+          )
+            .exec()
+            .then(userRes => {
+              if (userRes) {
+                return res.status(201).json({
+                  success: true,
+                  update: "password successfully updated"
+                });
+              } else {
+                return res.status(200).json({
+                  success: false,
+                  errors: "something went wrong"
+                });
+              }
+            });
+          }
+        },
+        err => {
+          return res.status(200).json({
+            success: false,
+            errors: err
           });
         }
-        //console.log(users);
-        //console.log();
-        if (sqlres.affectedRows)
-          return res.json({
-            success: true
-          });
-        else
-          return res.json({
-            success: false
-          });
-      });
+      );
     } catch (err) {}
   }
 };
 
-exports.reset = (req, res) => {
-  var email = req.body.email;
-  if (
-    !String(email).match(
-      /^[\-0-9a-zA-Z\.\+_]+@[\-0-9a-zA-Z\.\+_]+\.[a-zA-Z]{2,}$/
-    ) ||
-    email.length > 50
-  ) {
-    res.end("invalid email");
-  } else {
-    var token = require("crypto")
-      .randomBytes(48)
-      .toString("hex");
-    var link = "http://" + host + ":3000/reset?t=" + token + "&e=" + email;
-    var sbj = "Matcha | Reset your password";
-    var msg =
-      '</br><a href="' +
-      link +
-      '">Click Here</a> To Rest your password <br> OR Copy this link to your Browser:<br>' +
-      link;
-    try {
-      Users.resetpassword(email, token, (err, sqlres) => {
-        if (err) res.end();
-        //console.log(sqlres);
-        if (sqlres.affectedRows) {
-          //console.log('sending email...');
-          send_mail(email, sbj, msg);
-          res.send("sent");
-        } else {
-          res.send("not found");
-        }
-      });
-    } catch (err) {}
-  }
-};
+// exports.reset = (req, res) => {
+//   var email = req.body.email;
+//   if (
+//     !String(email).match(
+//       /^[\-0-9a-zA-Z\.\+_]+@[\-0-9a-zA-Z\.\+_]+\.[a-zA-Z]{2,}$/
+//     ) ||
+//     email.length > 50
+//   ) {
+//     res.end("invalid email");
+//   } else {
+//     var token = require("crypto")
+//       .randomBytes(48)
+//       .toString("hex");
+//     var link = "http://" + host + ":3000/reset?t=" + token + "&e=" + email;
+//     var sbj = "Matcha | Reset your password";
+//     var msg =
+//       '</br><a href="' +
+//       link +
+//       '">Click Here</a> To Rest your password <br> OR Copy this link to your Browser:<br>' +
+//       link;
+//     try {
+//       Users.resetpassword(email, token, (err, sqlres) => {
+//         if (err) res.end();
+//         //console.log(sqlres);
+//         if (sqlres.affectedRows) {
+//           //console.log('sending email...');
+//           send_mail(email, sbj, msg);
+//           res.send("sent");
+//         } else {
+//           res.send("not found");
+//         }
+//       });
+//     } catch (err) {}
+//   }
+// };
 
-exports.verifyRset = (req, res) => {
-  var email = req.body.email;
-  var token = req.body.token;
-  if (
-    !String(email).match(
-      /^[\-0-9a-zA-Z\.\+_]+@[\-0-9a-zA-Z\.\+_]+\.[a-zA-Z]{2,}$/
-    ) ||
-    email.length > 50
-  ) {
-    res.end("invalid email");
-  } else if (!String(token).match(/^[a-zA-Z0-9]*$/) || token.length > 300) {
-    res.end("invalid token");
-  } else {
-    try {
-      Users.verifyRset(email, token, (err, sqlres) => {
-        if (err) res.end();
-        if (sqlres.length) {
-          res.send("valid");
-        } else {
-          res.send("unvalid");
-        }
-      });
-    } catch (err) {}
-  }
-};
+// exports.verifyRset = (req, res) => {
+//   var email = req.body.email;
+//   var token = req.body.token;
+//   if (
+//     !String(email).match(
+//       /^[\-0-9a-zA-Z\.\+_]+@[\-0-9a-zA-Z\.\+_]+\.[a-zA-Z]{2,}$/
+//     ) ||
+//     email.length > 50
+//   ) {
+//     res.end("invalid email");
+//   } else if (!String(token).match(/^[a-zA-Z0-9]*$/) || token.length > 300) {
+//     res.end("invalid token");
+//   } else {
+//     try {
+//       Users.verifyRset(email, token, (err, sqlres) => {
+//         if (err) res.end();
+//         if (sqlres.length) {
+//           res.send("valid");
+//         } else {
+//           res.send("unvalid");
+//         }
+//       });
+//     } catch (err) {}
+//   }
+// };
 
-exports.changePassword = (req, res) => {
-  var email = req.body.email;
-  var token = req.body.token;
-  var password = req.body.password;
-  if (
-    !String(email).match(
-      /^[\-0-9a-zA-Z\.\+_]+@[\-0-9a-zA-Z\.\+_]+\.[a-zA-Z]{2,}$/
-    ) ||
-    email.length > 50
-  ) {
-    res.end("invalid email");
-  } else if (!String(token).match(/^[a-zA-Z0-9]*$/) || token.length > 300) {
-    res.end("invalid token");
-  } else if (
-    !String(password).match(
-      /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,30}$/g
-    ) ||
-    password.length > 30
-  ) {
-    res.end("invalid password");
-  } else {
-    var newpass = require("crypto")
-      .createHash("sha256")
-      .update(password)
-      .digest("hex");
-    try {
-      Users.changePassword(email, token, newpass, (err, sqlres) => {
-        if (err) res.end();
-        if (sqlres.affectedRows) res.send("done");
-        else res.send("error");
-      });
-    } catch (err) {}
-  }
-};
+// exports.changePassword = (req, res) => {
+//   var email = req.body.email;
+//   var token = req.body.token;
+//   var password = req.body.password;
+//   if (
+//     !String(email).match(
+//       /^[\-0-9a-zA-Z\.\+_]+@[\-0-9a-zA-Z\.\+_]+\.[a-zA-Z]{2,}$/
+//     ) ||
+//     email.length > 50
+//   ) {
+//     res.end("invalid email");
+//   } else if (!String(token).match(/^[a-zA-Z0-9]*$/) || token.length > 300) {
+//     res.end("invalid token");
+//   } else if (
+//     !String(password).match(
+//       /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,30}$/g
+//     ) ||
+//     password.length > 30
+//   ) {
+//     res.end("invalid password");
+//   } else {
+//     var newpass = require("crypto")
+//       .createHash("sha256")
+//       .update(password)
+//       .digest("hex");
+//     try {
+//       Users.changePassword(email, token, newpass, (err, sqlres) => {
+//         if (err) res.end();
+//         if (sqlres.affectedRows) res.send("done");
+//         else res.send("error");
+//       });
+//     } catch (err) {}
+//   }
+// };
 
 exports.userdata = (req, res) => {
   var login = req.params.login.toLowerCase();
   if (!login) {
-          return res.status(400).json({
-              success: false,
-              error: 'username undefined'
-          });
-      } else if (!String(login).match(/^[a-z]+([_-]?[a-z0-9])*$/g) || login.length > 50) {
-          return res.status(400).json({
-              success: false,
-              error: 'username is wrong'
-          });
-      }
-      try{
-         User.findOne({login : login}).then(
-           result => {
-            console.log(result);
-            if(result)
-              {
-                return res.status(200).json({
-                success: true,
-                data: { user: result}
-                });
-           }else
-            return res.status(200).json({
-            success: false,
-            error: 'user not found!'
-            });
-          }
-         )
-      }catch (err) {}
+    return res.status(400).json({
+      success: false,
+      error: "username undefined"
+    });
+  } else if (
+    !String(login).match(/^[a-z]+([_-]?[a-z0-9])*$/g) ||
+    login.length > 50
+  ) {
+    return res.status(400).json({
+      success: false,
+      error: "username is wrong"
+    });
+  }
+  try {
+    User.findOne({ login: login }).then(result => {
+      console.log(result);
+      if (result) {
+        return res.status(200).json({
+          success: true,
+          data: { user: result }
+        });
+      } else
+        return res.status(200).json({
+          success: false,
+          error: "user not found!"
+        });
+    });
+  } catch (err) {}
 };

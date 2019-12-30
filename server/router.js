@@ -10,7 +10,9 @@ const Spotifypassport = require('./controlers/spotifycontroler');
 const jwttoken = require('./jwtMiddleware');
 router.post('/signup', User.signup);
 router.post('/confirm', Validate.confirm);
-router.post('/create_profile_img', Images.create_a_image);
+router.post('/create_profile_img',jwttoken, Images.create_a_image);
+router.put('/update', jwttoken, User.update_account);
+router.put('/updatepassword', jwttoken, User.update_account_password);
 router.post('/authenticate', User.Login);
 
 router.get('/userdata/:login', User.userdata);

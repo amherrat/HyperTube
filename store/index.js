@@ -1,10 +1,12 @@
 // import Veux from "vuex";
+import createPersistedState from "vuex-persistedstate";
 
 // const createStore = () => {
 //     return new Veux.Store({
         export const state = () => ({
             data: []
         })
+        export const plugins = [createPersistedState()]
         export const mutations = {
             changedata(state, data) {
                 //console.log('mutations changedata ');

@@ -48,10 +48,10 @@
             />
           </mdb-dropdown-toggle>
           <mdb-dropdown-menu>
-            <mdb-dropdown-item >
+            <mdb-dropdown-item to="/settings">
               <nuxt-link to="/settings" no-prefetch>Settings</nuxt-link>
             </mdb-dropdown-item>
-            <mdb-dropdown-item>
+            <mdb-dropdown-item to="/logout">
               <nuxt-link to="/logout" no-prefetch>Log out</nuxt-link>
             </mdb-dropdown-item>
           </mdb-dropdown-menu>
@@ -65,7 +65,6 @@
 export default {
   data : () =>  {
     return {
-      
     };
   },
   computed:{
@@ -73,8 +72,17 @@ export default {
       return this.$store.getters.getdata;
     }
   },
+  mounted(){
+    this.$root.$on("refreshAvatar", () => {
+      this.update();
+    });
+  },
   created() {
-   this.$axios
+   this.update();
+  },
+  methods: {
+    update(){      
+    this.$axios
     .get(`/api/whoAmi/${localStorage.token}`)
     .then(res => {
       console.log(res.data.success);
@@ -84,9 +92,7 @@ export default {
         this.$router.push("/login");
     })
     .catch(err => console.log(err));
-  },
-  methods: {
-    
+    }
   }
 };
 </script>
