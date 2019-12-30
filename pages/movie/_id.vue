@@ -66,7 +66,7 @@
             ></iframe>
           </modal>
         </div>
-        <div v-if="moviedata.cast" class="cast">
+        <div v-if="castdone && moviedata.cast" class="cast">
           <div class="title_Cast">Cast</div>
           <div class="_shadow profile"v-for="(cast, i) in moviedata.cast" v-if="i < 10" :key="i">
             <!-- <a :href="'https://www.imdb.com/name/nm'+cast.imdb_code" target="_blank"> -->
@@ -155,6 +155,7 @@ export default {
   },
   data() {
     return {
+      castdone: false,
       selectedTorrent: null,
       selectedTorrentIndex: null,
       value1: 4.1,
@@ -211,7 +212,9 @@ export default {
           }
           this.$axios.$get(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=0f87bface5c69fcf394fc387f33049fa`).then(
             res => {
+              console.log(res.cast);
               this.moviedata.cast = res.cast;
+              this.castdone = true;
             }
           ).catch(err => { console.log(err) });
           this.$axios.$get(`https://tinfo.apiumadomain.com/3/movie/${id}/images?api_key=49101d62654e71a2931722642ac07e5e`).then(
@@ -266,6 +269,9 @@ export default {
 <style scoped>
 .cast_name{
   font-size: 0.6rem;
+}
+.cast{
+  width: 80%;
 }
 .read_reviews {
   display: inline-block;
@@ -533,6 +539,10 @@ export default {
   .watchbutton {
     margin-top: 0;
   }
+  .cast{
+  width: 100%;
+  }
+
 }
 @media (max-width: 404px) {
   .selecttorrent {
