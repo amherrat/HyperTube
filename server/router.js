@@ -52,5 +52,7 @@ router.get('/auth/spotify/callback', Spotifypassport.authenticate('spotify', { f
   });
 // Subtitles
 router.get('/subtitles/:imdbid', require('./controlers/subtitles'));
+//add video
+router.post('/addvideo', require('./controlers/videoController').NewVideo);
 
 module.exports = router;

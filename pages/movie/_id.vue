@@ -68,15 +68,16 @@
         </div>
         <div v-if="moviedata.cast" class="cast">
           <div class="title_Cast">Cast</div>
-          <div class="_shadow profile" v-for="(cast, i) in moviedata.cast" :key="i">
-            <a :href="'https://www.imdb.com/name/nm'+cast.imdb_code" target="_blank">
+          <div class="_shadow profile"v-for="(cast, i) in moviedata.cast" v-if="i < 10" :key="i">
+            <!-- <a :href="'https://www.imdb.com/name/nm'+cast.imdb_code" target="_blank"> -->
+            <a :href="'https://www.themoviedb.org/person/'+cast.id" target="_blank">
               <img
-                :src="cast.url_small_image ? cast.url_small_image : '/default-profile.png'"
+                :src="cast.profile_path ? `https://image.tmdb.org/t/p/original${cast.profile_path}` : '/default-profile.png'"
                 width="60px"
                 height="60px"
               />
               <div class="name">
-                <span>{{cast.name}}</span>
+                <span class="cast_name">{{cast.name}}</span>
               </div>
             </a>
           </div>
@@ -195,7 +196,7 @@ export default {
       //https://tv-v2.api-fetch.website/movie/{imdb_id}
       if (id.match(/tt\d{7,8}/)){
         this.$axios.$get(`https://api.apiumadomain.com/movie?cb=&quality=720p,1080p,3d&page=1&imdb=${id}`).then(res => {
-          console.log(res.poster_big);
+          console.log(res);
           this.moviedata.large_cover_image = res.poster_big;
           this.moviedata.title = res.title;
           this.moviedata.year = res.year;
@@ -204,22 +205,24 @@ export default {
           this.moviedata.yt_trailer_code = res.trailer;
           this.moviedata.rating = res.rating;
           this.moviedata.description_full = res.description;
-          this.moviedata.cast = res.actors;
           this.genre = res.genres[0];
           for (let i in res.items) {
             this.torrents.push({quality: res.items[i].quality, peers: res.items[i].torrent_peers, seeds: res.items[i].torrent_seeds, hash: res.items[i].torrent_magnet.substring(20, 60)});
           }
+          this.$axios.$get(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=0f87bface5c69fcf394fc387f33049fa`).then(
+            res => {
+              this.moviedata.cast = res.cast;
+            }
+          ).catch(err => { console.log(err) });
           this.$axios.$get(`https://tinfo.apiumadomain.com/3/movie/${id}/images?api_key=49101d62654e71a2931722642ac07e5e`).then(
             res => {
-              console.log(res);
               for (const x in res.backdrops){
-                console.log("http://image.tmdb.org/t/p/original"+res.backdrops[x].file_path);
                 this.images.push("http://image.tmdb.org/t/p/original"+res.backdrops[x].file_path);
               }
             }
-          ).catch(err => {console.log(err)})
+          ).catch(err => {console.log(err)});
         }).catch(err => { console.log(err) });
-      }else{        
+      }else{
       //YTS
       // this.$axios
       //   .$get("https://yts.lt/api/v2/movie_details.json", {
@@ -245,7 +248,6 @@ export default {
       //   .catch(err => {
       //     console.error(err);
       //   });
-        console.log(id);
         this.$route.push({name: 'home'});
       }
     },
@@ -262,6 +264,9 @@ export default {
 };
 </script>
 <style scoped>
+.cast_name{
+  font-size: 0.6rem;
+}
 .read_reviews {
   display: inline-block;
   outline: 0;
