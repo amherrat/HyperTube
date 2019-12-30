@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const User = require('./controlers/userscontroler');
 const Images = require('./controlers/imagescontroler');
+const Comment = require('./controlers/commentController');
 const Validate = require('./controlers/validatecontroler');
 const Googlepassport = require('./controlers/googlecontroler');
 const FortyTwopassport = require('./controlers/42controler');
@@ -21,6 +22,10 @@ router.get('/whoAmi/:token', jwttoken, (req, res) => {
     data: req.jwt
   });
 });
+
+router.post('/comment/add', jwttoken, Comment.commentAdd);
+router.get('/comment/get/:token/:id_film/:hash_film', jwttoken, Comment.commentGet);
+//router.get('/comment/tata/:token', jwttoken);
 
 /*Google*/
 router.get('/auth/google', Googlepassport.authenticate('google', { scope: ['profile', 'email'] }));

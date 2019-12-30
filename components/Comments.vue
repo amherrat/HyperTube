@@ -10,20 +10,15 @@
       </div>
     </div>
     <div class="other_comment">
-      <div class="userscomment">
-        <div class="user_profile">
+      <div style="margin-top: 3%;" class="userscomment" v-for="(com, index) in this.comment" v-bind:key="index">
+        <div class="user_profile" style="margin-top: 1%;">
           <img src="/default-profile.png" width="60px" height="60px" />
         </div>
         <div class="user_comment">
-          <span>Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.</span>
+          <span>{{com.comment}}</span>
         </div>
-      </div>
-      <div class="userscomment">
-        <div class="user_profile">
-          <img src="/default-profile.png" width="60px" height="60px" />
-        </div>
-        <div class="user_comment">
-          <span>Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression.</span>
+        <div class="userNameDate">
+          <span>{{com.username}},{{new Date(com.date).toLocaleString()}}</span>
         </div>
       </div>
     </div>
@@ -35,13 +30,51 @@ export default {
   name: "Comments",
   data() {
     return {
-      inputComment: null
+      inputComment: null,
+      hash: this.$route.params.hash,
+      id: this.$route.query.id,
+      token: localStorage.token,
+      comment: []
     };
   },
+  created(){
+    this.getComment();
+  },
   methods: {
+    getComment() {
+      const theComment = {
+          id_film: this.id,
+          hash_film: this.hash
+      }
+      this.$axios
+            .$get(`/api/comment/get/${this.token}/${theComment.id_film}/${theComment.hash_film}`)
+            .then(res => {
+              if (res.success)
+                this.comment = res.data.reverse();
+                console.log(this.comment);
+            })
+            .catch(err => {
+              console.log(err);
+            }) 
+    },
     NewComment() {
-      console.log("Enter : " + this.inputComment);
-      this.inputComment = null;
+      const theComment = {
+        id_film: this.id,
+        hash_film: this.hash,
+        comment: this.inputComment,
+        token: this.token 
+      }
+      this.$axios
+          .$post('/api/comment/add', theComment)
+          .then(res => {
+            let data = res.data;
+            let comment = this.comment;
+            comment.unshift(data);
+            this.comment = comment;
+            this.inputComment = "";
+          })
+          .catch(err => {
+          })
     }
   }
 };
@@ -51,7 +84,12 @@ export default {
 .user_profile img {
   border-radius: 50%;
 }
-
+.userNameDate{
+  color: white;
+  float: right;
+  margin-right: 1%;
+  font-size: 11px;
+}
 .user_profile {
   width: 65px;
   height: 65px;
@@ -108,6 +146,7 @@ export default {
   margin-top: 10px;
   font-size: 1.1rem;
   color: white;
+  margin-top: 3%;
   text-shadow: 0 0 5px #abd6dfff, 0 0 #abd6dfff, 0 0 #abd6dfff, 0 0 #abd6dfff;
 }
 @media (max-width: 600px) {
