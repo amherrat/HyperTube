@@ -38,14 +38,14 @@ export default {
     var hash = params.hash.toLowerCase();
     if (!query.id) return false;
     return (
-      /^[0-9]*$/.test(query.id) &&
-      /^(?!0*$).*$/.test(query.id) &&
+      // /^[0-9]*$/.test(query.id) &&
+      // /^(?!0*$).*$/.test(query.id) &&
       /([0-9a-f]{6})([0-9a-f]{34})/.test(hash)
     );
   },
   data() {
     return {
-      done: false,
+      done: true,
       movie_details: [],
       inputComment: "",
       playerOptions: {
@@ -66,64 +66,64 @@ export default {
     };
   },
   created() {
-    var id = this.$route.query.id;
-    this.$axios
-      .$get(
-        "https://yts.lt/api/v2/movie_details.json?with_images=true&movie_id=" +
-          id
-      )
-      .then(res => {
-        this.movie_details = res.data.movie;
-        console.log(res.data.movie);
-        var fine = 0;
-        // check if hash is from movie id
-        for (let index in res.data.movie.torrents) {
-          if (
-            res.data.movie.torrents[index].hash.includes(
-              this.$route.params.hash
-            )
-          )
-            fine = 1;
-        }
-        if (fine) {
-          var imdbid = res.data.movie.imdb_code;
-          this.playerOptions.poster = res.data.movie.large_screenshot_image3;
-          this.$axios
-            .$get("/api/subtitles/" + imdbid)
-            .then(res => {
-              console.log("subtitles");
-              console.log(res);
-              for (let lang in res) {
-                console.log(res[lang].langShort);
-                this.playerOptions.textTrack.push({
-                  src: res[lang].path.replace("/Volumes/Storage/goinfre/adouz/hyperTube/static",""),
-                  kind: "captions",
-                  label: res[lang].lang,
-                  srclang: res[lang].langShort,
-                  default: res[lang].langShort === "en" ? true : false
-                });
-              }
-              this.done = true;
-            })
-            .catch(err => {
-              console.log(err);
-            });
-          this.$axios
-            .$post("/api/addvideo", {
-              hash: this.$route.params.hash,
-              imdbid: imdbid
-            })
-            .then(res => {
-              console.log(res);
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        } else this.$router.push({ name: "home" });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    // var id = this.$route.query.id;
+    // this.$axios
+    //   .$get(
+    //     "https://yts.lt/api/v2/movie_details.json?with_images=true&movie_id=" +
+    //       id
+    //   )
+    //   .then(res => {
+    //     this.movie_details = res.data.movie;
+    //     console.log(res.data.movie);
+    //     var fine = 0;
+    //     // check if hash is from movie id
+    //     for (let index in res.data.movie.torrents) {
+    //       if (
+    //         res.data.movie.torrents[index].hash.includes(
+    //           this.$route.params.hash
+    //         )
+    //       )
+    //         fine = 1;
+    //     }
+    //     if (fine) {
+    //       var imdbid = res.data.movie.imdb_code;
+    //       this.playerOptions.poster = res.data.movie.large_screenshot_image3;
+    //       this.$axios
+    //         .$get("/api/subtitles/" + imdbid)
+    //         .then(res => {
+    //           console.log("subtitles");
+    //           console.log(res);
+    //           for (let lang in res) {
+    //             console.log(res[lang].langShort);
+    //             this.playerOptions.textTrack.push({
+    //               src: res[lang].path.replace("/Volumes/Storage/goinfre/adouz/hyperTube/static",""),
+    //               kind: "captions",
+    //               label: res[lang].lang,
+    //               srclang: res[lang].langShort,
+    //               default: res[lang].langShort === "en" ? true : false
+    //             });
+    //           }
+    //           this.done = true;
+    //         })
+    //         .catch(err => {
+    //           console.log(err);
+    //         });
+    //       this.$axios
+    //         .$post("/api/addvideo", {
+    //           hash: this.$route.params.hash,
+    //           imdbid: imdbid
+    //         })
+    //         .then(res => {
+    //           console.log(res);
+    //         })
+    //         .catch(err => {
+    //           console.log(err);
+    //         });
+    //     } else this.$router.push({ name: "home" });
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
   },
   mounted() {
     console.log(this.$route.params.hash);

@@ -165,7 +165,7 @@ export default {
     };
   },
   validate({ params }) {
-    return /^[0-9]*$/.test(params.id) && /^(?!0*$).*$/.test(params.id);
+    return (/^[0-9]*$/.test(params.id) && /^(?!0*$).*$/.test(params.id)) || /tt\d{7,8}/.test(params.id);
   },
   mounted() {
     this.$store.dispatch("getdata", "adouz").then(() => {
@@ -192,30 +192,62 @@ export default {
       this.$modal.show("yt_trailer");
     },
     getMovieData(id) {
-      this.$axios
-        .$get("https://yts.lt/api/v2/movie_details.json", {
-          params: {
-            movie_id: id,
-            with_images: true,
-            with_cast: true
+      //https://tv-v2.api-fetch.website/movie/{imdb_id}
+      if (id.match(/tt\d{7,8}/)){
+        this.$axios.$get(`https://api.apiumadomain.com/movie?cb=&quality=720p,1080p,3d&page=1&imdb=${id}`).then(res => {
+          console.log(res.poster_big);
+          this.moviedata.large_cover_image = res.poster_big;
+          this.moviedata.title = res.title;
+          this.moviedata.year = res.year;
+          this.moviedata.runtime = res.runtime;
+          this.moviedata.imdb_code = res.imdb;
+          this.moviedata.yt_trailer_code = res.trailer;
+          this.moviedata.rating = res.rating;
+          this.moviedata.description_full = res.description;
+          this.moviedata.cast = res.actors;
+          this.genre = res.genres[0];
+          for (let i in res.items) {
+            this.torrents.push({quality: res.items[i].quality, peers: res.items[i].torrent_peers, seeds: res.items[i].torrent_seeds, hash: res.items[i].torrent_magnet.substring(20, 60)});
           }
-        })
-        .then(res => {
-          if (res.data.movie.id !== 0) {
-            console.log(res.data);
-            this.moviedata = res.data.movie;
-            this.images = [
-              this.moviedata.large_screenshot_image1,
-              this.moviedata.large_screenshot_image2,
-              this.moviedata.large_screenshot_image3
-            ];
-            this.genre = this.moviedata.genres[0];
-            this.torrents = this.moviedata.torrents;
-          } else this.$router.push("/");
-        })
-        .catch(err => {
-          console.error(err);
-        });
+          this.$axios.$get(`https://tinfo.apiumadomain.com/3/movie/${id}/images?api_key=49101d62654e71a2931722642ac07e5e`).then(
+            res => {
+              console.log(res);
+              for (const x in res.backdrops){
+                console.log("http://image.tmdb.org/t/p/original"+res.backdrops[x].file_path);
+                this.images.push("http://image.tmdb.org/t/p/original"+res.backdrops[x].file_path);
+              }
+            }
+          ).catch(err => {console.log(err)})
+        }).catch(err => { console.log(err) });
+      }else{        
+      //YTS
+      // this.$axios
+      //   .$get("https://yts.lt/api/v2/movie_details.json", {
+      //     params: {
+      //       movie_id: id,
+      //       with_images: true,
+      //       with_cast: true
+      //     }
+      //   })
+      //   .then(res => {
+      //     if (res.data && res.data.movie.id !== 0) {
+      //       console.log(res.data);
+      //       this.moviedata = res.data.movie;
+      //       this.images = [
+      //         this.moviedata.large_screenshot_image1,
+      //         this.moviedata.large_screenshot_image2,
+      //         this.moviedata.large_screenshot_image3
+      //       ];
+      //       this.genre = this.moviedata.genres[0];
+      //       this.torrents = this.moviedata.torrents;
+      //     } else this.$router.push("/");
+      //   })
+      //   .catch(err => {
+      //     console.error(err);
+      //   });
+        console.log(id);
+        this.$route.push({name: 'home'});
+      }
     },
     backImages() {
       var i = 1;
