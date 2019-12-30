@@ -46,7 +46,7 @@
                       </select>
                     </div>
                   </div>
-                  <div class="col-md-3">
+                  <!-- <div class="col-md-3">
                     <div class="form-group">
                       <label for="rating">Rating</label>
                       <select id="rating" v-model="choosedRate" class="form-control">
@@ -54,7 +54,7 @@
                         <option v-for="(rate, index) in this.rating" v-bind:key="index">{{rate}}</option>
                       </select>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="col-md-3">
                     <div class="form-group">
                       <label for="sortby">Sort by</label>
@@ -89,7 +89,8 @@
       <div v-for="(film, index) in this.films" v-bind:key="index" ref="comCard" id="comCard" class="col-lg-2 col-md-3 col-sm-4 col-4"  style="padding-left: 0px; padding-right: 0;">
          <div class="card" ref="mycard" id="mycard">
             <div class="image">
-              <img :src="film.medium_cover_image" />
+              <!-- <img :src="film.medium_cover_image" /> -->
+              <img :src="film.poster_med" />
             </div>
             <div class="details">
               <div class="center">
@@ -102,7 +103,8 @@
                 <span style="color: #ffe066 ; ">{{film.year}}&nbsp;<font-awesome-icon id="iconStyle" style="color: #ffe066 " :icon="['fas', 'clock']" size="1x"/></span>
                 <br />
                 <br />
-                <nuxt-link :to="'/movie/'+ film.id">
+                <!-- <nuxt-link :to="'/movie/'+ film.id"> -->
+                <nuxt-link :to="'/movie/'+ film.imdb">
                   <span style="color: #ffe066 ; cursor:pointer;"><font-awesome-icon id="iconStyle" style="color: #ffe066 " :icon="['far', 'eye']" size="2x"/></span>
                 </nuxt-link>
                 </h1>
@@ -110,7 +112,7 @@
               </div>
             </div>
           </div>
-      </div>
+    </div>
       
       <div v-if="!this.loadDone" style="margin-left: 58vh; margin-top: 8vh;" class="spinner-border text-danger" role="status">
         <span class="sr-only">Loading...</span>
@@ -127,36 +129,46 @@ import axios from 'axios';
 export default {
   data : () =>  {
     return {
+      busy: false,
       filmyear: [1950,2020],
       allFilm: [],
       films: [],
       term: '',
       filterbarshow: false,
-      choosedQuality: 'All',
-      choosedGenre: 'All',
+      choosedQuality: 0,
+      choosedGenre: 0,
       choosedRate: 0,
-      sortvalue: 'None',
-      sortby: ["year", "rating", "peers", "seeds", "download_count"],
+      sortvalue: 0,
+      // sortby: ["year", "rating", "peers", "seeds", "download_count"], dateadded, seeds, year, title
+      sortby: ["date added", "popularity", "year", "title"],
       quality: ["3D", "720p", "1080p"],
-      genre: ["All", "Action", "Adventure", "Animation", "Biography", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "Film-Noir", "Game-Show", "History", "Horror", "Music", "Mystery", "News", "Reality-TV", "Romance", "Sci-Fi", "Sport", "Talk-Show", "Thriller", "War", "Western"],
+      // genre: ["All", "Action", "Adventure", "Animation", "Biography", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "Film-Noir", "Game-Show", "History", "Horror", "Music", "Mystery", "News", "Reality-TV", "Romance", "Sci-Fi", "Sport", "Talk-Show", "Thriller", "War", "Western"],
+      genre: ["All", "Action", "Adventure", "Animation", "Biography", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "Film-Noir", "History", "Horror", "Music", "Mystery", "Romance", "Sci-Fi", "Sport", "Thriller", "War", "Western"],
       rating: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
       page: 1,
       filmsExist: 0,
       limit: 50,
       loadDone: 1,
-      activeScroll: 1
+      activeScroll: 1,
+      empty: false
     };
   },
   mounted() {
-    axios.get(`https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${this.page}`)
+    this.infinteScroll();
+    // axios.get(`https://yts.ms/api/v2/list_movies.json?sort=seeds&page=${this.page}`)
+    axios.get(`https://api.apiumadomain.com/list?sort=seeds&short=1&cb=&quality=720p,1080p,3d&page=${this.page}`)
          .then(res => {
            let data = res.data;
-           if (data.status === "ok")
+          //  if (data.status === "ok")
+           if (res.status === 200)
            {
-             this.films = data.data.movies;
-             this.allFilm = data.data.movies;
-             this.filmsExist = 1;
+             this.films = data.MovieList;
              this.page = this.page + 1;
+             this.filmsExist = 1;
+            //  this.films = data.data.movies;
+            //  this.allFilm = data.data.movies;
+            //  this.filmsExist = 1;
+            //  this.page = this.page + 1;
            }
            this.scroll(this);
          })
@@ -180,38 +192,65 @@ export default {
     search () {
       this.filmsExist = 0;
       this.films = [];
-      this.page = 0;
+      this.page = 1;
+      this.empty = false;
       let link;
       
-      if (this.choosedQuality === "All" && this.sortvalue === "None" && this.choosedRate === 0 && this.term === '' && this.choosedGenre === "All")
-        link = `https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${this.page}`;
+      if (!this.choosedQuality  && !this.sortvalue && !this.choosedRate  && !this.term  && !this.choosedGenre ){
+
+      console.log('everything empty');
+        link = `https://api.apiumadomain.com/list?sort=seeds&short=1&cb=&quality=720p,1080p,3d&page=${this.page}`;
+        // link = `https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${this.page}`;
+      }
       else
       {
+        console.log(this.choosedQuality,this.sortvalue,this.choosedRate,this.term ,this.choosedGenre);
         this.activeScroll = 0;
-        if ( this.sortvalue === "None" )
-          this.sortvalue = "date_added";
-        if ( this.choosedGenre === "All" )
-          this.choosedGenre = 0;
-        if (this.choosedQuality === "All")
-          this.choosedQuality = 0;
-        link = `https://yts.lt/api/v2/list_movies.json?sort_by=${this.sortvalue}&query_term=${this.term}&quality=${this.choosedQuality}&minimum_rating=${this.choosedRate}&genre=${this.choosedGenre}`;
-        if (this.choosedGenre === 0)
-          this.choosedGenre = "All";
-        if (this.choosedQuality === 0)
-          this.choosedQuality = "All";
-        if ( this.sortvalue === "date_added" )
-          this.sortvalue = "None";
+        // if ( this.sortvalue === "None" ) // dateadded, seeds, year, title
+        //   this.sortvalue = "date_added";
+        // if ( this.choosedGenre === "All" ) // 
+        //   this.choosedGenre = 0;
+        // if (this.choosedQuality === "All") //720p, 1080p, 3d
+        //   this.choosedQuality = 0;
+        // link = `https://yts.lt/api/v2/list_movies.json?sort_by=${this.sortvalue}&query_term=${this.term}&quality=${this.choosedQuality}&minimum_rating=${this.choosedRate}&genre=${this.choosedGenre}`;
+        this.sortvalue = this.sortvalue === "None" ? 0 : this.sortvalue;
+        this.sortvalue = this.sortvalue === "popularity" ? "seeds" : this.sortvalue;
+        this.sortvalue = this.sortvalue === "date added" ? "dateadded" : this.sortvalue;
+        this.choosedGenre = this.choosedGenre === "All" ? 0 : this.choosedGenre;
+        this.choosedQuality = this.choosedQuality === "All" ? 0 : this.choosedQuality;
+        console.log(this.choosedQuality,this.sortvalue,this.choosedRate,this.term ,this.choosedGenre);
+        link = `https://api.apiumadomain.com/list?sort=${this.sortvalue ? this.sortvalue : ''}&short=1&cb=&quality=${this.choosedQuality ? this.choosedQuality : '' }&page=${this.page}&keywords=${this.term ? this.term : ''}&genre=${this.choosedGenre ? this.choosedGenre : ''}`;
+        // if (this.choosedGenre === 0)
+        //   this.choosedGenre = "All";
+        // if (this.choosedQuality === 0)
+        //   this.choosedQuality = "All";
+        // if ( this.sortvalue === "date_added" )
+        //   this.sortvalue = "None";
       }
+      console.log(`link ${link}`);
       axios.get(link)
       .then(res => {
         let data = res.data;
-        if (data.status === "ok" && data.data.movies)
+        console.log(data.MovieList);
+        if (res.status === 200 && data.MovieList.length)
         {
-          let min = this.filmyear[0];
-          let max = this.filmyear[1];
-          this.films = data.data.movies.filter(film => film.year >= min && film.year <= max);
-          this.allFilm = data.data.movies;
-          this.page = 1;
+          this.films = data.MovieList;
+          this.page = this.page + 1;
+          this.filmsExist = 1;
+          // let min = this.filmyear[0];
+          // let max = this.filmyear[1];
+          // this.films = data.data.movies.filter(film => film.year >= min && film.year <= max);
+          // console.log(this.films[0]);
+          // this.allFilm = data.data.movies;
+          // this.page = 1;
+        }else{
+          //2end Api
+          console.log('popcorn api');
+          // link = `https://api.apiumadomain.com/list?sort=seeds&short=1&cb=&quality=720p,1080p,3d&page=1&keywords=${this.term}`
+          axios.get(link).then(res => {
+            let Movies = res.data.MovieList;
+            console.log(Movies);
+          }).catch(err => {console.log(err)});
         }
         this.filmsExist = 1;
         this.filterbarshow = false;
@@ -222,15 +261,67 @@ export default {
         console.log(err);
       });
     },
+    getMoreData(){
+      if (this.sortvalue || this.choosedGenre || this.choosedQuality || this.term){
+        let link = `https://api.apiumadomain.com/list?sort=${this.sortvalue ? this.sortvalue : ''}&short=1&cb=&quality=${this.choosedQuality ? this.choosedQuality : '' }&page=${this.page}&keywords=${this.term ? this.term : ''}&genre=${this.choosedGenre ? this.choosedGenre : ''}`;
+        console.log(link);
+        axios.get(link)
+        .then(res => {
+          let data = res.data;
+          if (res.status === 200 && data.MovieList.length)
+          {
+            console.log(data.MovieList);
+            this.films = this.films.concat(data.MovieList);
+            this.page += 1;
+            this.filmsExist = 1;
+            console.log(this.films);
+            this.empty = false;
+          }
+        })
+        .catch(err => {});        
+      }else{
+      this.filmsExist = 0;
+      axios.get(`https://api.apiumadomain.com/list?sort=seeds&short=1&cb=&quality=720p,1080p,3d&page=${this.page}`)
+      .then(res => {
+        let data = res.data;
+        if (res.status === 200  && data.MovieList.length)
+        {
+          console.log(data.MovieList);
+          this.films = this.films.concat(data.MovieList);
+          this.page += 1;
+          this.filmsExist = 1;
+          console.log(this.films);
+          this.empty = false;
+        }
+      })
+      .catch(err => {});
+      }
+
+    },
+    infinteScroll(){
+      console.log('loadmore');
+      window.onscroll = () => {
+        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+          var clientHeight = document.documentElement.clientHeight;
+          const ele = document.querySelector('body');
+          console.log(this.$route.name);
+          if (ele.scrollHeight <= (scrollTop + clientHeight + 150) && !this.empty && this.$route.name === "home")
+          {
+            console.log('scroll now');
+            this.empty = true;
+            this.getMoreData();
+          }
+      }
+    },
     scroll (state) {
         window.addEventListener(
       'scroll',
       function()
       {
-          var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+         /* var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
           var clientHeight = document.documentElement.clientHeight;
           const ele = document.querySelector('body');
-          if (ele.scrollHeight <= (scrollTop + clientHeight + 150)/* && state.activeScroll === 1*/)
+          if (ele.scrollHeight <= (scrollTop + clientHeight + 150))
           {
             state.page = state.page + 1;
             state.loadDone = 0;
@@ -276,7 +367,7 @@ export default {
           else
           {
             
-          }
+          }*/
       },
       false
     );
