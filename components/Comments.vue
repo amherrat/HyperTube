@@ -2,7 +2,7 @@
   <div class="comments">
     <div class="input_comment">
       <div class="input_profile">
-        <img src="/default-profile.png" width="60px" height="60px" />
+        <img :src="this.$store.getters.getdata.profil ? this.$store.getters.getdata.profil : 'http://localhost:3000/default-profile.png'" width="60px" height="60px" />
       </div>
       <div class="input_textarea">
         <input v-model="inputComment" class="textarea" v-on:keyup.enter="NewComment()" />
@@ -10,9 +10,9 @@
       </div>
     </div>
     <div class="other_comment">
-      <div style="margin-top: 3%;" class="userscomment" v-for="(com, index) in this.comment" v-bind:key="index">
+      <div style="margin-top: 2%;" class="userscomment" v-for="(com, index) in this.comment" v-bind:key="index">
         <div class="user_profile" style="margin-top: 1%;">
-          <img src="/default-profile.png" width="60px" height="60px" />
+          <img :src="pics.filter(p => p.login === com.username)[0]['profil'] ? pics.filter(p => p.login === com.username)[0]['profil'] : 'http://localhost:3000/default-profile.png'" width="60px" height="60px" />
         </div>
         <div class="user_comment">
           <span>{{com.comment}}</span>
@@ -34,11 +34,14 @@ export default {
       hash: this.$route.params.hash,
       id: this.$route.query.id,
       token: localStorage.token,
+      pics: [],
       comment: []
     };
   },
   created(){
     this.getComment();
+    console.log(this.$store.getters.getdata.profil);
+    
   },
   methods: {
     getComment() {
@@ -51,7 +54,7 @@ export default {
             .then(res => {
               if (res.success)
                 this.comment = res.data.reverse();
-                console.log(this.comment);
+                this.pics = res.users;
             })
             .catch(err => {
               console.log(err);
@@ -81,6 +84,11 @@ export default {
 </script>
 
 <style>
+@media (max-width: 1170px) {
+  .userscomment{
+    margin-top: 5% !important;
+  }
+}
 .user_profile img {
   border-radius: 50%;
 }
