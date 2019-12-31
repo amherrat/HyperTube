@@ -42,7 +42,7 @@
         <div class="about">
           <div class="short_synopsis">{{moviedata.description_full}}</div>
           <div v-if="moviedata.yt_trailer_code" class="trailer" @click="opentrailer">
-            <div class="ytvideo" :style="'background-image:url('+images[1]+')'">
+            <div class="ytvideo" :style="`background-image:url(${images[2] ? images[2] : `http://i3.ytimg.com/vi/${moviedata.yt_trailer_code}/hqdefault.jpg`})`">
               <img src="/play2.png" class="playbutton" />
             </div>
           </div>
@@ -68,7 +68,7 @@
         </div>
         <div v-if="castdone && moviedata.cast" class="cast">
           <div class="title_Cast">Cast</div>
-          <div class="_shadow profile"v-for="(cast, i) in moviedata.cast" v-if="i < 10" :key="i">
+          <div class="_shadow profile" v-for="(cast, i) in moviedata.cast" v-if="i < 10" :key="i">
             <!-- <a :href="'https://www.imdb.com/name/nm'+cast.imdb_code" target="_blank"> -->
             <a :href="'https://www.themoviedb.org/person/'+cast.id" target="_blank">
               <img
@@ -110,31 +110,6 @@
               </span>
             </mdb-btn>
           </mdb-btn-group>
-          <!-- <mdb-dropdown dropup>
-            <mdb-dropdown-toggle slot="toggle" gradient="blue">{{selectedTorrent}}</mdb-dropdown-toggle>
-            <mdb-dropdown-menu>
-              <mdb-dropdown-item
-                v-for="(torrent, x) in torrents"
-                :key="x"
-                @click="TorrentSelect(x)"
-              >
-                <span>{{torrent.quality}}</span>
-                <span v-if="torrent.seeds > 500" class="peers peers-good">
-                  <font-awesome-icon :icon="['fas', 'wifi']" size="1x" />
-                  <i class="icon icon-battery-charging"></i>
-                  {{torrent.peers+'/'+torrent.seeds}}
-                </span>
-                <span v-if="torrent.seeds > 150 && torrent.seeds < 500" class="peers peers-mid">
-                  <font-awesome-icon :icon="['fas', 'wifi']" size="1x" />
-                  {{torrent.peers+'/'+torrent.seeds}}
-                </span>
-                <span v-if="torrent.seeds < 150" class="peers peers-bad">
-                  <font-awesome-icon :icon="['fas', 'wifi']" size="1x" />
-                  {{torrent.peers+'/'+torrent.seeds}}
-                </span>
-              </mdb-dropdown-item>
-            </mdb-dropdown-menu>
-          </mdb-dropdown>-->
         </div>
         <div class="watchbutton">
           <mdb-btn :disabled="selectedTorrent ? false : true" gradient="blue" @click="gowatch">
@@ -148,7 +123,7 @@
 
 <script>
 import StarRating from "vue-star-rating";
-
+import axios from "axios";
 export default {
   components: {
     StarRating
@@ -167,7 +142,10 @@ export default {
     };
   },
   validate({ params }) {
-    return (/^[0-9]*$/.test(params.id) && /^(?!0*$).*$/.test(params.id)) || /tt\d{7,8}/.test(params.id);
+    return (
+      // (/^[0-9]*$/.test(params.id) && /^(?!0*$).*$/.test(params.id)) ||
+      /tt\d{7,8}/.test(params.id)
+    );
   },
   mounted() {
     this.$store.dispatch("getdata", "adouz").then(() => {
@@ -185,8 +163,11 @@ export default {
       if (this.selectedTorrentIndex !== null) {
         if (this.torrents[this.selectedTorrentIndex]) {
           console.log("redirect to:");
-          this.$router.push({ name: "video-hash", params: {hash: this.torrents[this.selectedTorrentIndex].hash}, query: { id: this.$route.params.id } }
-          );
+          this.$router.push({
+            name: "video-hash",
+            params: { hash: this.torrents[this.selectedTorrentIndex].hash },
+            query: { id: this.$route.params.id }
+          });
         }
       }
     },
@@ -195,63 +176,95 @@ export default {
     },
     getMovieData(id) {
       //https://tv-v2.api-fetch.website/movie/{imdb_id}
-      if (id.match(/tt\d{7,8}/)){
-        this.$axios.$get(`https://api.apiumadomain.com/movie?cb=&quality=720p,1080p,3d&page=1&imdb=${id}`).then(res => {
-          console.log(res);
-          this.moviedata.large_cover_image = res.poster_big;
-          this.moviedata.title = res.title;
-          this.moviedata.year = res.year;
-          this.moviedata.runtime = res.runtime;
-          this.moviedata.imdb_code = res.imdb;
-          this.moviedata.yt_trailer_code = res.trailer;
-          this.moviedata.rating = res.rating;
-          this.moviedata.description_full = res.description;
-          this.genre = res.genres[0];
-          for (let i in res.items) {
-            this.torrents.push({quality: res.items[i].quality, peers: res.items[i].torrent_peers, seeds: res.items[i].torrent_seeds, hash: res.items[i].torrent_magnet.substring(20, 60)});
-          }
-          this.$axios.$get(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=0f87bface5c69fcf394fc387f33049fa`).then(
-            res => {
-              console.log(res.cast);
-              this.moviedata.cast = res.cast;
-              this.castdone = true;
-            }
-          ).catch(err => { console.log(err) });
-          this.$axios.$get(`https://tinfo.apiumadomain.com/3/movie/${id}/images?api_key=49101d62654e71a2931722642ac07e5e`).then(
-            res => {
-              for (const x in res.backdrops){
-                this.images.push("http://image.tmdb.org/t/p/original"+res.backdrops[x].file_path);
+      if (id.match(/tt\d{7,8}/)) {
+        axios
+          .get(
+            `https://api.apiumadomain.com/movie?cb=&quality=720p,1080p,3d&page=1&imdb=${id}`
+          )
+          .then(res => {
+            let data = res.data;
+            console.log(data);
+            if (res.status === 200) {
+              console.log(data);
+              this.moviedata.large_cover_image = data.poster_big;
+              this.moviedata.title = data.title;
+              this.moviedata.year = data.year;
+              this.moviedata.runtime = data.runtime;
+              this.moviedata.imdb_code = data.imdb;
+              this.moviedata.yt_trailer_code = data.trailer;
+              this.moviedata.rating = data.rating;
+              this.moviedata.description_full = data.description;
+              this.genre = data.genres[0];
+              for (let i in data.items) {
+                this.torrents.push({
+                  quality: data.items[i].quality,
+                  peers: data.items[i].torrent_peers,
+                  seeds: data.items[i].torrent_seeds,
+                  hash: data.items[i].torrent_magnet.substring(20, 60)
+                });
               }
-            }
-          ).catch(err => {console.log(err)});
-        }).catch(err => { console.log(err) });
-      }else{
-      //YTS
-      // this.$axios
-      //   .$get("https://yts.lt/api/v2/movie_details.json", {
-      //     params: {
-      //       movie_id: id,
-      //       with_images: true,
-      //       with_cast: true
-      //     }
-      //   })
-      //   .then(res => {
-      //     if (res.data && res.data.movie.id !== 0) {
-      //       console.log(res.data);
-      //       this.moviedata = res.data.movie;
-      //       this.images = [
-      //         this.moviedata.large_screenshot_image1,
-      //         this.moviedata.large_screenshot_image2,
-      //         this.moviedata.large_screenshot_image3
-      //       ];
-      //       this.genre = this.moviedata.genres[0];
-      //       this.torrents = this.moviedata.torrents;
-      //     } else this.$router.push("/");
-      //   })
-      //   .catch(err => {
-      //     console.error(err);
-      //   });
-        this.$route.push({name: 'home'});
+              axios
+                .get(
+                  `https://api.themoviedb.org/3/movie/${id}/credits?api_key=0f87bface5c69fcf394fc387f33049fa`
+                )
+                .then(res => {
+                  let data = res.data;
+                  console.log(data.cast);
+                  this.moviedata.cast = data.cast;
+                  this.castdone = true;
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+              axios
+                .get(
+                  `https://tinfo.apiumadomain.com/3/movie/${id}/images?api_key=49101d62654e71a2931722642ac07e5e`
+                )
+                .then(res => {
+                  var data = res.data;
+                  console.log(data);
+                  for (const x in data.backdrops) {
+                    this.images.push(
+                      "http://image.tmdb.org/t/p/original" +
+                        data.backdrops[x].file_path
+                    );
+                  }
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+            } else this.$nuxt.error({ statusCode: 404 });
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        //YTS
+        // this.$axios
+        //   .$get("https://yts.lt/api/v2/movie_details.json", {
+        //     params: {
+        //       movie_id: id,
+        //       with_images: true,
+        //       with_cast: true
+        //     }
+        //   })
+        //   .then(res => {
+        //     if (res.data && res.data.movie.id !== 0) {
+        //       console.log(res.data);
+        //       this.moviedata = res.data.movie;
+        //       this.images = [
+        //         this.moviedata.large_screenshot_image1,
+        //         this.moviedata.large_screenshot_image2,
+        //         this.moviedata.large_screenshot_image3
+        //       ];
+        //       this.genre = this.moviedata.genres[0];
+        //       this.torrents = this.moviedata.torrents;
+        //     } else this.$router.push("/");
+        //   })
+        //   .catch(err => {
+        //     console.error(err);
+        //   });
+        this.$route.push({ name: "home" });
       }
     },
     backImages() {
@@ -267,10 +280,10 @@ export default {
 };
 </script>
 <style scoped>
-.cast_name{
+.cast_name {
   font-size: 0.6rem;
 }
-.cast{
+.cast {
   width: 80%;
 }
 .read_reviews {
@@ -341,7 +354,7 @@ export default {
   top: calc(30% - 200px);
   max-height: 100vh;
   overflow-y: scroll;
-  padding-bottom: 20%;
+  padding-bottom: 30%;
 }
 .content::-webkit-scrollbar {
   width: 0 !important;
@@ -516,7 +529,7 @@ export default {
   }
   .content {
     left: 5%;
-    padding-bottom: 50%;
+    padding-bottom: 60%;
   }
   .title {
     font-size: 2.5rem;
@@ -539,10 +552,9 @@ export default {
   .watchbutton {
     margin-top: 0;
   }
-  .cast{
-  width: 100%;
+  .cast {
+    width: 100%;
   }
-
 }
 @media (max-width: 404px) {
   .selecttorrent {
