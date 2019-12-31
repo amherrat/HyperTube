@@ -1,5 +1,6 @@
 
 var CommentModel = require('../models/commentModel');
+var UserModel = require('../models/userModel');
 
 exports.commentGet = (req, res) => {
     const params = {
@@ -16,10 +17,12 @@ exports.commentGet = (req, res) => {
         try {
             CommentModel
                 .commentGet(params)
-                .then(result => {
+                .then(async result => {
+                    let users = await UserModel.userGet();
                     res.json({
                         success: true,
-                        data: result
+                        data: result,
+                        users: users
                     }); 
                 })
                 .catch(err => {

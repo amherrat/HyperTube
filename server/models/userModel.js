@@ -44,6 +44,9 @@ userSchema.pre("save", function(next) {
   });
 });
 userSchema.statics = {
+  async userGet(){
+    return await this.find({}, ['login', 'profil']);
+  },
   getUser(login) {
     return new Promise((resolve, reject) => {
       this.findOne({ login })
