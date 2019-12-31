@@ -1,12 +1,14 @@
 <template>
   <mdb-navbar expand="large" dark color="young-1337">
-    <mdb-navbar-brand href="/">
+    <mdb-navbar-brand href="/home">
       <!-- class="animated bounce infinite" -->
+      <nuxt-link to="/home">
       <img src="~/assets/Hbrand.png" height="50" alt />
+      </nuxt-link>
     </mdb-navbar-brand>
     <mdb-navbar-toggler>
       <mdb-navbar-nav left>
-        <nuxt-link to="film" no-prefetch>
+        <!-- <nuxt-link to="film" no-prefetch>
           <mdb-nav-item>
             <span>
               <font-awesome-icon :icon="['fas', 'film']" size="2x" />
@@ -21,22 +23,24 @@
               <br />Shows
             </span>
           </mdb-nav-item>
-        </nuxt-link>
+        </nuxt-link> -->
       </mdb-navbar-nav>
       <mdb-navbar-nav right>
+        <form @submit.prevent="gotoProfil">
         <div class="md-form form-sm">
-          <input type="text" placeholder="Search" class="form-control" />
+          <mdb-input
+                    type="text"
+                    id="search"
+                    label="User search"
+                    v-model="customValues.login"
+                    :customValidation="validation.login.validated"
+                    :isValid="validation.login.valid"
+                    @change="validate('login')"
+                    validFeedback="login look's good."
+                    :invalidFeedback="validation.login.invalidFeedback"
+                  />
         </div>
-        <!-- <mdb-dropdown>
-            <mdb-dropdown-toggle class="profile-icon-toggle"  slot="toggle"><img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" class="rounded-circle z-depth-0"
-            alt="avatar image" width="60px" height="60px"></mdb-dropdown-toggle>
-            <mdb-dropdown-menu>
-               <nuxt-link to="settings" no-prefetch><mdb-dropdown-item to="/settings">Settings</mdb-dropdown-item>
-               </nuxt-link>
-              <nuxt-link to="logout" no-prefetch> <mdb-dropdown-item to="/logout">Log out</mdb-dropdown-item>
-              </nuxt-link>
-            </mdb-dropdown-menu>
-        </mdb-dropdown>-->
+        </form>
         <mdb-dropdown style="margin-left: 30px;">
           <mdb-dropdown-toggle class="profile-icon-toggle" slot="toggle">
             <img
@@ -65,6 +69,17 @@
 export default {
   data : () =>  {
     return {
+      customValues :{
+        login :""
+      },
+      validation: {
+        login: {
+          valid: false,
+          validated: false,
+          invalidFeedback: ""
+        }
+        },
+      userprofil:""
     };
   },
   computed:{
@@ -81,6 +96,28 @@ export default {
    this.update();
   },
   methods: {
+    gotoProfil(){
+      this.isValidForm()
+      .then(res=>{
+        let login = this.customValues.login;
+        let input = document.getElementById('search');
+        this.customValues.login = "";
+        this.validation.login = {};
+        input.focus();
+        input.blur();
+        this.$router.push("/profile/"+login);
+      })
+      .catch(err=> {})
+    },
+    isValidForm() {
+      return new Promise((reject, resolve)=>{
+        Object.keys(this.validation).forEach((key)=> {
+          if (!this.validation[key].valid) {
+            resolve(false);
+          }
+        });
+        reject(true);
+      })},
     update(){      
     this.$axios
     .get(`/api/whoAmi/${localStorage.token}`)
@@ -92,7 +129,22 @@ export default {
         this.$router.push("/login");
     })
     .catch(err => console.log(err));
-    }
+    },
+        validate(key, value) {
+      if (key === "login") {
+        if (!String(this.customValues[key]).match(/^[a-zA-Z]+([_-]?[a-zA-Z0-9])*$/g) ||
+        this.customValues[key].length > 30 ||
+        this.customValues[key].length < 3) {
+            this.validation[key].valid = false;
+            this.validation[key].invalidFeedback =
+            "Wrong login.";
+        } else {
+          this.validation[key].valid = true;
+        }
+        this.validation[key].validated = true;
+      }
+        this.validation[key].validated = true;
+        }
   }
 };
 </script>

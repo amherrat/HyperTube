@@ -91,7 +91,7 @@ export default {
             this.fill_Profile(res.data.data.user);
           })
           .catch(err => {
-            console.log(err);
+            //console.log(err);
           });
       }
     },

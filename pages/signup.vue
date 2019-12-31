@@ -1,5 +1,6 @@
 <template>
 <div class="classic-form-page">
+  <br>
     <mdb-mask class="d-flex gradient justify-content-center align-items-center">
       <mdb-container>
         <mdb-row>
@@ -232,8 +233,13 @@ export default {
                   this.validation.mail.validated = true;
                 }
               } else {
+
                 console.log(res.data);
               }
+            }else
+            {
+              //success
+             this.$router.push({ path: "/login" });
             }
           })
           .catch(err => console.log(err));

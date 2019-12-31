@@ -1,5 +1,6 @@
 <template>
   <div class="classic-form-page">
+    <br>
     <mdb-mask class="d-flex gradient justify-content-center align-items-center">
       <mdb-container>
         <mdb-row>
@@ -96,7 +97,7 @@ export default {
     };
   },
   mounted() {
-       // if (localStorage.token) this.$router.push({ path: "/home" });
+      if (localStorage.token) this.$router.push({ path: "/home" });
   },
   methods: {
     Login() {
@@ -130,6 +131,7 @@ export default {
               } else {
                 // success
                 localStorage.setItem("token", res.data.token);
+                this.$router.push({ path: "/home" });
                 console.log("DONE")
               }
             })

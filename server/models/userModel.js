@@ -29,6 +29,7 @@ const schema = {
   FortytowId:{type: mongoose.SchemaTypes.String},
   googleId:{type: mongoose.SchemaTypes.String},
   spotifyId:{type: mongoose.SchemaTypes.String},
+  preferedlang: { type: String, default: "en" },
   verified: { type: Number, default: 0 }
 };
 const collectionName = "users";
