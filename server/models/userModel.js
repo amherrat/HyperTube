@@ -30,6 +30,7 @@ const schema = {
   googleId:{type: mongoose.SchemaTypes.String},
   spotifyId:{type: mongoose.SchemaTypes.String},
   preferedlang: { type: String, default: "en" },
+  passwdtoken: {type: String},
   verified: { type: Number, default: 0 }
 };
 const collectionName = "users";
@@ -98,6 +99,48 @@ userSchema.statics = {
                 });
             } else reject("Already Verified");
           } else reject("Token or mail doesn't exist");
+        });
+    });
+  },
+  ValidateResetPassword(mail, passwdtoken, password) {
+    return new Promise((resolve, reject) => {
+      this.findOne({ mail, passwdtoken })
+        .exec()
+        .then(user => {
+          if (user) {
+            if (!user.verified) {
+              this.findOneAndUpdate(
+                { mail, passwdtoken },
+                { password: password },
+                { useFindAndModify: false }
+              )
+                .exec()
+                .then(user => {
+                  if (user) resolve("Updated password");
+                  else reject("Not updated");
+                });
+            } else reject("Something went wrong");
+          } else reject("Token or mail doesn't exist");
+        });
+    });
+  },
+  Passwordreset(mail, passwdtoken) {
+    return new Promise((resolve, reject) => {
+      this.findOne({ mail })
+        .exec()
+        .then(user => {
+          if (user) {
+              this.findOneAndUpdate(
+                { mail },
+                { passwdtoken: passwdtoken },
+                { useFindAndModify: false }
+              )
+                .exec()
+                .then(user => {
+                  if (user) resolve("Ready for reset");
+                  else reject("Not ready for reset");
+                });
+          } else reject("No user found");
         });
     });
   }

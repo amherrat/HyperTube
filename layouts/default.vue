@@ -40,8 +40,14 @@ body, html {
 }
 .bg {
   /* The image used */
-
-
+  min-height: 100vh;
+  background-image: url('/hyperbg.jpg');
+  background-attachment: scroll;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* overflow-x: hidden;
+  overflow-y: scroll; */
 }
 .full{
   height: 90vh;

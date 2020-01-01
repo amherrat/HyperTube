@@ -349,28 +349,28 @@ exports.update_account_password = function(req, res) {
     try {
       User.authenticate(login, password.oldpassword).then(
         result => {
-          if(result){
-          User.findOneAndUpdate(
-            { login: login},
-            {
-              password: password.password
-            },
-            { useFindAndModify: false }
-          )
-            .exec()
-            .then(userRes => {
-              if (userRes) {
-                return res.status(201).json({
-                  success: true,
-                  update: "password successfully updated"
-                });
-              } else {
-                return res.status(200).json({
-                  success: false,
-                  errors: "something went wrong"
-                });
-              }
-            });
+          if (result) {
+            User.findOneAndUpdate(
+              { login: login },
+              {
+                password: password.password
+              },
+              { useFindAndModify: false }
+            )
+              .exec()
+              .then(userRes => {
+                if (userRes) {
+                  return res.status(201).json({
+                    success: true,
+                    update: "password successfully updated"
+                  });
+                } else {
+                  return res.status(200).json({
+                    success: false,
+                    errors: "something went wrong"
+                  });
+                }
+              });
           }
         },
         err => {
@@ -384,41 +384,38 @@ exports.update_account_password = function(req, res) {
   }
 };
 
-// exports.reset = (req, res) => {
-//   var email = req.body.email;
-//   if (
-//     !String(email).match(
-//       /^[\-0-9a-zA-Z\.\+_]+@[\-0-9a-zA-Z\.\+_]+\.[a-zA-Z]{2,}$/
-//     ) ||
-//     email.length > 50
-//   ) {
-//     res.end("invalid email");
-//   } else {
-//     var token = require("crypto")
-//       .randomBytes(48)
-//       .toString("hex");
-//     var link = "http://" + host + ":3000/reset?t=" + token + "&e=" + email;
-//     var sbj = "Matcha | Reset your password";
-//     var msg =
-//       '</br><a href="' +
-//       link +
-//       '">Click Here</a> To Rest your password <br> OR Copy this link to your Browser:<br>' +
-//       link;
-//     try {
-//       Users.resetpassword(email, token, (err, sqlres) => {
-//         if (err) res.end();
-//         //console.log(sqlres);
-//         if (sqlres.affectedRows) {
-//           //console.log('sending email...');
-//           send_mail(email, sbj, msg);
-//           res.send("sent");
-//         } else {
-//           res.send("not found");
-//         }
-//       });
-//     } catch (err) {}
-//   }
-// };
+exports.resetpassword = (req, res) => {
+  var mail = req.body.mail;
+  if (
+    !String(mail).match(
+      /^[\-0-9a-zA-Z\.\+_]+@[\-0-9a-zA-Z\.\+_]+\.[a-zA-Z]{2,}$/
+    ) ||
+    mail.length > 50
+  ) {
+    res.end("invalid email");
+  } else {
+    var token = require("crypto").randomBytes(48).toString("hex");
+    var link = "http://0.0.0.0:3000/reset?t=" + token + "&e=" + mail;
+    var sbj = "Hypertube | Reset your password";
+    var msg =
+      '</br><a href="' +
+      link +
+      '">Click Here</a> To Rest your password <br> OR Copy this link to your Browser:<br>' +
+      link;
+    try {      
+      User.Passwordreset(mail, token).then(result => {
+        if (result === "Ready for reset") {
+          send_mail(mail, sbj, msg);
+          return res.send("sent");
+        } else {
+          return res.send("not found");
+        }
+      }).catch(err => {
+        console.log(err);
+        return res.end();});
+    } catch (err) {}
+  }
+};
 
 // exports.verifyRset = (req, res) => {
 //   var email = req.body.email;
@@ -446,40 +443,50 @@ exports.update_account_password = function(req, res) {
 //   }
 // };
 
-// exports.changePassword = (req, res) => {
-//   var email = req.body.email;
-//   var token = req.body.token;
-//   var password = req.body.password;
-//   if (
-//     !String(email).match(
-//       /^[\-0-9a-zA-Z\.\+_]+@[\-0-9a-zA-Z\.\+_]+\.[a-zA-Z]{2,}$/
-//     ) ||
-//     email.length > 50
-//   ) {
-//     res.end("invalid email");
-//   } else if (!String(token).match(/^[a-zA-Z0-9]*$/) || token.length > 300) {
-//     res.end("invalid token");
-//   } else if (
-//     !String(password).match(
-//       /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,30}$/g
-//     ) ||
-//     password.length > 30
-//   ) {
-//     res.end("invalid password");
-//   } else {
-//     var newpass = require("crypto")
-//       .createHash("sha256")
-//       .update(password)
-//       .digest("hex");
-//     try {
-//       Users.changePassword(email, token, newpass, (err, sqlres) => {
-//         if (err) res.end();
-//         if (sqlres.affectedRows) res.send("done");
-//         else res.send("error");
-//       });
-//     } catch (err) {}
-//   }
-// };
+exports.changePassword = (req, res) => {
+  var email = req.body.email;
+  var token = req.body.token;
+  var password = req.body.password;
+  if (
+    !String(email).match(
+      /^[\-0-9a-zA-Z\.\+_]+@[\-0-9a-zA-Z\.\+_]+\.[a-zA-Z]{2,}$/
+    ) ||
+    email.length > 50
+  ) {
+    res.end("invalid email");
+  } else if (!String(token).match(/^[a-zA-Z0-9]*$/) || token.length > 300) {
+    res.end("invalid token");
+  } else if (
+    !String(password).match(
+      /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,30}$/g
+    ) ||
+    password.length > 30
+  ) {
+    res.end("invalid password");
+  } else {
+    bcrypt.hash(password, 10, (err, hash) => {
+      if (err) return next(err);
+      password = hash;
+      console.log(password);
+        try {
+          User.ValidateResetPassword(email, token, password)
+            .then(result => {
+                console.log(result);
+                return res.json({
+                success: true
+              });
+            })
+            .catch(err => {
+                console.log(err);
+              return res.json({
+                success: false,
+                msg : err
+              });
+            });
+        } catch (err) {}
+    });
+  }
+};
 
 exports.userdata = (req, res) => {
   var login = req.params.login.toLowerCase();
