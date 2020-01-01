@@ -41,8 +41,11 @@
         </div>
         <div class="about">
           <div class="short_synopsis">{{moviedata.description_full}}</div>
-          <div v-if="moviedata.yt_trailer_code" class="trailer" @click="opentrailer">
-            <div class="ytvideo" :style="`background-image:url(${images[2] ? images[2] : `http://i3.ytimg.com/vi/${moviedata.yt_trailer_code}/hqdefault.jpg`})`">
+          <div v-if="moviedata.yt_trailer_code" class="trailer" @click="openmodal('yt_trailer')">
+            <div
+              class="ytvideo"
+              :style="`background-image:url(${images[2] ? images[2] : `http://i3.ytimg.com/vi/${moviedata.yt_trailer_code}/hqdefault.jpg`})`"
+            >
               <img src="/play2.png" class="playbutton" />
             </div>
           </div>
@@ -67,20 +70,92 @@
           </modal>
         </div>
         <div v-if="castdone && moviedata.cast" class="cast">
-          <div class="title_Cast">Cast</div>
+          <div class="title_Cast">
+            <span>Cast</span>
+            <button type="button" class="more_button _shadow" @click="openmodal('cast_modal')">
+              <span class="readbutton">More</span>
+            </button>
+          </div>
           <div class="_shadow profile" v-for="(cast, i) in moviedata.cast" v-if="i < 10" :key="i">
             <!-- <a :href="'https://www.imdb.com/name/nm'+cast.imdb_code" target="_blank"> -->
-            <a :href="'https://www.themoviedb.org/person/'+cast.id" target="_blank">
-              <img
-                :src="cast.profile_path ? `https://image.tmdb.org/t/p/original${cast.profile_path}` : '/default-profile.png'"
-                width="60px"
-                height="60px"
-              />
-              <div class="name">
-                <span class="cast_name">{{cast.name}}</span>
-              </div>
-            </a>
+            <div>
+              <a :href="'https://www.themoviedb.org/person/'+cast.id" target="_blank">
+                <img
+                  :src="cast.profile_path ? `https://image.tmdb.org/t/p/original${cast.profile_path}` : '/default-profile.png'"
+                  width="60px"
+                  height="60px"
+                />
+                <div class="name">
+                  <p class="cast_name">{{cast.name}}</p>
+                  <p class="cast_name">{{`(${cast.character})`}}</p>
+                </div>
+              </a>
+            </div>
           </div>
+          <modal class="fademodal" width="500" height="500" name="cast_modal">
+            <div class="modaloverfollow">
+              <div class="_shadow profile" v-for="(cast, i) in moviedata.cast" :key="i">
+                <!-- <a :href="'https://www.imdb.com/name/nm'+cast.imdb_code" target="_blank"> -->
+                <div>
+                  <a :href="'https://www.themoviedb.org/person/'+cast.id" target="_blank">
+                    <img
+                      :src="cast.profile_path ? `https://image.tmdb.org/t/p/original${cast.profile_path}` : '/default-profile.png'"
+                      width="60px"
+                      height="60px"
+                    />
+                    <div class="name">
+                      <p class="cast_name">{{cast.name}}</p>
+                      <p class="cast_name">{{`(${cast.character})`}}</p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </modal>
+        </div>
+        <div v-if="castdone && moviedata.crew" class="crew">
+          <div class="title_Cast">
+            <span>Crew</span>
+            <button type="button" class="more_button _shadow" @click="openmodal('crew_modal')">
+              <span class="readbutton">More</span>
+            </button>
+          </div>
+          <div class="_shadow profile" v-for="(crew, i) in moviedata.crew" v-if="i < 10" :key="i">
+            <!-- <a :href="'https://www.imdb.com/name/nm'+cast.imdb_code" target="_blank"> -->
+            <div>
+              <a :href="'https://www.themoviedb.org/person/'+crew.id" target="_blank">
+                <img
+                  :src="crew.profile_path ? `https://image.tmdb.org/t/p/original${crew.profile_path}` : '/default-profile.png'"
+                  width="60px"
+                  height="60px"
+                />
+                <div class="name">
+                  <p class="cast_name">{{crew.name}}</p>
+                  <p class="cast_name">{{`(${crew.job})`}}</p>
+                </div>
+              </a>
+            </div>
+          </div>
+          <modal class="fademodal" width="500" height="500" name="crew_modal">
+            <div class="modaloverfollow">
+              <div class="_shadow profile" v-for="(crew, i) in moviedata.crew" :key="i">
+                <!-- <a :href="'https://www.imdb.com/name/nm'+cast.imdb_code" target="_blank"> -->
+                <div>
+                  <a :href="'https://www.themoviedb.org/person/'+crew.id" target="_blank">
+                    <img
+                      :src="crew.profile_path ? `https://image.tmdb.org/t/p/original${crew.profile_path}` : '/default-profile.png'"
+                      width="60px"
+                      height="60px"
+                    />
+                    <div class="name">
+                      <p class="cast_name">{{crew.name}}</p>
+                      <p class="cast_name">{{`(${crew.job})`}}</p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </modal>
         </div>
       </div>
       <div class="footer">
@@ -141,7 +216,7 @@ export default {
       torrents: []
     };
   },
-  validate({ params }) {
+  validate({ params }) {  
     return (
       // (/^[0-9]*$/.test(params.id) && /^(?!0*$).*$/.test(params.id)) ||
       /tt\d{7,8}/.test(params.id)
@@ -155,6 +230,16 @@ export default {
     this.getMovieData(this.$route.params.id);
   },
   methods: {
+    openmodal(name) {
+      if (window.innerWidth > 600)
+        this.$modal.show(name);
+      else{
+        //crew_modal cast_modal yt_trailer
+        if (name === 'yt_trailer') window.open(`http://youtube.com/watch?v=${this.moviedata.yt_trailer_code}`, '_blank');
+        else if (name === 'crew_modal') window.open(`https://m.imdb.com/title/${this.moviedata.imdb_code}/fullcredits`, '_blank');
+        else if (name === 'cast_modal') window.open(`https://m.imdb.com/title/${this.moviedata.imdb_code}/fullcredits/cast`, '_blank');
+      }
+    },
     TorrentSelect(x) {
       this.selectedTorrent = this.torrents[x].quality;
       this.selectedTorrentIndex = x;
@@ -170,9 +255,6 @@ export default {
           });
         }
       }
-    },
-    opentrailer() {
-      this.$modal.show("yt_trailer");
     },
     getMovieData(id) {
       //https://tv-v2.api-fetch.website/movie/{imdb_id}
@@ -205,12 +287,14 @@ export default {
               }
               axios
                 .get(
-                  `https://api.themoviedb.org/3/movie/${id}/credits?api_key=0f87bface5c69fcf394fc387f33049fa`
+                  // `https://api.themoviedb.org/3/movie/${id}/credits?api_key=0f87bface5c69fcf394fc387f33049fa`
+                  `https://api.themoviedb.org/3/movie/${id}?api_key=0f87bface5c69fcf394fc387f33049fa&append_to_response=credits`
                 )
                 .then(res => {
-                  let data = res.data;
-                  console.log(data.cast);
+                  let data = res.data.credits;
+                  console.log(data);
                   this.moviedata.cast = data.cast;
+                  this.moviedata.crew = data.crew;
                   this.castdone = true;
                 })
                 .catch(err => {
@@ -280,11 +364,24 @@ export default {
 };
 </script>
 <style scoped>
+.modaloverfollow {
+  width: 500px;
+  height: 500px;
+  overflow-y: scroll;
+  background-color: black;
+  padding-left: 20px;
+}
 .cast_name {
   font-size: 0.6rem;
+  margin: 0;
 }
 .cast {
   width: 80%;
+  float: left;
+}
+.crew {
+  width: 80%;
+  float: left;
 }
 .read_reviews {
   display: inline-block;
@@ -300,6 +397,21 @@ export default {
   padding: 2px 10px;
   background: none;
   color: #3f536e;
+}
+.more_button {
+  display: inline-block;
+  outline: 0;
+  line-height: 1.5;
+  text-align: center;
+  border: 1px solid #c5d9e8;
+  border-radius: 4px;
+  user-select: none;
+  cursor: pointer;
+  font-size: 10px;
+  padding: 2px 10px;
+  background: none;
+  color: #3f536e;
+  vertical-align: middle;
 }
 .cover img {
   position: absolute;
@@ -458,6 +570,7 @@ export default {
   height: 100px;
   margin-right: 10px;
   float: left;
+  margin-bottom: 10px;
 }
 .profile img {
   margin-right: auto;
@@ -531,7 +644,7 @@ export default {
   .content {
     padding-top: 15%;
     left: 5%;
-    padding-bottom: 60%;
+    padding-bottom: 65%;
   }
   .title {
     font-size: 2.5rem;
@@ -557,6 +670,10 @@ export default {
   .cast {
     width: 100%;
   }
+  .crew {
+    width: 100%;
+  }
+
 }
 @media (max-width: 404px) {
   .selecttorrent {
