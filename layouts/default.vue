@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       err: false,
-      pages1: ["login", "signup", "verify", "reset", "index"],
+      pages1: ["login", "signup", "verify", "reset", "index","forgotpassword"],
       pages2: [
         "home",
         "movie-id",
