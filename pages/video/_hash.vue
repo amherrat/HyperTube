@@ -102,17 +102,14 @@ export default {
             });
           //subtitles
           this.$axios
-            .$get("/api/subtitles/" + imdbid)
+            .$get(`/api/subtitles/${imdbid}`)
             .then(res => {
               console.log("subtitles");
               console.log(res);
               for (let lang in res) {
                 console.log(res[lang].langShort);
                 this.playerOptions.textTrack.push({
-                  src: res[lang].path.replace(
-                    "/Volumes/Storage/goinfre/adouz/hyperTube/static",
-                    ""
-                  ),
+                  src: res[lang].path,
                   kind: "captions",
                   label: res[lang].lang,
                   srclang: res[lang].langShort,
@@ -143,9 +140,9 @@ export default {
         console.log(err);
       });
   },
-  computed:{
-    userdata: function () {
-        return this.$store.getters.getdata;
+  computed: {
+    userdata: function() {
+      return this.$store.getters.getdata;
     }
   },
   mounted() {
@@ -161,7 +158,7 @@ export default {
   width: 100%;
   height: 100%;
   top: 0;
-  padding-top: 6%; 
+  padding-top: 6%;
 }
 
 .video {
