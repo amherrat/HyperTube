@@ -223,9 +223,6 @@ export default {
     );
   },
   mounted() {
-    this.$store.dispatch("getdata", "adouz").then(() => {
-      console.log(this.$store.getters.getdata);
-    });
     this.backImages();
     this.getMovieData(this.$route.params.id);
   },
