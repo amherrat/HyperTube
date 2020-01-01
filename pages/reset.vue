@@ -1,229 +1,227 @@
 <template>
-
-<mdb-card id="classic-card">
+  <div class="classic-form-page">
+    <br />
+    <mdb-mask class="d-flex gradient justify-content-center align-items-center">
+      <mdb-container>
+        <mdb-row>
+          <div class="white-text text-center text-md-left col-md-6 mt-xl-5 mb-5">
+            <h1 class="h1-responsive font-weight-bold">Reset Password</h1>
+            <hr class="hr-light" />
+            <h6 class="mb-4">you can reset your password here</h6>
+            <!-- <nuxt-link to="/login">
+              <mdb-btn outline="white" color="white">Login Now</mdb-btn>
+            </nuxt-link>-->
+          </div>
+          <mdb-col md="6" xl="5" class="mb-4">
+            <mdb-card id="classic-card">
               <mdb-card-body class="z-depth-2 grey-text">
-              <!-- <form @submit.prevent="Login">
-               <mdb-input label="Your login" type="text" class="mb-5" v-model="login" maxlength="30" required invalidFeedback="Please choose a username." />
-                <mdb-input label="Enter password" type="password"  v-model="password" maxlength="30" class="pb-3"></mdb-input>
-                <p class="font-small blue-text d-flex justify-content-end mb-5">
-                  <a class="ml-1" @click="ForgetPassword(true)">Forget Password?</a>
-                </p>
-                <div class="text-center mb-3">
-                  <mdb-btn gradient="aqua" block type="submit" >Sign In</mdb-btn>
+                <form v-if="validreset && !done" @submit.prevent="Reset_password">
+                  <mdb-row>
+                    <mdb-col>
+                      <mdb-input
+                        type="password"
+                        label="Password"
+                        v-model="customValues.password"
+                        :customValidation="validation.password.validated"
+                        :isValid="validation.password.valid"
+                        @change="validate('password')"
+                        validFeedback="password look's good."
+                        :invalidFeedback="validation.password.invalidFeedback"
+                      />
+                    </mdb-col>
+                  </mdb-row>
+                  <mdb-row>
+                    <mdb-col>
+                      <mdb-input
+                        type="password"
+                        label="Confirm password"
+                        v-model="customValues.confirmpassword"
+                        :customValidation="validation.confirmpassword.validated"
+                        :isValid="validation.confirmpassword.valid"
+                        @change="validate('confirmpassword')"
+                        validFeedback="password look's good."
+                        :invalidFeedback="validation.confirmpassword.invalidFeedback"
+                      />
+                    </mdb-col>
+                  </mdb-row>
+                  <div class="text-center mb-3">
+                    <mdb-btn gradient="aqua" block type="submit">Update</mdb-btn>
+                  </div>
+                </form>
+                <div v-if="!validreset" class="red-text text-center">
+                  <center>
+                    <font-awesome-icon :icon="['fas', 'times']" size="5x" />
+                    <br />Something went wrong please check again your link.
+                  </center>
                 </div>
-                <p
-                  class="font-small dark-white-text text-right d-flex justify-content-center mb-3 pt-2"
-                >or Sign in with:</p>
-                <mdb-row center class="my-3">
-                  <mdb-btn color="light-blue" class="mr-md-3 z-depth-1a" >
-                    <font-awesome-icon :icon="['fab', 'google']" size="3x" />
-                  </mdb-btn>
-                  <mdb-btn color="black"  class="mr-md-3 z-depth-1a">
-                    <img src="/42logo.svg" alt="Logo" height="42px"/>
-                  </mdb-btn>
-                  <mdb-btn color="dark-green"  class="mr-md-3 z-depth-1a">
-                    <font-awesome-icon :icon="['fab', 'spotify']" size="3x" />
-                  </mdb-btn>
-                </mdb-row>
-              </form> -->
-              <form @submit.prevent="validateForm" novalidate>
-    <mdb-input
-      type="text"
-      id="customInput1"
-      label="First name"
-      v-model="customValues.name"
-      :customValidation="validation.name.validated"
-      :isValid="validation.name.valid"
-      @change="validate('name')"
-      required
-      validFeedback="Look's good."
-      invalidFeedback="Please correct."
-    />
-    <mdb-input
-      type="text"
-      id="customInput2"
-      label="Last name"
-      v-model="customValues.lastname"
-      :customValidation="validation.lastname.validated"
-      :isValid="validation.lastname.valid"
-      @change="validate('lastname')"
-      required
-      validFeedback="Look's good."
-      invalidFeedback="Please correct."
-    />
-    <mdb-input
-      type="email"
-      id="customInput3"
-      label="Country"
-      v-model="customValues.country"
-      :customValidation="validation.country.validated"
-      :isValid="validation.country.valid"
-      @change="validate('country')"
-      required
-      validFeedback="Look's good."
-      invalidFeedback="Country should be one of those: USA, France, Poland"
-    />
-    <mdb-input
-      type="password"
-      id="customInput4"
-      label="Password"
-      v-model="customValues.password"
-      :customValidation="validation.password.validated"
-      :isValid="validation.password.valid"
-      @change="validate('password')"
-      required
-      validFeedback="Look's good."
-      :invalidFeedback="validation.password.invalidFeedback"
-    />
-    <mdb-btn type="Submit" size="sm" color="danger">Submit</mdb-btn>
-  </form>
-               <!-- <form class="box" @submit.prevent="Login">
-        <div v-if="confirm" class="notification is-danger">
-          <button class="delete" @click="deletemsg"></button>
-          Please Confirm your Email first
-          <br>before login to your Account!
-        </div>
-        <b-field label="Login" :type="Erorrs.login.err" :message="Erorrs.login.msg">
-          <b-input v-model="login" maxlength="30"></b-input>
-        </b-field>
-        <b-field label="Password" :type="Erorrs.password.err" :message="Erorrs.password.msg">
-          <b-input type="password" v-model="password" maxlength="30" password-reveal></b-input>
-        </b-field>
-        <div class="level">
-          <a class="level-left is-size-7" @click="ForgetPassword(true)">Forget Password?</a>
-          <button type="submit" class="button is-info level-right">Submit</button>
-        </div>
-      </form> -->
+                <div v-if="done" class="green-text text-center">
+                  <center>
+                    <font-awesome-icon :icon="['fas', 'check']" size="5x" />
+                    <br />Your password have been succcessfully reset.
+                    <br>
+                    <nuxt-link to="/login">
+                      <mdb-btn outline="green" color="green">Login Now</mdb-btn>
+                    </nuxt-link>
+                  </center>
+                </div>
               </mdb-card-body>
             </mdb-card>
+          </mdb-col>
+        </mdb-row>
+      </mdb-container>
+    </mdb-mask>
+  </div>
 </template>
+
 <script>
-  export default {
-    name: "Signup",
-    components: {
-    },
-    data() {
-      return {
-        customValues: {
-          name: "Matt",
-          lastname: "Doe",
-          country: "",
-          city: "",
-          password: "",
-          checkbox: false,
-          datepicker: ""
+export default {
+  name: "reset_password",
+  data() {
+    return {
+      done:false,
+      validreset: false,
+      customValues: {
+        password: "",
+        confirmpassword: ""
+      },
+      validation: {
+        password: {
+          valid: false,
+          validated: false,
+          invalidFeedback: ""
         },
-
-        validation: {
-          name: {
-            valid: false,
-            validated: false
-          },
-          lastname: {
-            valid: false,
-            validated: false
-          },
-          country: {
-            valid: false,
-            validated: false
-          },
-          city: {
-            valid: false,
-            validated: false
-          },
-          password: {
-            valid: false,
-            validated: false,
-            invalidFeedback: ''
-          },
-          checkbox: {
-            valid: false,
-            validated: false
-          }
+        confirmpassword: {
+          valid: false,
+          validated: false,
+          invalidFeedback: ""
         }
-      };
-    },
-    computed: {
-      city() {
-        if (this.customValues.country === 'USA') {
-          return [
-            { text: 'Boston', value: 'boston' },
-            { text: 'Chicago', value: 'chicago' },
-            { text: 'New York', value: 'newYork' }
-          ];
-        } else if (this.customValues.country === 'France') {
-          return [
-            { text: 'Paris', value: 'paris' },
-            { text: 'Nantes', value: 'nantes' },
-            { text: 'Lyon', value: 'lyon' }
-          ];
-        } else if (this.customValues.country === 'Poland') {
-          return [
-            { text: 'Warszawa', value: 'warszawa' },
-            { text: 'Kraków', value: 'krakow' },
-            { text: 'Gdańsk', value: 'gdansk' },
-          ];
-        }
-        return [
-        ];
       }
-    },
-    methods: {
-      validateForm() {
-        Object.keys(this.customValues).forEach(key => {
-          this.validate(key);
+    };
+  },
+  mounted() {
+    if (localStorage.token) this.$router.push({ path: "/home" });
+    var email = this.$route.query.e;
+    var token = this.$route.query.t;
+    if (email && token) {
+      this.$axios
+        .post("api/confirmresetpassword", { email: email, passwdtoken: token })
+        .then(res => {
+          if (res.data.success) this.validreset = true;
         });
-      },
-      validate(key, value) {
-        if (key === "name" || key === "lastname" || key === "checkbox") {
-          if (this.customValues[key]) {
-            this.validation[key].valid = true;
-          } else {
-            this.validation[key].valid = false;
-          }
-          this.validation[key].validated = true;
-        }
-        if (key === "country") {
-          if (["USA", "France", "Poland"].includes(this.customValues[key])) {
-            this.validation[key].valid = true;
-          } else {
-            this.validation[key].valid = false;
-          }
-          this.validation[key].validated = true;
-        }
-        if (key === "password") {
-          // check length
-          if (this.customValues[key].length > 5) {
-            // check uppercase
-            for (let character of this.customValues[key].split("")) {
-              if (character === character.toUpperCase()) {
-                this.validation[key].valid = true;
-                break;
-              }
-              this.validation[key].valid = false;
-              this.validation[key].invalidFeedback =
-                "Password should contain at least one uppercase character.";
-            }
-          } else {
-            this.validation[key].valid = false;
-            this.validation[key].invalidFeedback =
-              "Password too short. Type at least 6 letters.";
-          }
-          this.validation[key].validated = true;
-        }
-        if (key === "city") {
-
-          this.$refs.select.validate();
-        }
-        if (key === "arrival") {
-          if (value) {
-            this.validation[key].valid = true;
-          } else {
-            this.validation[key].valid = false;
-          }
-          this.validation[key].validated = true;
-        }
-      },
     }
-  };
+  },
+  methods: {
+    Reset_password() {
+      console.log("Dkhal khouna");
+      var email = this.$route.query.e;
+      var token = this.$route.query.t;
+      this.isValidForm()
+        .then(res => {
+          this.$axios
+            .post("/api/changepassword", {
+              mail: email,
+              token: token,
+              password: this.customValues.password
+            })
+            .then(res => {
+              console.log(res);
+               if (res.data.success)
+                this.done = true;
+              //   if (res.data.errors) {
+              //     if (res.data.errors.error === "password") {
+              //       this.validation.oldpassword.valid = false;
+              //       this.validation.oldpassword.invalidFeedback =
+              //         res.data.errors.msg;
+              //       this.validation.oldpassword.validated = true;
+              //     }
+              //   }
+              // } else {
+              //   //Success
+              //   console.log(res.data);
+              //   //this.confirm = true;
+              // }
+            })
+            .catch(err => console.log(err));
+        })
+        .catch(err => {});
+    },
+    validateForm() {
+      Object.keys(this.customValues).forEach(key => {
+        this.validate(key);
+      });
+    },isValidForm() {
+      return new Promise((reject, resolve)=>{
+        Object.keys(this.validation).forEach((key)=> {
+          if (!this.validation[key].valid) {
+            resolve(false);
+          }
+        });
+        reject(true);
+      })
+    },
+    validate(key, value) {
+      //Check Upper case check Lower case check Number check special character
+      const regexer = [
+        {
+          regex: /[a-z]+/,
+          error: "Password should contain at least one lowercase character."
+        },
+        {
+          regex: /[A-Z]+/,
+          error: "Password should contain at least one uppercase character."
+        },
+        {
+          regex: /[0-9]+/,
+          error: "Password should contain at least one number."
+        },
+        {
+          regex: /[#$^+=!*()@%&]+/,
+          error: "Password should contain at least one special character."
+        }
+      ];
+      //Password
+      if (key === "password") {
+        if (this.customValues[key].length > 7) {
+          for (let item of regexer) {
+            if (!String(this.customValues[key]).match(item.regex)) {
+              this.validation[key].valid = false;
+              this.validation[key].invalidFeedback = item.error;
+              break;
+            }
+            this.validation[key].valid = true;
+          }
+        } else {
+          this.validation[key].valid = false;
+          this.validation[key].invalidFeedback =
+            "Password too short. Type at least 8 letters.";
+        }
+        this.validation[key].validated = true;
+      }
+      //Confirm password
+      if (key === "confirmpassword") {
+        if (this.customValues[key].length > 7) {
+          for (let item of regexer) {
+            if (!String(this.customValues[key]).match(item.regex)) {
+              this.validation[key].valid = false;
+              this.validation[key].invalidFeedback = item.error;
+              break;
+            }
+            if (this.customValues[key].match(this.customValues.password))
+              this.validation[key].valid = true;
+            else {
+              this.validation[key].valid = false;
+              this.validation[key].invalidFeedback = "Passwords doesn't match.";
+            }
+          }
+        } else {
+          this.validation[key].valid = false;
+          this.validation[key].invalidFeedback =
+            "Password too short. Type at least 8 letters.";
+        }
+        this.validation[key].validated = true;
+      }
+      this.validation[key].validated = true;
+    }
+  }
+};
 </script>

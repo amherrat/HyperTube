@@ -21,7 +21,6 @@ function validate_input(email, token) {
 }
 
 function validate_input_passwordreset(email, token) {
-  console.log(email,token);
   if (email && token) {
     if (
       !String(email).match(

@@ -23,7 +23,7 @@
                         :customValidation="validation.mail.validated"
                         :isValid="validation.mail.valid"
                         @change="validate('mail')"
-                        validFeedback="email look's good."
+                        :validFeedback="validation.mail.validFeedback"
                         :invalidFeedback="validation.mail.invalidFeedback"
                       />
                     </mdb-col>
@@ -55,13 +55,14 @@ export default {
         mail: {
           valid: false,
           validated: false,
-          invalidFeedback: ""
+          invalidFeedback: "",
+          validFeedback: "email look's good."
         }
       }
     };
   },
   mounted() {
-    //if (localStorage.token) this.$router.push({ path: "/dashboard" });
+    if (localStorage.token) this.$router.push({ path: "/home" });
   },
   methods: {
     validateForm() {
@@ -82,42 +83,25 @@ export default {
     Forgot() {
       //this.validateForm();
       this.isValidForm().then((res) => {
-        // this.$axios
-        //   .post("/api/signup", {
-        //     login: this.customValues.login,
-        //     fname: this.customValues.fname,
-        //     lname: this.customValues.lname,
-        //     mail: this.customValues.mail,
-        //     password: this.customValues.password
-        //   })
-        //   .then(res => {
-        //     if (!res.data.success) {
-        //       console.log(res.data);
-        //       if (res.data.errors) {
-        //         if (res.data.errors === "login already exist") {
-        //           this.validation.login.valid = false;
-        //           this.validation.login.invalidFeedback = "login already exist";
-        //           this.validation.login.validated = true;
-        //         }
-        //         if (res.data.errors === "mail already exist") {
-        //           this.validation.mail.valid = false;
-        //           this.validation.mail.invalidFeedback = "mail already exist";
-        //           this.validation.mail.validated = true;
-        //         }
-        //         //     this.Errors.username.err = "is-danger";
-        //         //     this.Errors.username.msg = "this username already exists";
-        //         //   } else if (res.data.error === "mail exist") {
-        //         //     this.Errors.email.err = "is-danger";
-        //         //     this.Errors.email.msg = "this email already exists";
-        //         //   }
-        //         // } else this.err = true;
-        //       } else {
-        //         console.log(res.data);
-        //         //this.confirm = true;
-        //       }
-        //     }
-        //   })
-        //   .catch(err => console.log(err));
+        this.$axios
+          .post("/api/resetpassword", {
+            mail: this.customValues.mail
+          })
+          .then(res => {
+            if (!res.data.success) {
+              console.log(res);
+              if (res.data === "not found") {
+                  this.validation.mail.valid = false;
+                  this.validation.mail.invalidFeedback = "mail doesn't exist";
+                  this.validation.mail.validated = true;
+              } else {
+                this.validation.mail.validFeedback = "A mail was sent please check your email"
+                console.log(res.data);
+                //this.confirm = true;
+              }
+            }
+          })
+          .catch(err => console.log(err));
       }).catch(err => {})
     },
     validate(key, value) {
