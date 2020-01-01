@@ -7,6 +7,13 @@ var videosSchema = new Schema({
     last_watch: Date
 });
 
+var UsersWatch = new Schema({
+    imdbid: String,
+    user: String,
+    date: Date
+})
+
+var watch = new mongoose.model('watch', UsersWatch);
 var video = new mongoose.model('videos', videosSchema);
 
 exports.newVideo = (data) => {
@@ -32,5 +39,24 @@ exports.deleteVideo = (hash) => {
     video.deleteOne({ hash: hash }, function (err) {
         if (err) return handleError(err);
         // deleted at most one video document
+    });
+}
+
+exports.addToWatchUser = (data) => {
+    var query = { imdbid: data.imdbid, user: data.user },
+        options = { upsert: true, new: true, setDefaultsOnInsert: true, useFindAndModify: false },
+        update = { date: new Date() };
+    watch.findOneAndUpdate(query, update, options, function (err, res) {
+        if (err) console.log(err);
+    });
+}
+
+exports.getWatchUser = (user) => {
+    return new Promise((resolve, reject) => {
+        watch.find({user: user}, function (err, wtch) {
+            if (err) reject(err);
+            if (!wtch) reject('cannot found user watchlist');
+            resolve(wtch);
+        });
     });
 }

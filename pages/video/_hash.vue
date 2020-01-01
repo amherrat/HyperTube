@@ -128,6 +128,7 @@ export default {
           this.$axios
             .$post("/api/addvideo", {
               hash: this.$route.params.hash,
+              username: this.userdata.login,
               imdbid: imdbid
             })
             .then(res => {
@@ -141,6 +142,11 @@ export default {
       .catch(err => {
         console.log(err);
       });
+  },
+  computed:{
+    userdata: function () {
+        return this.$store.getters.getdata;
+    }
   },
   mounted() {
     console.log(this.$route.params.hash);

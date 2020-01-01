@@ -54,8 +54,10 @@ router.get('/auth/spotify/callback', Spotifypassport.authenticate('spotify', { f
     res.render('redirect', { token: req.user });
   });
 // Subtitles
-router.get('/subtitles/:imdbid', require('./controlers/subtitles'));
+router.get('/subtitles/:imdbid', jwttoken, require('./controlers/subtitles'));
 //add video
-router.post('/addvideo', require('./controlers/videoController').NewVideo);
+router.post('/addvideo', jwttoken, require('./controlers/videoController').NewVideo);
+//watchlist
+router.get('/watchedlist/:username', jwttoken, require('./controlers/videoController').watchedlist);
 
 module.exports = router;
