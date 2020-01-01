@@ -1,5 +1,5 @@
 <template>
-  <mdb-navbar expand="large" dark color="young-1337">
+  <mdb-navbar class="nav-bar" expand="large" dark color="young-1337">
     <mdb-navbar-brand href="/home">
       <!-- class="animated bounce infinite" -->
       <nuxt-link to="/home">
@@ -149,6 +149,11 @@ export default {
 };
 </script>
 <style scoped>
+.nav-bar{
+  position: fixed;
+  z-index: 1030;
+  width: 100%;
+}
 .profile-icon-toggle {
   box-shadow: none;
   padding: 0px;

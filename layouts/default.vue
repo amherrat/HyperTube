@@ -50,6 +50,7 @@ body, html {
   overflow-y: scroll; */
 }
 .full{
+  padding-top: 5%;
   height: 90vh;
 }
 .picture-preview{

@@ -345,6 +345,7 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
+  top: 0;
   overflow: hidden;
 }
 .content {
@@ -528,6 +529,7 @@ export default {
     max-height: 750px;
   }
   .content {
+    padding-top: 15%;
     left: 5%;
     padding-bottom: 60%;
   }

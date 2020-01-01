@@ -157,9 +157,11 @@ export default {
 <style scoped>
 .back {
   position: absolute;
-  background: black;
+  background: rgba(0, 0, 0, 1);
   width: 100%;
   height: 100%;
+  top: 0;
+  padding-top: 6%; 
 }
 
 .video {
@@ -179,6 +181,9 @@ export default {
 @media (max-width: 600px) {
   .video {
     width: 100%;
+  }
+  .back {
+    padding-top: 18%;
   }
 }
 </style>
