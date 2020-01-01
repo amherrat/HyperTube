@@ -28,6 +28,7 @@ router.get('/whoAmi/:token', jwttoken, (req, res) => {
 
 router.post('/comment/add', jwttoken, Comment.commentAdd);
 router.get('/comment/get/:token/:id_film/:hash_film', jwttoken, Comment.commentGet);
+router.get('/comment/get/:username', Comment.commentCount);
 //router.get('/comment/tata/:token', jwttoken);
 
 /*Google*/

@@ -36,7 +36,42 @@ exports.commentGet = (req, res) => {
             }); 
         }
     }
-  };
+};
+
+exports.commentCount = (req, res) => {
+    const params = {
+      username:  req.params.username || ""
+    }
+    console.log(params);
+    if ( params.username.length < 1 ){
+        res.json({
+            success: false,
+            nb: 0
+        }); 
+    }
+    else {
+        try {
+            CommentModel
+                .commentGet(params)
+                .then(result => {
+                    console.log("heeeere ===> ", result);
+                    res.json({
+                        success: true,
+                        nb: result.length || 0
+                    }); 
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+            
+        } catch (error) {
+            res.json({
+                success: false,
+                nb: 0
+            }); 
+        }
+    }
+};
 
 exports.commentAdd = (req, res) => {
     const params = {

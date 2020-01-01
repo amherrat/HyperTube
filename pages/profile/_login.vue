@@ -1,6 +1,6 @@
 <template>
 <div>
-<div v-if="login" class="wrapper">
+<div v-if="login" class="wrapper" >
   <div class="profile-card js-profile-card">
     <div class="profile-card__img">
       <img :src="profil" alt="profile card">
@@ -17,16 +17,38 @@
 
       <div class="profile-card-inf">
         <div class="profile-card-inf__item">
-          <div class="profile-card-inf__title">1598</div>
+          <div class="profile-card-inf__title">{{nb_comments}}</div>
           <div class="profile-card-inf__txt">Comments</div>
         </div>
 
         <div class="profile-card-inf__item">
-          <div class="profile-card-inf__title">85</div>
+          <div class="profile-card-inf__title">{{nb_films}}</div>
           <div class="profile-card-inf__txt">Watched Movies</div>
         </div>
       </div>
         </div>
+		<div id="infoss">
+			<el-collapse v-for="(movie, index) in this.movies" v-bind:key="index" v-model="activeName" accordion>
+				<el-collapse-item :name="index">
+					<template slot="title">
+						<nuxt-link style="padding: 1%;" :to="'/movie/'+ movie.imdb">
+						<img
+							:src="movie.poster_med ? movie.poster_med : 'http://localhost:3000/default-profile.png'"
+							class="rounded-circle z-depth-0"
+							alt="avatar image"
+							width="40px"
+							height="40px"
+							
+						/>
+						</nuxt-link>
+						{{ movie.title }}
+					</template>
+					<div>
+						<span style="font-size: 18px; margin-left: 0%; font-family: initial;" >{{ movie.description }}</span>
+					</div>
+				</el-collapse-item>
+			</el-collapse>
+		</div>
   </div>
 </div>
 <div v-else>
@@ -51,9 +73,16 @@
 </div>
 </template>
 <script>
+import axios from "axios";
+
 export default {
     data() {
     return {
+		activeName: '1',
+		nb_films: 0,
+		nb_comments: 0,
+		movies: [],
+		imbds: [],
         login: "",
         fname: "",
         lname: "",
@@ -66,10 +95,34 @@ export default {
     console.log(login);
     return /^[a-zA-Z]+([_-]?[a-zA-Z0-9])*$/.test(login);
   },
+  mounted() {
+	  this
+		.$axios
+		.get(`/api/comment/get/${this.$route.params.login}`)
+		.then(res => {
+			if (res.data.success)
+				this.nb_comments = res.data.nb;
+		})
+		.catch(err => {
+		})
+  },
   created() {
-    console.log(this.userdata);
     if(this.userdata){
-        this.ShowProfile(this.$route.params.login);
+		this.ShowProfile(this.$route.params.login);
+		this.$axios
+			.get(`/api/watchedlist/${this.$route.params.login}`)
+			.then(res => {
+				if (res.data){
+					this.nb_films = res.data.length;
+					this.imbds = res.data;
+					this.getFilm(res.data).then(res => {
+						this.movies = res;
+					});
+				}
+			})
+			.catch(err => {
+				console.log(err.response);
+			})
     }
   },
   computed: {
@@ -78,13 +131,31 @@ export default {
     }
   },
   methods: {
+	promiseGetOneFilm(imbd) {
+		let promise = new Promise(async (resolve, reject) => {
+			let response = await axios.get(`https://api.apiumadomain.com/movie?cb=&quality=720p,1080p,3d&page=1&imdb=${imbd.imdbid}`);
+			resolve(response.data);
+		})
+		return promise;
+	},
+	getFilm(imbds) {
+		let promise = new Promise(async (resolve, reject) => {
+			let movies = [];
+			for (let index = 0; index < imbds.length; index++) {
+				let movie = await this.promiseGetOneFilm(imbds[index]);
+				movies.push(movie);
+			}
+			resolve(movies);
+		})
+		return promise;
+	},
     ShowProfile(user) {
         console.log("was here");
       if (user == this.userdata.login) {
         this.fill_Profile(this.userdata);
       } else {
         // other user profile
-        this.$axios
+        axios
           .get("/api/userdata/" + user)
           .then(res => {
               console.log(res.data.data.user);
@@ -107,6 +178,15 @@ export default {
 </script>
 
 <style scoped>
+#infoss{
+    width: 90%;
+    height: 306px;
+    margin-left: 5%;
+    overflow-y: scroll;
+    /* border: 1px solid red; */
+    /* border-radius: 5%; */
+    padding: 2%;
+}
 html {
 	 position: relative;
 	 overflow-x: hidden !important;
@@ -133,7 +213,7 @@ html {
 	 width: 100%;
 	 height: auto;
 	 min-height: 100vh;
-   margin-top: 50px;
+   margin-top: 90px;
 	 padding: 50px 20px;
 	 /*display: flex;*/
 }
