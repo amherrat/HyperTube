@@ -2,7 +2,9 @@ var torrentStream = require('torrent-stream');
 var fs = require('fs');
 const parseRange = require('range-parser');
 var ffmpeg = require('fluent-ffmpeg');
-const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+const ffmpegInstaller = require('@ffmpeg-installer/ffmpeg');
+const ffmpegPath = ffmpegInstaller.path;
+
 // recommended trackers
 var trackers = [
     'udp://open.demonii.com:1337/announce',
@@ -15,9 +17,7 @@ var trackers = [
     'udp://tracker.leechers-paradise.org:6969'
 ]
 var engines = [];
-//torrent-stream
 var VideoStream = async function (req, res) {
-    //1bb1f95ef15df0f6720313166c26eb7773691be3 - 6 underground mkv
     console.log(req.params.hash);
     var hash = String(req.params.hash).toLowerCase();
     console.log('here!!', hash);
@@ -42,18 +42,9 @@ var VideoStream = async function (req, res) {
                 console.log(`file ext: ${ext}`);
                 file.select();
                 var len = file.length;
-                //var len = fs.statSync(__dirname + '/1280.mkv').size;
                 console.log(req.headers.range);
                 const ranges = parseRange(len, req.headers.range, { combine: true });
                 console.log('ranges ', ranges);
-                // if (ranges === -1)
-                //     console.log('ranges -1 signals a malformed header string');
-                // if (ranges === -2)
-                //     console.log('ranges -2 signals an unsatisfiable range');
-                // if (ranges.type !== 'bytes')
-                //     console.log('ranges -1');
-                // if (ranges.length > 1)
-                //     console.log('ranges.length > 1');
                 if (ranges.type === 'bytes' && ranges !== -1 && ranges !== -2) {
                     console.log('ranges');
                     const range = ranges[0];
@@ -76,19 +67,20 @@ var VideoStream = async function (req, res) {
                             'Content-Range': `bytes ${range.start}-${range.end}/${len}`
                         });    
                         console.log('unsupported format');
+                        console.log(ffmpegInstaller.path, ffmpegInstaller.version);
                         res.set({ 'Content-Type': 'video/webm' })
-                        //var filepath = __dirname + '/torrent-stream/' + hash + '/' + file.path;
-                        // var filepath = __dirname + '/1280.mkv';
-                        // var stream = file.createReadStream({ start: range.start, end: range.end });
                         var stream = file.createReadStream();
-                        //var stream = fs.createReadStream(filepath);
-                        // stream.pipe(res);
-                        //fmpeg converting
-                        // var ffmpegStream =  ffmpeg(stream).setFfmpegPath(ffmpegPath);
-                        ffmpeg(stream).setFfmpegPath(ffmpegPath)
+                        ffmpeg(stream).setFfmpegPath('/Users/adouz/goinfre/ffmpeg')
                         .videoCodec('libvpx')
-                        // .outputOptions("-c:v libvpx -crf 10 -b:v 1M -c:a libvorbis")
+                        .audioCodec('libvorbis')
                         .format('webm')
+                        .audioBitrate(128)
+                        .videoBitrate(8000)
+                        .outputOptions([
+                        //   `-threads ${threads}`,
+                          '-deadline realtime',
+                          '-error-resilient 1'
+                        ])
                         .on('start', function (cmd) {
                             console.log("--- ffmpeg start process ---")
                             console.log(`cmd: ${cmd}`)
@@ -97,8 +89,8 @@ var VideoStream = async function (req, res) {
                             console.log('Finished processing');
                         })
                         .on('error', function (err) {
-                            // console.log("--- ffmpeg meets error ---")
-                            // console.log(err)
+                            console.log("--- ffmpeg meets error ---")
+                            console.log(err)
                         })
                         .on('progress', function(progress) {
                             console.log("--- ffmpeg progress ---")
@@ -107,15 +99,6 @@ var VideoStream = async function (req, res) {
                         .pipe(res, { end: true });
                     }else
                         res.status(415).end(); //415 Unsupported Media Type
-                    // console.log(filepath);
-                    // var stream = fs.createReadStream(filepath, { start: range.start, end: range.end });
-                    // if (fs.existsSync(filepath)) {
-                    //     // file.createReadStream({ start: range.start, end: range.end });
-                    //     console.log('file exists');
-                    //     var stream = fs.createReadStream(filepath, { start: range.start, end: range.end });
-                    //     stream.pipe(res);
-                    // } 
-                    // file.createReadStream({ start: range.start, end: range.end });
                 } else {
                     file.createReadStream().pipe(res);
                 }
