@@ -1,6 +1,6 @@
 var jimp = require('jimp');
 const uuidv1 = require('uuid/v1');
-const destination = __dirname + "/../../uploads/";
+const destination = __dirname + "/../uploads/";
 const User = require("../models/userModel.js");
 
 exports.createImage = function (Image, user) {
@@ -14,6 +14,7 @@ exports.createImage = function (Image, user) {
         jimp.read(buf, (err, image) => {
             if (err) reject('Invalid image');
             else {
+              console.log(image_path);
                 image.write(image_path);
                 User.findOneAndUpdate(
                     { login: user},
