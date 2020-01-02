@@ -36,7 +36,7 @@ passport.use(
         googleId: profile.id,
         verified: profile.emails[0].verified //here will be checked:/
       });
-      console.log(user);
+      //console.log(user);
       /*Create usere if dosnt exist*/
       try {
         User.find({ mail: user.mail }, (err, result) => {

@@ -51,8 +51,8 @@
                 <div class="form-group">
                   <label for="genre">Genre</label>
                   <select id="genre" v-model="choosedGenre" class="form-control">
-                    <option v-for="(gen, index) in this.genre" v-bind:key="index">{{gen}}</option>
-                  </select>
+                <option v-for="(gen, index) in this.genre" :value="gen" v-bind:key="index">{{$t(gen)}}</option>   
+                </select>
                 </div>
               </div>
               <!-- <div class="col-md-3">

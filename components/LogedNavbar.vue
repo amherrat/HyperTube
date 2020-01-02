@@ -8,6 +8,12 @@
     </mdb-navbar-brand>
     <mdb-navbar-toggler>
       <mdb-navbar-nav left>
+      <select v-model="lang" @change="changelang">
+      <option value="en">Anglais</option>
+      <option value="fr">Français</option>
+      <option value="ar">Arabic</option>
+      <option value="dr">Darija</option>
+      </select>
         <!-- <nuxt-link to="film" no-prefetch>
           <mdb-nav-item>
             <span>
@@ -31,7 +37,7 @@
           <mdb-input
                     type="text"
                     id="search"
-                    label="User search"
+                    :label="$t('searchu')"
                     v-model="customValues.login"
                     :customValidation="validation.login.validated"
                     :isValid="validation.login.valid"
@@ -52,11 +58,14 @@
             />
           </mdb-dropdown-toggle>
           <mdb-dropdown-menu>
+            <mdb-dropdown-item :to="`/profile/${user.login}`" >
+              <nuxt-link :to="`/profile/${user.login}`" no-prefetch>{{$t('Profile')}}</nuxt-link>
+            </mdb-dropdown-item>
             <mdb-dropdown-item to="/settings">
-              <nuxt-link to="/settings" no-prefetch>Settings</nuxt-link>
+              <nuxt-link to="/settings" no-prefetch>{{$t('Settings')}}</nuxt-link>
             </mdb-dropdown-item>
             <mdb-dropdown-item to="/logout">
-              <nuxt-link to="/logout" no-prefetch>Log out</nuxt-link>
+              <nuxt-link to="/logout" no-prefetch>{{$t('Log out')}}</nuxt-link>
             </mdb-dropdown-item>
           </mdb-dropdown-menu>
         </mdb-dropdown>
@@ -69,6 +78,7 @@
 export default {
   data : () =>  {
     return {
+      lang : "en",
       customValues :{
         login :""
       },
@@ -93,9 +103,14 @@ export default {
     });
   },
   created() {
+    this.lang = this.user.preferedlang;
    this.update();
   },
   methods: {
+    changelang() { 
+      //update user's language
+      this.$i18n.locale = this.lang;
+    },
     gotoProfil(){
       this.isValidForm()
       .then(res=>{

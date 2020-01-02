@@ -34,7 +34,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: ['@/plugins/mdb-vue',
-    '@/plugins/icons-vue', '~/plugins/xgplayer', '~/plugins/vmodal','~/plugins/element-vue','~/plugins/axios'],
+    '@/plugins/icons-vue', '~/plugins/xgplayer', '~/plugins/vmodal','~/plugins/element-vue','~/plugins/axios', '~/plugins/i18n'],
   /*
   ** Nuxt.js dev-modules
   */

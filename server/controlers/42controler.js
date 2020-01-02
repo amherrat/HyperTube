@@ -15,12 +15,12 @@ passport.use(new FortyTwoStrategy({
     callbackURL: "http://localhost:3000/api/auth/42/callback"
   },
   function(accessToken, refreshToken, profile, done) {
-         console.log("User ID => ",profile.id);
-      console.log("USER NAME => ",profile.name.givenName[0]+profile.name.familyName);
-      console.log("FIRST NAME => ",profile.name.givenName);
-      console.log("LAST NAME => ",profile.name.familyName);
-      console.log("MAIL => ",profile.emails[0].value);
-      console.log("IMG URL => ",profile.photos[0].value);
+      //    console.log("User ID => ",profile.id);
+      // console.log("USER NAME => ",profile.name.givenName[0]+profile.name.familyName);
+      // console.log("FIRST NAME => ",profile.name.givenName);
+      // console.log("LAST NAME => ",profile.name.familyName);
+      // console.log("MAIL => ",profile.emails[0].value);
+      // console.log("IMG URL => ",profile.photos[0].value);
       var user = new User({
         // login: profile.name.givenName[0].toLowerCase() + profile.name.familyName.toLowerCase(),
         login: "u"+String(Math.round(new Date().getTime()/1000)),
@@ -30,9 +30,9 @@ passport.use(new FortyTwoStrategy({
         password: profile.id+"tkharbi9a",
         profil: profile.photos[0].value,
         FortytowId: profile.id,
-        verified: 1
+        verified: 1 //we will consider 42 and spotify as verfied :/
       });
-      console.log(user);
+      //console.log(user);
       /*Create usere if dosnt exist*/
       try {
         User.find({ mail: user.mail }, (err, result) => {

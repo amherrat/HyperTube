@@ -33,7 +33,7 @@ passport.use(
         spotifyId: profile.id,
         verified: 1 //we will consider 42 and spotify as verfied :/
       });
-      console.log(user);
+      //console.log(user);
       /*Create usere if dosnt exist*/
       try {
         User.find({ mail: user.mail }, (err, result) => {
