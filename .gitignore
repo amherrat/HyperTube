@@ -1,1 +1,5 @@
 node_modules/
+.DS_Store
+server/subtitles
+server/torrent-stream
+server/uploads
