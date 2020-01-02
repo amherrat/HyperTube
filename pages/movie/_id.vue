@@ -216,7 +216,7 @@ export default {
       torrents: []
     };
   },
-  validate({ params }) {  
+  validate({ params }) {
     return (
       // (/^[0-9]*$/.test(params.id) && /^(?!0*$).*$/.test(params.id)) ||
       /tt\d{7,8}/.test(params.id)
@@ -228,13 +228,24 @@ export default {
   },
   methods: {
     openmodal(name) {
-      if (window.innerWidth > 600)
-        this.$modal.show(name);
-      else{
+      if (window.innerWidth > 600) this.$modal.show(name);
+      else {
         //crew_modal cast_modal yt_trailer
-        if (name === 'yt_trailer') window.open(`http://youtube.com/watch?v=${this.moviedata.yt_trailer_code}`, '_blank');
-        else if (name === 'crew_modal') window.open(`https://m.imdb.com/title/${this.moviedata.imdb_code}/fullcredits`, '_blank');
-        else if (name === 'cast_modal') window.open(`https://m.imdb.com/title/${this.moviedata.imdb_code}/fullcredits/cast`, '_blank');
+        if (name === "yt_trailer")
+          window.open(
+            `http://youtube.com/watch?v=${this.moviedata.yt_trailer_code}`,
+            "_blank"
+          );
+        else if (name === "crew_modal")
+          window.open(
+            `https://m.imdb.com/title/${this.moviedata.imdb_code}/fullcredits`,
+            "_blank"
+          );
+        else if (name === "cast_modal")
+          window.open(
+            `https://m.imdb.com/title/${this.moviedata.imdb_code}/fullcredits/cast`,
+            "_blank"
+          );
       }
     },
     TorrentSelect(x) {
@@ -263,7 +274,7 @@ export default {
           .then(res => {
             let data = res.data;
             console.log(data);
-            if (res.status === 200) {
+            if (res.status === 200 && data) {
               console.log(data);
               this.moviedata.large_cover_image = data.poster_big;
               this.moviedata.title = data.title;
@@ -282,39 +293,66 @@ export default {
                   hash: data.items[i].torrent_magnet.substring(20, 60)
                 });
               }
-              axios
-                .get(
-                  // `https://api.themoviedb.org/3/movie/${id}/credits?api_key=0f87bface5c69fcf394fc387f33049fa`
-                  `https://api.themoviedb.org/3/movie/${id}?api_key=0f87bface5c69fcf394fc387f33049fa&append_to_response=credits`
-                )
-                .then(res => {
-                  let data = res.data.credits;
-                  console.log(data);
-                  this.moviedata.cast = data.cast;
-                  this.moviedata.crew = data.crew;
-                  this.castdone = true;
-                })
-                .catch(err => {
-                  console.log(err);
-                });
-              axios
-                .get(
-                  `https://tinfo.apiumadomain.com/3/movie/${id}/images?api_key=49101d62654e71a2931722642ac07e5e`
-                )
-                .then(res => {
-                  var data = res.data;
-                  console.log(data);
-                  for (const x in data.backdrops) {
-                    this.images.push(
-                      "http://image.tmdb.org/t/p/original" +
-                        data.backdrops[x].file_path
-                    );
-                  }
-                })
-                .catch(err => {
-                  console.log(err);
-                });
             } else this.$nuxt.error({ statusCode: 404 });
+          })
+          .catch(err => {
+            console.log(err);
+            console.log('2nd api');
+            axios.get(`https://tv-v2.api-fetch.website/movie/${id}`).then(res => {
+              console.log(res);
+              let data = res.data;
+              if (res.status === 200 && data){
+                this.moviedata.large_cover_image = data.images.poster;
+                this.moviedata.title = data.title;
+                this.moviedata.year = data.year;
+                this.moviedata.runtime = data.runtime;
+                this.moviedata.imdb_code = data.imdb_id;
+                this.moviedata.yt_trailer_code = data.trailer.substring(27);
+                console.log(data.trailer.substring(27));
+                this.moviedata.rating = data.rating.percentage/10;
+                this.moviedata.description_full = data.synopsis;
+                this.genre = data.genres[0];
+                for (let i in data.torrents['en']) {
+                  console.log(data.torrents['en'][i].url);
+                  console.log(data.torrents['en'][i].url.substring(20, 60));
+                  this.torrents.push({
+                    quality: i,
+                    peers: data.torrents['en'][i].peer,
+                    seeds: data.torrents['en'][i].seed,
+                    hash: data.torrents['en'][i].url.substring(20, 60)
+                  });
+                }
+              }// }else this.$nuxt.error({ statusCode: 404 });
+            }).catch(err => console.log(err));
+          });
+        axios
+          .get(
+            // `https://api.themoviedb.org/3/movie/${id}/credits?api_key=0f87bface5c69fcf394fc387f33049fa`
+            `https://api.themoviedb.org/3/movie/${id}?api_key=0f87bface5c69fcf394fc387f33049fa&append_to_response=credits`
+          )
+          .then(res => {
+            let data = res.data.credits;
+            console.log(data);
+            this.moviedata.cast = data.cast;
+            this.moviedata.crew = data.crew;
+            this.castdone = true;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        axios
+          .get(
+            `https://tinfo.apiumadomain.com/3/movie/${id}/images?api_key=49101d62654e71a2931722642ac07e5e`
+          )
+          .then(res => {
+            var data = res.data;
+            console.log(data);
+            for (const x in data.backdrops) {
+              this.images.push(
+                "http://image.tmdb.org/t/p/original" +
+                  data.backdrops[x].file_path
+              );
+            }
           })
           .catch(err => {
             console.log(err);
@@ -670,7 +708,6 @@ export default {
   .crew {
     width: 100%;
   }
-
 }
 @media (max-width: 404px) {
   .selecttorrent {

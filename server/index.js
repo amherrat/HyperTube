@@ -98,7 +98,10 @@ async function start() {
   })
 }
 
-const dir = path.join(__dirname , '../uploads');
+const dir = path.join(__dirname , './uploads');
 app.use('/uploads', express.static(dir));
+
+const subDir = path.join(__dirname , './subtitles');
+app.use('/subtitles', express.static(subDir));
 
 start()

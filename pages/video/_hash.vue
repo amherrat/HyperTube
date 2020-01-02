@@ -68,34 +68,38 @@ export default {
   },
   created() {
     var id = this.$route.query.id;
+    var fine = 0;
     axios
       .get(
         `https://api.apiumadomain.com/movie?cb=&quality=720p,1080p,3d&page=1&imdb=${id}`
       )
       .then(res => {
         let data = res.data;
-        console.log(data);
-        this.movie_details = data;
-        var fine = 0;
         // check if hash is from movie id
-        for (let i in data.items) {
-          if (
-            data.items[i].torrent_magnet
-              .substring(20, 60)
-              .includes(this.$route.params.hash)
-          )
-            fine = 1;
-        }
+        if (data) {
+          this.movie_details = data;
+          for (let i in data.items) {
+            if (
+              data.items[i].torrent_magnet
+                .substring(20, 60)
+                .toUpperCase()
+                .includes(this.$route.params.hash.toUpperCase())
+            )
+              fine = 1;
+          }
+        }else this.$nuxt.error({ statusCode: 404 });
         if (fine) {
           console.log(data.poster_med);
           var imdbid = data.imdb;
+          //backdrops
           axios
             .get(
               `https://tinfo.apiumadomain.com/3/movie/${imdbid}/images?api_key=49101d62654e71a2931722642ac07e5e`
             )
             .then(res => {
               let data = res.data;
-              this.playerOptions.poster = `http://image.tmdb.org/t/p/original${data.backdrops[0].file_path}`;
+              if (data.backdrops[0] && data.backdrops[0].file_path)
+                this.playerOptions.poster = `http://image.tmdb.org/t/p/original${data.backdrops[0].file_path}`;
             })
             .catch(err => {
               console.log(err);
@@ -134,10 +138,69 @@ export default {
             .catch(err => {
               console.log(err);
             });
-        } else this.$router.push({ name: "home" });
+        } else this.$nuxt.error({ statusCode: 404 });
       })
       .catch(err => {
         console.log(err);
+        axios
+          .get(`https://tv-v2.api-fetch.website/movie/${id}`)
+          .then(res => {
+            let data = res.data;
+            if (res.status === 200 && data) {
+              for (let i in data.torrents["en"]) {
+                if (
+                  data.torrents["en"][i].url
+                    .substring(20, 60)
+                    .toUpperCase()
+                    .includes(this.$route.params.hash.toUpperCase())
+                )
+                  fine = 1;
+              }
+            } else this.$nuxt.error({ statusCode: 404 });
+            if (fine) {
+              console.log(data.poster_med);
+              var imdbid = data.imdb_id;
+              if (data.images && data.images.fanart)
+                this.playerOptions.poster = data.images.fanart;
+              //subtitles
+              this.$axios
+                .$get(`/api/subtitles/${imdbid}`)
+                .then(res => {
+                  console.log("subtitles");
+                  console.log(res);
+                  for (let lang in res) {
+                    console.log(res[lang].langShort);
+                    this.playerOptions.textTrack.push({
+                      src: res[lang].path,
+                      kind: "captions",
+                      label: res[lang].lang,
+                      srclang: res[lang].langShort,
+                      default: res[lang].langShort === "en" ? true : false
+                    });
+                  }
+                  this.done = true;
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+              // api/addvideo
+              this.$axios
+                .$post("/api/addvideo", {
+                  hash: this.$route.params.hash,
+                  username: this.userdata.login,
+                  imdbid: imdbid
+                })
+                .then(res => {
+                  console.log(res);
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+            } else this.$nuxt.error({ statusCode: 404 });
+          })
+          .catch(err => {
+            console.log(err);
+          });
       });
   },
   computed: {

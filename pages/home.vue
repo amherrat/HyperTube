@@ -273,6 +273,7 @@ export default {
       this.filterbarshow = !this.filterbarshow;
     },
     search() {
+      this.nothingFound = false;
       this.filmsExist = 0;
       this.films = [];
       this.page = 1;
