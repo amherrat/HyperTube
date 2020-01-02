@@ -145,12 +145,11 @@ export default {
   name: "Signup",
   head() {
 		return {
-		title: this.title
+		title: this.$t('title_SignUp')
 		};
 	},
   data() {
     return {
-      title: 'SignUp',
       image: "",
       customValues: {
         login: "",

@@ -76,12 +76,11 @@ export default {
   name: "update_password",
   head() {
 		return {
-		title: this.title
+		title: this.$t('title_Update_Password')
 		};
 	},
   data() {
     return {
-      title: 'Update Password',
       done: false,
       customValues: {
         oldpassword: "",

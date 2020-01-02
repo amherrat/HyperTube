@@ -17,12 +17,12 @@
           </div>
           <div class="_shadow length">
             <i class="icon icon-clock"></i>
-            {{moviedata.runtime}} min
+            {{moviedata.runtime}} {{$t('min')}}
           </div>
           <div>
             <a target="_blank" :href="'https://www.imdb.com/title/'+moviedata.imdb_code+'/reviews'">
               <button type="button" class="read_reviews _shadow">
-                <span class="readbutton">Read Reviews</span>
+                <span class="readbutton">{{$t('Read_Reviews')}}</span>
               </button>
             </a>
           </div>
@@ -71,9 +71,9 @@
         </div>
         <div v-if="castdone && moviedata.cast" class="cast">
           <div class="title_Cast">
-            <span>Cast</span>
+            <span>{{$t('Cast')}}</span>
             <button type="button" class="more_button _shadow" @click="openmodal('cast_modal')">
-              <span class="readbutton">More</span>
+              <span class="readbutton">{{$t('More')}}</span>
             </button>
           </div>
           <div v-for="(cast, i) in moviedata.cast" :key="i">
@@ -117,9 +117,9 @@
         </div>
         <div v-if="castdone && moviedata.crew" class="crew">
           <div class="title_Cast">
-            <span>Crew</span>
+            <span>{{$t('Crew')}}</span>
             <button type="button" class="more_button _shadow" @click="openmodal('crew_modal')">
-              <span class="readbutton">More</span>
+              <span class="readbutton">{{$t('More')}}</span>
             </button>
           </div>
           <div v-for="(crew, i) in moviedata.crew" :key="i">
@@ -192,7 +192,7 @@
         </div>
         <div class="watchbutton">
           <mdb-btn :disabled="selectedTorrent ? false : true" gradient="blue" @click="gowatch">
-            <font-awesome-icon :icon="['fas', 'play']" size="1x" />&nbsp;&nbsp;WATCH NOW
+            <font-awesome-icon :icon="['fas', 'play']" size="1x" />&nbsp;&nbsp;{{$t('WATCH_NOW')}}
           </mdb-btn>
         </div>
       </div>
@@ -214,7 +214,7 @@ export default {
   },
   data() {
     return {
-      title: "Movie Details",
+      title: "",
       castdone: false,
       selectedTorrent: null,
       selectedTorrentIndex: null,

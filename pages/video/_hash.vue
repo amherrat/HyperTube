@@ -51,7 +51,7 @@ export default {
   },
   data() {
     return {
-      title: 'watch torrent video',
+      title: '',
       done: false,
       movie_details: [],
       inputComment: "",

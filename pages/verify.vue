@@ -34,12 +34,11 @@ export default {
   name: "Verify",
   head() {
 		return {
-		title: this.title
+		title: this.$t('title_Verify')
 		};
 	},
   data() {
     return {
-      title: 'Verify',
       msg: "there is an error in your link!",
       type: "danger"
     };

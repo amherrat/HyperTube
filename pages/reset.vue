@@ -78,12 +78,11 @@ export default {
   name: "reset_password",
   head() {
 		return {
-		title: this.title
+		title: this.$t('title_Reset_Password')
 		};
 	},
   data() {
     return {
-      title: 'Reset Password',
       done:false,
       validreset: false,
       customValues: {

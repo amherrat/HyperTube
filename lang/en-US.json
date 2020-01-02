@@ -61,9 +61,19 @@
   "Thriller": "Thriller",
   "War": "War",
   "Western": "Western",
-  "pages": {
-    "home": "home",
-    "contacts": "Contacts",
-    "login": "login"
-  }
+  "title_profile": "Profil",
+  "title_Settings": "Settings",
+  "title_Update_Password": "Update Password",
+  "title_Forget_Password": "Forget Password",
+  "title_Home": "Home",
+  "title_Login": "Login",
+  "title_Reset_Password": "Reset Password",
+  "title_SignUp": "SignUp",
+  "title_Verify": "Verify",
+  "Read_Reviews" : "Read Reviews",
+  "min" : "min",
+  "More" : "More",
+  "WATCH_NOW" : "WATCH NOW",
+  "Crew" : "Crew",
+  "Cast" : "Cast"
 }

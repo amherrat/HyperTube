@@ -61,9 +61,19 @@
   "Thriller": "Thriller",
   "War": "Guerre",
   "Western": "Occidental",
-  "pages": {
-    "home": "Page d'acceuil",
-    "settings": "modification",
-    "login" :  "Se connecter"
-  }
+  "title_profile": "Profil",
+  "title_Settings": "Réglages",
+  "title_Update_Password": "changer mot de pass",
+  "title_Forget_Password": "Mot de passe oublié",
+  "title_Home": "page d'accueil",
+  "title_Login": "se connecter",
+  "title_Reset_Password": "réinitialiser le mot de passe",
+  "title_SignUp": "s'inscrire",
+  "title_Verify": "Vérifier",
+  "Read_Reviews" : "Lire les avis",
+  "min" : "min",
+  "More" : "Plus",
+  "WATCH_NOW" : "REGARDER MAINTENANT",
+  "Crew" : "Équipe",
+  "Cast" : "Acteurs"
 }

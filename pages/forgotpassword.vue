@@ -46,12 +46,11 @@ export default {
   name: "Forgot",
   head() {
 		return {
-		title: this.title
+		title: this.$t('title_Forget_Password')
 		};
 	},
   data() {
     return {
-      title: 'Forget Password',
         customValues: {
         mail: ""
       },

@@ -153,12 +153,11 @@ export default {
   },
   	head() {
 		return {
-		title: this.title
+		title: this.$t('title_Settings')
 		};
 	},
   data() {
     return {
-      title: 'Settings',
       Uploadedimg: false,
       done: false,
       customValues: {

@@ -83,7 +83,7 @@ export default {
 	},
     data() {
     return {
-		title: 'Profile',
+		title: '',
 		activeName: '1',
 		nb_films: 0,
 		nb_comments: 0,
@@ -102,7 +102,7 @@ export default {
     return /^[a-zA-Z]+([_-]?[a-zA-Z0-9])*$/.test(login);
   },
   mounted() {
-	  this.title = `${this.$route.params.login} Profile`;
+	  this.title = `${this.$route.params.login} ${this.$t('title_profile')}`;
 	  this
 		.$axios
 		.get(`/api/comment/get/${this.$route.params.login}`)

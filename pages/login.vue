@@ -74,13 +74,12 @@ export default {
   name: "Login",
   head() {
 		return {
-		title: this.title
+		title: this.$t('title_Login')
 		};
 	},
   components: {},
   data() {
     return {
-      title: 'Login',
       customValues: {
         login: "",
         password: ""
