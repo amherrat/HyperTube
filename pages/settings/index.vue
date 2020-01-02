@@ -5,9 +5,9 @@
       <mdb-container>
         <mdb-row>
           <div class="white-text text-center text-md-left col-md-6 mt-xl-5 mb-5">
-            <h1 class="h1-responsive font-weight-bold">Settings</h1>
+            <h1 class="h1-responsive font-weight-bold">{{$t('Settings')}}</h1>
             <hr class="hr-light" />
-            <h6 class="mb-4">you can modify your infos here</h6>
+            <h6 class="mb-4">{{$t('Settings msg')}}</h6>
             <!-- <nuxt-link to="/login">
               <mdb-btn outline="white" color="white">Login Now</mdb-btn>
             </nuxt-link>-->
@@ -62,8 +62,8 @@
                     size="10"
                     button-class="btn btn-info"
                     :custom-strings="{
-                    upload: '<h1>Bummer!</h1>',
-                    drag: 'Drag your profile img here'
+                    upload: '<h1></h1>',
+                    drag: $t('dg img')
                     }"
                     @change="AddProfilImage"
                   ></picture-input>
@@ -71,19 +71,19 @@
                     <h3
                       class="text-danger"
                       v-if="!validation.Profileimg.valid"
-                    >{{validation.Profileimg.invalidFeedback}}</h3>
+                    >{{$t(validation.Profileimg.invalidFeedback)}}</h3>
                   </center>
                   <mdb-row>
                     <mdb-col>
                       <mdb-input
                         type="text"
-                        label="login"
+                        :label="$t('Login')"
                         v-model="customValues.login"
                         :customValidation="validation.login.validated"
                         :isValid="validation.login.valid"
                         @change="validate('login')"
-                        validFeedback="login look's good."
-                        :invalidFeedback="validation.login.invalidFeedback"
+                        :validFeedback="$t('Login looks good')"
+                        :invalidFeedback="$t(validation.login.invalidFeedback)"
                       />
                     </mdb-col>
                   </mdb-row>
@@ -91,25 +91,25 @@
                     <mdb-col>
                       <mdb-input
                         type="text"
-                        label="First name"
+                        :label="$t('First name')"
                         v-model="customValues.fname"
                         :customValidation="validation.fname.validated"
                         :isValid="validation.fname.valid"
                         @change="validate('fname')"
-                        validFeedback="First name look's good."
-                        :invalidFeedback="validation.fname.invalidFeedback"
+                        :validFeedback="$t('First name looks good')"
+                        :invalidFeedback="$t(validation.fname.invalidFeedback)"
                       />
                     </mdb-col>
                     <mdb-col>
                       <mdb-input
                         type="text"
-                        label="Last name"
+                         :label="$t('Last name')"
                         v-model="customValues.lname"
                         :customValidation="validation.lname.validated"
                         :isValid="validation.lname.valid"
                         @change="validate('lname')"
-                        validFeedback="Last name look's good."
-                        :invalidFeedback="validation.lname.invalidFeedback"
+                        :validFeedback="$t('Last name looks good')"
+                        :invalidFeedback="$t(validation.lname.invalidFeedback)"
                       />
                     </mdb-col>
                   </mdb-row>
@@ -122,17 +122,17 @@
                         :customValidation="validation.mail.validated"
                         :isValid="validation.mail.valid"
                         @change="validate('mail')"
-                        validFeedback="email look's good."
-                        :invalidFeedback="validation.mail.invalidFeedback"
+                        :validFeedback="$t('Email looks good')"
+                        :invalidFeedback="$t(validation.mail.invalidFeedback)"
                       />
                     </mdb-col>
                   </mdb-row>
                   <p class="font-small blue-text d-flex justify-content-end mb-5">
-                    <nuxt-link to="settings/update_password">Change password</nuxt-link>
+                    <nuxt-link to="settings/update_password">{{$t('Change password')}}</nuxt-link>
                   </p>
                   <p></p>
                   <div class="text-center mb-3">
-                    <mdb-btn gradient="aqua" block type="submit">Update</mdb-btn>
+                    <mdb-btn gradient="aqua" block type="submit">{{$t('Update')}}</mdb-btn>
                   </div>
                 </form>
               </mdb-card-body>
@@ -258,12 +258,12 @@ export default {
                   if (res.data.errors === "login already exist") {
                     this.validation.login.valid = false;
                     this.validation.login.invalidFeedback =
-                      "login already exist";
+                      "Login already exist";
                     this.validation.login.validated = true;
                   }
                   if (res.data.errors === "mail already exist") {
                     this.validation.mail.valid = false;
-                    this.validation.mail.invalidFeedback = "mail already exist";
+                    this.validation.mail.invalidFeedback = "Mail already exist";
                     this.validation.mail.validated = true;
                   }
                 } else {
@@ -288,7 +288,7 @@ export default {
           this.customValues[key].length < 3
         ) {
           this.validation[key].valid = false;
-          this.validation[key].invalidFeedback = "Wrong login.";
+          this.validation[key].invalidFeedback = "Wrong login";
         } else {
           this.validation[key].valid = true;
         }
@@ -304,7 +304,7 @@ export default {
           this.customValues[key].length < 3
         ) {
           this.validation[key].valid = false;
-          this.validation[key].invalidFeedback = "First name not valid.";
+          this.validation[key].invalidFeedback = "First name not valid";
         } else {
           this.validation[key].valid = true;
         }
@@ -320,7 +320,7 @@ export default {
           this.customValues[key].length < 3
         ) {
           this.validation[key].valid = false;
-          this.validation[key].invalidFeedback = "Last name not valid.";
+          this.validation[key].invalidFeedback = "Last name not valid";
         } else {
           this.validation[key].valid = true;
         }
@@ -336,7 +336,7 @@ export default {
           this.customValues[key].length < 5
         ) {
           this.validation[key].valid = false;
-          this.validation[key].invalidFeedback = "Email not valid.";
+          this.validation[key].invalidFeedback = "Email not valid";
         } else {
           this.validation[key].valid = true;
         }

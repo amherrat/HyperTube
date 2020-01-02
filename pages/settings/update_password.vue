@@ -5,9 +5,9 @@
       <mdb-container>
         <mdb-row>
           <div class="white-text text-center text-md-left col-md-6 mt-xl-5 mb-5">
-            <h1 class="h1-responsive font-weight-bold">Update Password</h1>
+            <h1 class="h1-responsive font-weight-bold">{{$t('Update password')}}</h1>
             <hr class="hr-light" />
-            <h6 class="mb-4">you can change your password here</h6>
+            <h6 class="mb-4">{{$t('Update password msg')}}</h6>
             <!-- <nuxt-link to="/login">
               <mdb-btn outline="white" color="white">Login Now</mdb-btn>
             </nuxt-link>-->
@@ -20,13 +20,13 @@
                     <mdb-col>
                       <mdb-input
                         type="password"
-                        label="Old password"
+                        :label="$t('Old password')"
                         v-model="customValues.oldpassword"
                         :customValidation="validation.oldpassword.validated"
                         :isValid="validation.oldpassword.valid"
                         @change="validate('oldpassword')"
-                        validFeedback="password look's good."
-                        :invalidFeedback="validation.oldpassword.invalidFeedback"
+                        validFeedback="password look's good"
+                        :invalidFeedback="$t(validation.oldpassword.invalidFeedback)"
                       />
                     </mdb-col>
                   </mdb-row>
@@ -34,13 +34,13 @@
                     <mdb-col>
                       <mdb-input
                         type="password"
-                        label="Password"
+                        :label="$t('Password')"
                         v-model="customValues.password"
                         :customValidation="validation.password.validated"
                         :isValid="validation.password.valid"
                         @change="validate('password')"
-                        validFeedback="password look's good."
-                        :invalidFeedback="validation.password.invalidFeedback"
+                        validFeedback="password look's good"
+                        :invalidFeedback="$t(validation.password.invalidFeedback)"
                       />
                     </mdb-col>
                   </mdb-row>
@@ -48,18 +48,18 @@
                     <mdb-col>
                       <mdb-input
                         type="password"
-                        label="Confirm password"
+                         :label="$t('Confirm password')"
                         v-model="customValues.confirmpassword"
                         :customValidation="validation.confirmpassword.validated"
                         :isValid="validation.confirmpassword.valid"
                         @change="validate('confirmpassword')"
-                        validFeedback="password look's good."
-                        :invalidFeedback="validation.confirmpassword.invalidFeedback"
+                        validFeedback="password look's good"
+                        :invalidFeedback="$t(validation.confirmpassword.invalidFeedback)"
                       />
                     </mdb-col>
                   </mdb-row>
                   <div class="text-center mb-3">
-                    <mdb-btn gradient="aqua" block type="submit">Update</mdb-btn>
+                    <mdb-btn gradient="aqua" block type="submit">{{$t('Update')}}</mdb-btn>
                   </div>
                 </form>
               </mdb-card-body>
@@ -158,19 +158,19 @@ export default {
       const regexer = [
         {
           regex: /[a-z]+/,
-          error: "Password should contain at least one lowercase character."
+          error: "Password should contain at least one lowercase character"
         },
         {
           regex: /[A-Z]+/,
-          error: "Password should contain at least one uppercase character."
+          error: "Password should contain at least one uppercase character"
         },
         {
           regex: /[0-9]+/,
-          error: "Password should contain at least one number."
+          error: "Password should contain at least one number"
         },
         {
           regex: /[#$^+=!*()@%&]+/,
-          error: "Password should contain at least one special character."
+          error: "Password should contain at least one special character"
         }
       ];
       //oldPassword
@@ -187,7 +187,7 @@ export default {
         } else {
           this.validation[key].valid = false;
           this.validation[key].invalidFeedback =
-            "Password too short. Type at least 8 letters.";
+            "Password too short, Type at least 8 letters";
         }
         this.validation[key].validated = true;
       }
@@ -205,13 +205,13 @@ export default {
             else {
               this.validation[key].valid = false;
               this.validation[key].invalidFeedback =
-                "New password match the old one.";
+                "New password match the old one";
             }
           }
         } else {
           this.validation[key].valid = false;
           this.validation[key].invalidFeedback =
-            "Password too short. Type at least 8 letters.";
+            "Password too short. Type at least 8 letters";
         }
         this.validation[key].validated = true;
       }
@@ -228,13 +228,13 @@ export default {
               this.validation[key].valid = true;
             else {
               this.validation[key].valid = false;
-              this.validation[key].invalidFeedback = "Passwords doesn't match.";
+              this.validation[key].invalidFeedback = "Passwords doesn't match";
             }
           }
         } else {
           this.validation[key].valid = false;
           this.validation[key].invalidFeedback =
-            "Password too short. Type at least 8 letters.";
+            "Password too short. Type at least 8 letters";
         }
         this.validation[key].validated = true;
       }

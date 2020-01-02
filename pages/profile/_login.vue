@@ -18,12 +18,12 @@
       <div class="profile-card-inf">
         <div class="profile-card-inf__item">
           <div class="profile-card-inf__title">{{nb_comments}}</div>
-          <div class="profile-card-inf__txt">Comments</div>
+          <div class="profile-card-inf__txt">{{$t('Comments')}}</div>
         </div>
 
         <div class="profile-card-inf__item">
           <div class="profile-card-inf__title">{{nb_films}}</div>
-          <div class="profile-card-inf__txt">Watched Movies</div>
+          <div class="profile-card-inf__txt">{{$t('Watched')}}</div>
         </div>
       </div>
         </div>

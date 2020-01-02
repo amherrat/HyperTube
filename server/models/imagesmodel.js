@@ -12,7 +12,7 @@ exports.createImage = function (Image, user) {
         var img_url = "http://" + "0.0.0.0" + ":3000/uploads/" + image_name;
         const buf = Buffer.from(base64str, 'base64');
         jimp.read(buf, (err, image) => {
-            if (err) reject('invalid image');
+            if (err) reject('Invalid image');
             else {
                 image.write(image_path);
                 User.findOneAndUpdate(
@@ -26,7 +26,7 @@ exports.createImage = function (Image, user) {
                       {
                         resolve(img_url);
                       }else
-                        reject('problem invalid image');
+                        reject('Invalid image');
                     });
             }
         })

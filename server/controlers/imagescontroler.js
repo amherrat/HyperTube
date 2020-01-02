@@ -13,7 +13,7 @@ function is_valid_image(image) {
         )
       )
         errors.msg = ["Image invalide"];
-  } else errors.error = ["data wrong format"];
+  } else errors.error = ["Data wrong format"];
   return errors;
 }
 
