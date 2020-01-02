@@ -44,8 +44,14 @@
 <script>
 export default {
   name: "Forgot",
+  head() {
+		return {
+		title: this.title
+		};
+	},
   data() {
     return {
+      title: 'Forget Password',
         customValues: {
         mail: ""
       },

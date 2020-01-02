@@ -72,9 +72,15 @@
 <script>
 export default {
   name: "Login",
+  head() {
+		return {
+		title: this.title
+		};
+	},
   components: {},
   data() {
     return {
+      title: 'Login',
       customValues: {
         login: "",
         password: ""

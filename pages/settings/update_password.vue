@@ -74,8 +74,14 @@
 <script>
 export default {
   name: "update_password",
+  head() {
+		return {
+		title: this.title
+		};
+	},
   data() {
     return {
+      title: 'Update Password',
       done: false,
       customValues: {
         oldpassword: "",

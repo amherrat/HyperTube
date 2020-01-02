@@ -76,8 +76,14 @@
 import axios from "axios";
 
 export default {
+	head() {
+		return {
+		title: this.title
+		};
+	},
     data() {
     return {
+		title: 'Profile',
 		activeName: '1',
 		nb_films: 0,
 		nb_comments: 0,
@@ -91,11 +97,12 @@ export default {
     }
     },
   validate({ params }) {
-    var login = params.login.toLowerCase();
+	var login = params.login.toLowerCase();
     console.log(login);
     return /^[a-zA-Z]+([_-]?[a-zA-Z0-9])*$/.test(login);
   },
   mounted() {
+	  this.title = `${this.$route.params.login} Profile`;
 	  this
 		.$axios
 		.get(`/api/comment/get/${this.$route.params.login}`)

@@ -182,8 +182,14 @@
 import axios from "axios";
 
 export default {
+  head () {
+    return {
+      title: this.title
+    }
+  },
   data: () => {
     return {
+      title: 'Home',
       nothingFound: false,
       busy: false,
       filmyear: [1950, 2020],

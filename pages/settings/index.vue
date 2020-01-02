@@ -151,8 +151,14 @@ export default {
   components: {
     PictureInput
   },
+  	head() {
+		return {
+		title: this.title
+		};
+	},
   data() {
     return {
+      title: 'Settings',
       Uploadedimg: false,
       done: false,
       customValues: {

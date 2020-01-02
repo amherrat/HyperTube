@@ -32,8 +32,14 @@
 <script>
 export default {
   name: "Verify",
+  head() {
+		return {
+		title: this.title
+		};
+	},
   data() {
     return {
+      title: 'Verify',
       msg: "there is an error in your link!",
       type: "danger"
     };

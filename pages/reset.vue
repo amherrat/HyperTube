@@ -76,8 +76,14 @@
 <script>
 export default {
   name: "reset_password",
+  head() {
+		return {
+		title: this.title
+		};
+	},
   data() {
     return {
+      title: 'Reset Password',
       done:false,
       validreset: false,
       customValues: {

@@ -35,6 +35,11 @@ export default {
   components: {
     Comments
   },
+  head() {
+    return {
+      title: this.title
+    };
+  },
   validate({ params, query }) {
     var hash = params.hash.toLowerCase();
     if (!query.id) return false;
@@ -46,6 +51,7 @@ export default {
   },
   data() {
     return {
+      title: 'watch torrent video',
       done: false,
       movie_details: [],
       inputComment: "",
@@ -84,10 +90,12 @@ export default {
                 .substring(20, 60)
                 .toUpperCase()
                 .includes(this.$route.params.hash.toUpperCase())
-            )
+            ){
+              this.title = `${data.title} ${data.items[i].quality}`
               fine = 1;
+            }
           }
-        }else this.$nuxt.error({ statusCode: 404 });
+        } else this.$nuxt.error({ statusCode: 404 });
         if (fine) {
           console.log(data.poster_med);
           var imdbid = data.imdb;

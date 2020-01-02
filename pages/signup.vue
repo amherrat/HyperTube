@@ -143,8 +143,14 @@
 <script>
 export default {
   name: "Signup",
+  head() {
+		return {
+		title: this.title
+		};
+	},
   data() {
     return {
+      title: 'SignUp',
       image: "",
       customValues: {
         login: "",

@@ -76,20 +76,22 @@
               <span class="readbutton">More</span>
             </button>
           </div>
-          <div class="_shadow profile" v-for="(cast, i) in moviedata.cast" v-if="i < 10" :key="i">
-            <!-- <a :href="'https://www.imdb.com/name/nm'+cast.imdb_code" target="_blank"> -->
-            <div>
-              <a :href="'https://www.themoviedb.org/person/'+cast.id" target="_blank">
-                <img
-                  :src="cast.profile_path ? `https://image.tmdb.org/t/p/original${cast.profile_path}` : '/default-profile.png'"
-                  width="60px"
-                  height="60px"
-                />
-                <div class="name">
-                  <p class="cast_name">{{cast.name}}</p>
-                  <p class="cast_name">{{`(${cast.character})`}}</p>
-                </div>
-              </a>
+          <div v-for="(cast, i) in moviedata.cast" :key="i">
+            <div class="_shadow profile" v-if="i < 10">
+              <!-- <a :href="'https://www.imdb.com/name/nm'+cast.imdb_code" target="_blank"> -->
+              <div>
+                <a :href="'https://www.themoviedb.org/person/'+cast.id" target="_blank">
+                  <img
+                    :src="cast.profile_path ? `https://image.tmdb.org/t/p/original${cast.profile_path}` : '/default-profile.png'"
+                    width="60px"
+                    height="60px"
+                  />
+                  <div class="name">
+                    <p class="cast_name">{{cast.name}}</p>
+                    <p class="cast_name">{{`(${cast.character})`}}</p>
+                  </div>
+                </a>
+              </div>
             </div>
           </div>
           <modal class="fademodal" width="500" height="500" name="cast_modal">
@@ -120,20 +122,22 @@
               <span class="readbutton">More</span>
             </button>
           </div>
-          <div class="_shadow profile" v-for="(crew, i) in moviedata.crew" v-if="i < 10" :key="i">
-            <!-- <a :href="'https://www.imdb.com/name/nm'+cast.imdb_code" target="_blank"> -->
-            <div>
-              <a :href="'https://www.themoviedb.org/person/'+crew.id" target="_blank">
-                <img
-                  :src="crew.profile_path ? `https://image.tmdb.org/t/p/original${crew.profile_path}` : '/default-profile.png'"
-                  width="60px"
-                  height="60px"
-                />
-                <div class="name">
-                  <p class="cast_name">{{crew.name}}</p>
-                  <p class="cast_name">{{`(${crew.job})`}}</p>
-                </div>
-              </a>
+          <div v-for="(crew, i) in moviedata.crew" :key="i">
+            <div class="_shadow profile" v-if="i < 10">
+              <!-- <a :href="'https://www.imdb.com/name/nm'+cast.imdb_code" target="_blank"> -->
+              <div>
+                <a :href="'https://www.themoviedb.org/person/'+crew.id" target="_blank">
+                  <img
+                    :src="crew.profile_path ? `https://image.tmdb.org/t/p/original${crew.profile_path}` : '/default-profile.png'"
+                    width="60px"
+                    height="60px"
+                  />
+                  <div class="name">
+                    <p class="cast_name">{{crew.name}}</p>
+                    <p class="cast_name">{{`(${crew.job})`}}</p>
+                  </div>
+                </a>
+              </div>
             </div>
           </div>
           <modal class="fademodal" width="500" height="500" name="crew_modal">
@@ -203,8 +207,14 @@ export default {
   components: {
     StarRating
   },
+  head() {
+    return {
+      title: this.title
+    };
+  },
   data() {
     return {
+      title: "Movie Details",
       castdone: false,
       selectedTorrent: null,
       selectedTorrentIndex: null,
@@ -278,6 +288,7 @@ export default {
               console.log(data);
               this.moviedata.large_cover_image = data.poster_big;
               this.moviedata.title = data.title;
+              this.title = data.title;
               this.moviedata.year = data.year;
               this.moviedata.runtime = data.runtime;
               this.moviedata.imdb_code = data.imdb;
@@ -297,33 +308,36 @@ export default {
           })
           .catch(err => {
             console.log(err);
-            console.log('2nd api');
-            axios.get(`https://tv-v2.api-fetch.website/movie/${id}`).then(res => {
-              console.log(res);
-              let data = res.data;
-              if (res.status === 200 && data){
-                this.moviedata.large_cover_image = data.images.poster;
-                this.moviedata.title = data.title;
-                this.moviedata.year = data.year;
-                this.moviedata.runtime = data.runtime;
-                this.moviedata.imdb_code = data.imdb_id;
-                this.moviedata.yt_trailer_code = data.trailer.substring(27);
-                console.log(data.trailer.substring(27));
-                this.moviedata.rating = data.rating.percentage/10;
-                this.moviedata.description_full = data.synopsis;
-                this.genre = data.genres[0];
-                for (let i in data.torrents['en']) {
-                  console.log(data.torrents['en'][i].url);
-                  console.log(data.torrents['en'][i].url.substring(20, 60));
-                  this.torrents.push({
-                    quality: i,
-                    peers: data.torrents['en'][i].peer,
-                    seeds: data.torrents['en'][i].seed,
-                    hash: data.torrents['en'][i].url.substring(20, 60)
-                  });
-                }
-              }// }else this.$nuxt.error({ statusCode: 404 });
-            }).catch(err => console.log(err));
+            console.log("2nd api");
+            axios
+              .get(`https://tv-v2.api-fetch.website/movie/${id}`)
+              .then(res => {
+                console.log(res);
+                let data = res.data;
+                if (res.status === 200 && data) {
+                  this.moviedata.large_cover_image = data.images.poster;
+                  this.moviedata.title = data.title;
+                  this.moviedata.year = data.year;
+                  this.moviedata.runtime = data.runtime;
+                  this.moviedata.imdb_code = data.imdb_id;
+                  this.moviedata.yt_trailer_code = data.trailer.substring(27);
+                  console.log(data.trailer.substring(27));
+                  this.moviedata.rating = data.rating.percentage / 10;
+                  this.moviedata.description_full = data.synopsis;
+                  this.genre = data.genres[0];
+                  for (let i in data.torrents["en"]) {
+                    console.log(data.torrents["en"][i].url);
+                    console.log(data.torrents["en"][i].url.substring(20, 60));
+                    this.torrents.push({
+                      quality: i,
+                      peers: data.torrents["en"][i].peer,
+                      seeds: data.torrents["en"][i].seed,
+                      hash: data.torrents["en"][i].url.substring(20, 60)
+                    });
+                  }
+                } // }else this.$nuxt.error({ statusCode: 404 });
+              })
+              .catch(err => console.log(err));
           });
         axios
           .get(
