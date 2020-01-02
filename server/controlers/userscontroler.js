@@ -1,6 +1,7 @@
 const User = require("../models/userModel.js");
 var nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 /** 
 STMP Configuration 
 **/
@@ -412,7 +413,7 @@ exports.resetpassword = (req, res) => {
         }
       }).catch(err => {
         console.log(err);
-        return res.end();});
+        return res.send("not found");});
     } catch (err) {}
   }
 };
@@ -444,14 +445,14 @@ exports.resetpassword = (req, res) => {
 // };
 
 exports.changePassword = (req, res) => {
-  var email = req.body.email;
+  var mail = req.body.mail;
   var token = req.body.token;
   var password = req.body.password;
   if (
-    !String(email).match(
+    !String(mail).match(
       /^[\-0-9a-zA-Z\.\+_]+@[\-0-9a-zA-Z\.\+_]+\.[a-zA-Z]{2,}$/
     ) ||
-    email.length > 50
+    mail.length > 50
   ) {
     res.end("invalid email");
   } else if (!String(token).match(/^[a-zA-Z0-9]*$/) || token.length > 300) {
@@ -469,7 +470,7 @@ exports.changePassword = (req, res) => {
       password = hash;
       console.log(password);
         try {
-          User.ValidateResetPassword(email, token, password)
+          User.ValidateResetPassword(mail, token, password)
             .then(result => {
                 console.log(result);
                 return res.json({

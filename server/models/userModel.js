@@ -108,7 +108,6 @@ userSchema.statics = {
         .exec()
         .then(user => {
           if (user) {
-            if (!user.verified) {
               this.findOneAndUpdate(
                 { mail, passwdtoken },
                 { password: password },
@@ -119,7 +118,6 @@ userSchema.statics = {
                   if (user) resolve("Updated password");
                   else reject("Not updated");
                 });
-            } else reject("Something went wrong");
           } else reject("Token or mail doesn't exist");
         });
     });
