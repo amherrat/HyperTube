@@ -6,10 +6,11 @@ var jwt1 = (req, res, next) => {
             jwt.verify(token, appSecret, (err, decoded) => {
             if (err){
                 //console.log('Failed to authenticate token.');
-                return res.json({
-                    success: false,
-                    message: "Failed to authenticate token."
-                });
+                // return res.json({
+                //     success: false,
+                //     message: "Failed to authenticate token."
+                // });
+                return res.status(401).send("Failed to authenticate token."); //401 (Unauthorized)
             } else{
                 console.log(decoded);
                 req.jwt = decoded;
@@ -18,11 +19,11 @@ var jwt1 = (req, res, next) => {
         });
     }catch (err) {}
     }else{
-        //console.log('No token Provided.');
-        return res.send({
-            success: false,
-            message: "No token Provided."
-        });
+        // return res.send({
+        //     success: false,
+        //     message: "No token Provided."
+        // });
+        return res.status(400).send("No token Provided."); //400 (Bad Request)
     }
 }
 // export default jwt1;

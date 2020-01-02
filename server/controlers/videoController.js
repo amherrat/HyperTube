@@ -9,17 +9,23 @@ exports.NewVideo = (req, res) => {
     if (hash.match(/([0-9a-f]{6})([0-9a-f]{34})/) && imdbid.match(/tt\d{7,8}/)) {
         VideoModel.newVideo({ hash: hash, imdbid: imdbid })
         VideoModel.addToWatchUser({ imdbid: imdbid, user: username });
-        res.json({ success: true });
-    } else res.json({ success: false });
+        res.status(200).json({ success: true }); //OK
+    } else res.status(400).end("hash or imdbid is wrong"); //Bad Request
 }
 
 exports.watchedlist = (req, res) => {
     var username = String(req.params.username).toLowerCase();
-    VideoModel.getWatchUser(username).then(
-        (data) => { 
-            console.log(data) 
-            res.send(data);
-        },
-        err => {console.log(err) }
-    );
+    if (username.match(/^[a-z]+([_-]?[a-z0-9])*$/g) && username.length < 50) {
+
+        VideoModel.getWatchUser(username).then(
+            (data) => {
+                console.log(data)
+                res.status(200).send(data); //OK
+            },
+            err => {
+                console.log(err)
+                res.status(404).end(err); //Not found
+            }
+        );
+    }else res.status(400).end("username is wrong"); //Bad Request
 }

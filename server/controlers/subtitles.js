@@ -13,8 +13,8 @@ var subtitles = async (req, res) => {
         for (i in ytsres) {
             ytsres[i] = { lang: ytsres[i].lang, langShort: ytsres[i].langShort, path: `/subtitles/${ytsres[i].fileName}` }
         }
-        res.send(ytsres);
-    } else res.end();
+        res.status(200).send(ytsres); //200 (OK)
+    } else res.status(400).end("imdbid is wrong"); //400 (Bad Request)
 }
 
 module.exports = subtitles;

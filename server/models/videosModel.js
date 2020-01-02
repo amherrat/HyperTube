@@ -55,7 +55,7 @@ exports.getWatchUser = (user) => {
     return new Promise((resolve, reject) => {
         watch.find({user: user}, function (err, wtch) {
             if (err) reject(err);
-            if (!wtch) reject('cannot found user watchlist');
+            if (!wtch) reject('user watchedlist is empty');
             resolve(wtch);
         });
     });
