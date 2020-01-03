@@ -9,10 +9,9 @@
     <mdb-navbar-toggler>
       <mdb-navbar-nav left>
       <select v-model="lang" @change="changelang">
-      <option value="en">Anglais</option>
-      <option value="fr">Français</option>
-      <option value="ar">Arabic</option>
-      <option value="dr">Darija</option>
+      <option value="en"> 🇬🇧 </option>
+      <option value="fr"> 🇫🇷 </option>
+      <option value="dr"> 🇲🇦 </option>
       </select>
         <!-- <nuxt-link to="film" no-prefetch>
           <mdb-nav-item>

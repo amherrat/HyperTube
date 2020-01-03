@@ -118,7 +118,7 @@
         <div class="card" ref="mycard" id="mycard">
           <div class="image">
             <!-- <img :src="film.medium_cover_image" /> -->
-            <img :src="film.poster_med" />
+            <img :src="film.poster_big" />
           </div>
           <div class="details">
             <div class="center">
@@ -377,7 +377,7 @@ export default {
                 console.log(res);
                 if (res.status === 200 && data.length) {
                   for (let i in data) {
-                    this.films.push({description: data[i].synopsis, imdb: data[i].imdb_id, poster_med: data[i].images.poster, rating: data[i].rating.percentage/10, title: data[i].title, year: data[i].year});                   
+                    this.films.push({description: data[i].synopsis, imdb: data[i].imdb_id, poster_big: data[i].images.poster, rating: data[i].rating.percentage/10, title: data[i].title, year: data[i].year});                   
                   }
                   let min = this.filmyear[0];
                   let max = this.filmyear[1];
