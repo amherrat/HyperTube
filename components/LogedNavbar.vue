@@ -8,7 +8,7 @@
     </mdb-navbar-brand>
     <mdb-navbar-toggler>
       <mdb-navbar-nav left>
-      <select v-model="lang" @change="changelang">
+      <select v-model="lang" id="selector" @change="changelang">
       <option value="en"> 🇬🇧 </option>
       <option value="fr"> 🇫🇷 </option>
       <option value="dr"> 🇲🇦 </option>
@@ -181,6 +181,13 @@ export default {
   position: relative;
   margin: 0px;
 }
+#selector {
+  background-color: #d2c2c200;
+  border: red;
+  font-size: 45px;
+  -webkit-appearance: none;
+} 
+
 .young-1337 {
     background-image: -webkit-gradient(
     linear,

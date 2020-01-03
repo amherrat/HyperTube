@@ -630,6 +630,7 @@ export default {
   transform-origin: left;
   transform: perspective(2000px) rotateY(-90deg);
 }
+
 .card:hover .details {
   transform: perspective(2000px) rotateY(0deg);
 }
