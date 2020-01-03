@@ -70,11 +70,14 @@ export default {
       this.$axios
           .$post('/api/comment/add', theComment)
           .then(res => {
-            let data = res.data;
-            let comment = this.comment;
-            comment.unshift(data);
-            this.comment = comment;
-            this.inputComment = "";
+            if (res.success)
+            {
+              let data = res.data;
+              let comment = this.comment;
+              comment.unshift(data);
+              this.comment = comment;
+              this.inputComment = "";
+            }
           })
           .catch(err => {
           })
@@ -146,6 +149,8 @@ export default {
   right: 0;
 }
 .user_comment {
+  border-radius: 25px;
+  margin-top: 0%;
   display: inline-block;
   vertical-align: middle;
   width: calc(100% - 75px);

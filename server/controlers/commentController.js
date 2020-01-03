@@ -82,7 +82,7 @@ exports.commentAdd = (req, res) => {
       date: new Date()
     }
     if (params.id_film.length < 1 || params.hash_film.length < 1 || params.comment.length < 1 || params.comment.length > 150){
-        res.json({
+        res.status(400).json({
             success: false,
             data: {}
         }); 
@@ -90,12 +90,12 @@ exports.commentAdd = (req, res) => {
     else {
         try {
             CommentModel.commentAdd(params);
-            res.json({
+            res.status(200).json({
                 success: true,
                 data: params
             }); 
         } catch (error) {
-            res.json({
+            res.status(400).json({
                 success: false,
                 data: {}
             }); 
