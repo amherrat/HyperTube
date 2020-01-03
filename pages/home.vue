@@ -182,6 +182,17 @@
 import axios from "axios";
 
 export default {
+  beforeRouteEnter (to, from, next) {
+    axios
+    .get(`/api/whoAmi/${localStorage.token}`)
+    .then(res => {
+      next();
+    })
+    .catch(err => {
+      localStorage.removeItem('token');
+      next('/login');
+    });
+  },
   head () {
     return {
       title: this.$t('title_Home')

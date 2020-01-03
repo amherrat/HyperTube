@@ -75,6 +75,8 @@
   </mdb-navbar>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
   data : () =>  {
     return {
@@ -97,6 +99,7 @@ export default {
       return this.$store.getters.getdata;
     }
   },
+  
   mounted(){
     this.$root.$on("refreshAvatar", () => {
       this.update();
@@ -140,10 +143,12 @@ export default {
       console.log(res.data.success);
       if(res.data.success)
         this.$store.dispatch("getdata", res.data.data.user);
-      else
-        this.$router.push("/login");
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      //console.log(err);
+      localStorage.removeItem('token');
+      this.$router.push("/login");
+    });
     },
         validate(key, value) {
       if (key === "login") {
