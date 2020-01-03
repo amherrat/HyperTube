@@ -3,3 +3,4 @@ node_modules/
 server/subtitles
 server/torrent-stream
 server/uploads
+dist/
