@@ -83,9 +83,16 @@ export default {
       }
     };
   },
+  computed:{
+    userdata: function () {
+      return this.$store.getters.getdata;
+    }
+  },
   created() {
     var id = this.$route.query.id;
     var fine = 0;
+    var preferedlang = this.userdata.preferedlang;
+    // console.log(lang);
     axios
       .get(
         `https://api.apiumadomain.com/movie?cb=&quality=720p,1080p,3d&page=1&imdb=${id}`
@@ -130,13 +137,13 @@ export default {
               console.log("subtitles");
               console.log(res);
               for (let lang in res) {
-                console.log(res[lang].langShort);
+                console.log(res[lang].langShort, preferedlang, res[lang].langShort === preferedlang ? true : false);
                 this.playerOptions.textTrack.push({
                   src: res[lang].path,
                   kind: "captions",
                   label: res[lang].lang,
                   srclang: res[lang].langShort,
-                  default: res[lang].langShort === "en" ? true : false
+                  default: res[lang].langShort === preferedlang ? true : false
                 });
               }
               this.done = true;
