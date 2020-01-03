@@ -12,6 +12,7 @@
       <option value="en"> 🇬🇧 </option>
       <option value="fr"> 🇫🇷 </option>
       <option value="dr"> 🇲🇦 </option>
+      <option value="ar"> 🇸🇦 </option>
       </select>
         <!-- <nuxt-link to="film" no-prefetch>
           <mdb-nav-item>

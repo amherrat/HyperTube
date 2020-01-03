@@ -18,18 +18,17 @@
     <div class="row" id="searchEngine" v-show="this.filterbarshow">
       <div class="col-md-2"></div>
       <div class="col-md-8">
-        <h1 style="text-align: center;">Search&Filter engine</h1>
+        <h1 style="text-align: center;">{{$t('Search&Filter engine')}}</h1>
           <div class="form-row">
             <div class="col-md-12">
               <label for="searchTerm">
-                <h3>Your term</h3>
+                <h3>{{$t('Your term')}}</h3>
               </label>
               <input
                 type="text"
                 class="form-control"
                 v-model="term"
                 id="searchTerm"
-                placeholder="Your term"
                 v-on:keyup.enter="search"
               />
             </div>
@@ -40,7 +39,7 @@
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group">
-                  <label for="quality">Quality</label>
+                  <label for="quality">{{$t('Quality')}}</label>
                   <select v-model="choosedQuality" id="quality" class="form-control">
                     <option selected>All</option>
                     <option v-for="(qua, index) in this.quality" v-bind:key="index">{{qua}}</option>
@@ -49,7 +48,7 @@
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label for="genre">Genre</label>
+                  <label for="genre">{{$t('Genre')}}</label>
                   <select id="genre" v-model="choosedGenre" class="form-control">
                 <option v-for="(gen, index) in this.genre" :value="gen" v-bind:key="index">{{$t(gen)}}</option>   
                 </select>
@@ -66,7 +65,7 @@
               </div>-->
               <div class="col-md-3">
                 <div class="form-group">
-                  <label for="sortby">Sort by</label>
+                  <label for="sortby">{{$t('Sort by')}}</label>
                   <select id="sortby" v-model="sortvalue" class="form-control">
                     <option selected>None</option>
                     <option v-for="(ele, index) in this.sortby" v-bind:key="index">{{ele}}</option>
@@ -85,7 +84,7 @@
                   style="color: black;width: 100%;"
                   class="btn btn-danger"
                 >
-                  <font-awesome-icon :icon="['fas', 'search']" size="1x" />Done
+                  <font-awesome-icon :icon="['fas', 'search']" size="1x" />{{$t('Done')}}
                 </button>
               </center>
             </div>

@@ -1,4 +1,10 @@
 {
+  "Sort by": "Sort by",
+  "Done": "Done",
+  "Genre": "Genre",
+  "Quality" : "Quality",
+  "Your term": "Your term",
+  "Search&Filter engine": "Search&Filter engine",
   "Welcome": "Welcome to HyperTube!",
   "Welcomemsg": "You can connect by providing your login and password, if you have not yet created an account do not hesitate to register",
   "Login": "login",
