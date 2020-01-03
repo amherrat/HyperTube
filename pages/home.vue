@@ -116,7 +116,11 @@
         style="padding-left: 0px; padding-right: 0;"
       >
         <div class="card" ref="mycard" id="mycard">
-          <div class="image">
+          <div class="image" v-if="watchedMovies.includes(film.imdb)">
+              <div class="watchedback"></div>
+              <img :src="film.poster_big" class="watched" />
+          </div>
+          <div class="image" v-else>
             <!-- <img :src="film.medium_cover_image" /> -->
             <img :src="film.poster_big" />
           </div>
@@ -182,17 +186,17 @@
 import axios from "axios";
 
 export default {
-  beforeRouteEnter (to, from, next) {
-    axios
-    .get(`/api/whoAmi/${localStorage.token}`)
-    .then(res => {
-      next();
-    })
-    .catch(err => {
-      localStorage.removeItem('token');
-      next('/login');
-    });
-  },
+  // beforeRouteEnter (to, from, next) {
+  //   axios
+  //   .get(`/api/whoAmi/${localStorage.token}`)
+  //   .then(res => {
+  //     next();
+  //   })
+  //   .catch(err => {
+  //     localStorage.removeItem('token');
+  //     next('/login');
+  //   });
+  // },
   head () {
     return {
       title: this.$t('title_Home')
@@ -245,8 +249,24 @@ export default {
       limit: 50,
       loadDone: 1,
       activeScroll: 1,
-      empty: false
+      empty: false,
+      watchedMovies: []
     };
+  },
+  computed:{
+    userdata: function () {
+      return this.$store.getters.getdata;
+    }
+  },
+  created(){
+    const username = this.userdata.login;
+    console.log(username);
+    this.$axios.$get(`/api/watchedlist/${username}`).then(res => {
+      for (var i in res){
+        this.watchedMovies.push(res[i].imdbid);
+      }
+      console.log(res);
+    }).catch(err => {console.log(err)});
   },
   mounted() {
     this.infinteScroll();
@@ -541,6 +561,9 @@ export default {
 </script>
 
 <style scoped>
+.watched{
+ opacity: 0.15;
+}
 .nothingFound {
   font-size: 2rem;
   color: #fff;
