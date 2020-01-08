@@ -53,15 +53,15 @@ module.exports = {
   /*
   ** Build configuration
   */
- babel: {
-  presets: [
-      ['vue-app', {
-          useBuiltIns: true,
-          targets: { ie: 9, uglify: true, browsers: ["> 1%","last 2 versions","Firefox > 20"] }
-          }
-      ]
-  ]
-},
+//  babel: {
+//   presets: [
+//       ['vue-app', {
+//           useBuiltIns: true,
+//           targets: { ie: 9, uglify: true, browsers: ["> 1%","last 2 versions","Firefox > 20"] }
+//           }
+//       ]
+//   ]
+// },
   build: {
     /*
     ** You can extend webpack config here
