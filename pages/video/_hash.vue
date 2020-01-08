@@ -115,7 +115,7 @@ export default {
           }
         } else this.$nuxt.error({ statusCode: 404 });
         if (fine) {
-          console.log(data.poster_med);
+          // console.log(data.poster_med);
           var imdbid = data.imdb;
           //backdrops
           axios
@@ -134,8 +134,8 @@ export default {
           this.$axios
             .$get(`/api/subtitles/${imdbid}`)
             .then(res => {
-              console.log("subtitles");
-              console.log(res);
+              // console.log("subtitles");
+              // console.log(res);
               for (let lang in res) {
                 console.log(res[lang].langShort, preferedlang, res[lang].langShort === preferedlang ? true : false);
                 this.playerOptions.textTrack.push({
@@ -184,7 +184,7 @@ export default {
               }
             } else this.$nuxt.error({ statusCode: 404 });
             if (fine) {
-              console.log(data.poster_med);
+              // console.log(data.poster_med);
               var imdbid = data.imdb_id;
               if (data.images && data.images.fanart)
                 this.playerOptions.poster = data.images.fanart;
@@ -192,8 +192,8 @@ export default {
               this.$axios
                 .$get(`/api/subtitles/${imdbid}`)
                 .then(res => {
-                  console.log("subtitles");
-                  console.log(res);
+                  // console.log("subtitles");
+                  // console.log(res);
                   for (let lang in res) {
                     console.log(res[lang].langShort);
                     this.playerOptions.textTrack.push({
@@ -233,11 +233,12 @@ export default {
     userdata: function() {
       return this.$store.getters.getdata;
     }
-  },
-  mounted() {
-    console.log(this.$route.params.hash);
-  },
-  methods: {}
+  }
+  // ,
+  // mounted() {
+  //   console.log(this.$route.params.hash);
+  // },
+  // methods: {}
 };
 </script>
 <style scoped>

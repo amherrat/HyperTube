@@ -38,7 +38,6 @@ exports.getVideos = () => {
 exports.deleteVideo = (hash) => {
     video.deleteOne({ hash: hash }, function (err) {
         if (err) return handleError(err);
-        // deleted at most one video document
     });
 }
 

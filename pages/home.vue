@@ -259,7 +259,6 @@ export default {
   },
   created(){
     const username = this.userdata.login;
-    console.log(username);
     this.$axios.$get(`/api/watchedlist/${username}`).then(res => {
       for (var i in res){
         this.watchedMovies.push(res[i].imdbid);
@@ -282,7 +281,6 @@ export default {
           this.allFilm = data.MovieList;
           this.page = this.page + 1;
           this.filmsExist = 1;
-          console.log(this.films);
           //  this.films = data.data.movies;
           //  this.allFilm = data.data.movies;
           //  this.filmsExist = 1;
@@ -322,17 +320,9 @@ export default {
         !this.term &&
         !this.choosedGenre
       ) {
-        console.log("everything empty");
         link = `https://api.apiumadomain.com/list?sort=seeds&short=1&cb=&quality=720p,1080p,3d&page=${this.page}`;
         // link = `https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${this.page}`;
       } else {
-        console.log(
-          this.choosedQuality,
-          this.sortvalue,
-          this.choosedRate,
-          this.term,
-          this.choosedGenre
-        );
         this.activeScroll = 0;
         // if ( this.sortvalue === "None" ) // dateadded, seeds, year, title
         //   this.sortvalue = "date_added";
@@ -360,12 +350,10 @@ export default {
         // if ( this.sortvalue === "date_added" )
         //   this.sortvalue = "None";
       }
-      console.log(`link ${link}`);
       axios
         .get(link)
         .then(res => {
           let data = res.data;
-          console.log(data.MovieList);
           if (res.status === 200 && data.MovieList.length) {
             let min = this.filmyear[0];
             let max = this.filmyear[1];
@@ -377,7 +365,6 @@ export default {
             this.page = this.page + 1;
             this.filmsExist = 1;
           } else {
-            console.log("2end Api");
             //2end Api
             this.sortvalue = this.sortvalue === "dateadded" ? "last added" : this.sortvalue;
             this.sortvalue = this.sortvalue === "seeds" ? "trending" : this.sortvalue;
@@ -388,12 +375,10 @@ export default {
             }&keywords=${this.term}&genre=${
               this.choosedGenre ? this.choosedGenre : ""
             }`;
-            console.log(link);
             axios
               .get(link)
               .then(res => {
                 let data = res.data;
-                console.log(res);
                 if (res.status === 200 && data.length) {
                   for (let i in data) {
                     this.films.push({description: data[i].synopsis, imdb: data[i].imdb_id, poster_big: data[i].images.poster, rating: data[i].rating.percentage/10, title: data[i].title, year: data[i].year});                   
@@ -404,7 +389,6 @@ export default {
                   this.films = this.films.filter(
                     film => film.year >= min && film.year <= max
                   );
-                  console.log(this.films);
                   this.page = this.page + 1;
                   this.filmsExist = 1;
                 } else this.nothingFound = true;
@@ -436,13 +420,11 @@ export default {
         }&page=${this.page}&keywords=${this.term ? this.term : ""}&genre=${
           this.choosedGenre ? this.choosedGenre : ""
         }`;
-        console.log(link);
         axios
           .get(link)
           .then(res => {
             let data = res.data;
             if (res.status === 200 && data.MovieList.length) {
-              console.log(data.MovieList);
               this.films = this.films.concat(data.MovieList);
               this.page += 1;
               this.filmsExist = 1;
@@ -460,7 +442,6 @@ export default {
           .then(res => {
             let data = res.data;
             if (res.status === 200 && data.MovieList.length) {
-              console.log(data.MovieList);
               this.films = this.films.concat(data.MovieList);
               this.allFilm = this.allFilm.concat(data.MovieList);
               let min = this.filmyear[0];
@@ -478,19 +459,16 @@ export default {
       }
     },
     infinteScroll() {
-      console.log("loadmore");
       window.onscroll = () => {
         var scrollTop =
           document.documentElement.scrollTop || document.body.scrollTop;
         var clientHeight = document.documentElement.clientHeight;
         const ele = document.querySelector("body");
-        console.log(this.$route.name);
         if (
           ele.scrollHeight <= scrollTop + clientHeight + 150 &&
           !this.empty &&
           this.$route.name === "home"
         ) {
-          console.log("scroll now");
           this.empty = true;
           this.getMoreData();
         }

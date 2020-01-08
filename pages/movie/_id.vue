@@ -276,7 +276,6 @@ export default {
     gowatch() {
       if (this.selectedTorrentIndex !== null) {
         if (this.torrents[this.selectedTorrentIndex]) {
-          console.log("redirect to:");
           this.$router.push({
             name: "video-hash",
             params: { hash: this.torrents[this.selectedTorrentIndex].hash },
@@ -294,9 +293,7 @@ export default {
           )
           .then(res => {
             let data = res.data;
-            console.log(data);
             if (res.status === 200 && data) {
-              console.log(data);
               this.moviedata.large_cover_image = data.poster_big;
               this.moviedata.title = data.title;
               this.title = data.title;
@@ -319,11 +316,9 @@ export default {
           })
           .catch(err => {
             console.log(err);
-            console.log("2nd api");
             axios
               .get(`https://tv-v2.api-fetch.website/movie/${id}`)
               .then(res => {
-                console.log(res);
                 let data = res.data;
                 if (res.status === 200 && data) {
                   this.moviedata.large_cover_image = data.images.poster;
@@ -332,13 +327,10 @@ export default {
                   this.moviedata.runtime = data.runtime;
                   this.moviedata.imdb_code = data.imdb_id;
                   this.moviedata.yt_trailer_code = data.trailer.substring(27);
-                  console.log(data.trailer.substring(27));
                   this.moviedata.rating = data.rating.percentage / 10;
                   this.moviedata.description_full = data.synopsis;
                   this.genre = data.genres[0];
                   for (let i in data.torrents["en"]) {
-                    console.log(data.torrents["en"][i].url);
-                    console.log(data.torrents["en"][i].url.substring(20, 60));
                     this.torrents.push({
                       quality: i,
                       peers: data.torrents["en"][i].peer,
@@ -357,7 +349,6 @@ export default {
           )
           .then(res => {
             let data = res.data.credits;
-            console.log(data);
             this.moviedata.cast = data.cast;
             this.moviedata.crew = data.crew;
             this.castdone = true;
@@ -371,7 +362,6 @@ export default {
           )
           .then(res => {
             var data = res.data;
-            console.log(data);
             for (const x in data.backdrops) {
               this.images.push(
                 "http://image.tmdb.org/t/p/original" +

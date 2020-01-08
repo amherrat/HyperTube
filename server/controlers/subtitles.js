@@ -3,8 +3,6 @@ const fs = require('fs');
 
 var subtitles = async (req, res) => {
     const imdbid = String(req.params.imdbid).toLowerCase();
-    const lang = String(req.query.lang).toLowerCase();
-    console.log(imdbid, lang);
     if (imdbid && imdbid.match(/tt\d{7,8}/)) {
         var dir = __dirname + '/../subtitles';
         if (!fs.existsSync(dir))
