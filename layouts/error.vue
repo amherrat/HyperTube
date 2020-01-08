@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <div class="errortext">
-      <h1  v-if="error.statusCode === 404">Page not found</h1>
-      <h1 v-else>An error occurred</h1>
+      <h1  v-if="error.statusCode === 404">{{$t("Page not found")}}</h1>
+      <h1 v-else>{{$t("An error occurred")}}</h1>
       <nuxt-link to="/">
-        <mdb-btn gradient="blue" rounded>Go Home</mdb-btn>
+        <mdb-btn gradient="blue" rounded>{{$t("Go Home")}}</mdb-btn>
       </nuxt-link>
     </div>
   </div>

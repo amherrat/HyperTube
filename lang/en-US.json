@@ -81,5 +81,10 @@
   "More" : "More",
   "WATCH_NOW" : "WATCH NOW",
   "Crew" : "Crew",
-  "Cast" : "Cast"
+  "Cast" : "Cast",
+  "User not found" : "User not found",
+  "Go back home" :  "GO BACK HOME",
+  "An error occurred" : "An error occurred",
+  "Page not found" : "Page not found",
+  "Go Home" : "Go Home"
 }

@@ -56,13 +56,13 @@
    <mdb-card class="card-image w-50 p-3" style='background-color: rgb(196, 40, 37,0.6); margin-top: 10px;'>
     <div class="text-white text-center py-3 px-3 my-5">
       <div>
-        <h2 class="card-title h1-responsive font-bold"><strong>User not found</strong></h2>
+        <h2 class="card-title h1-responsive font-bold"><strong>{{$t("User not found")}}</strong></h2>
         <div>
           <font-awesome-icon :icon="['fas', 'times']" size="5x"  />
         </div>
         <div>
         <nuxt-link to="/home">
-              <mdb-btn outline="white" color="white">Go back home</mdb-btn>
+              <mdb-btn outline="white" color="white">{{$t("Go back home")}}</mdb-btn>
             </nuxt-link>
         </div>
       </div>

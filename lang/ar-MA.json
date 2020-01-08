@@ -81,6 +81,11 @@
     "More" : "أكثر",
     "WATCH_NOW" : "شاهد الآن",
     "Crew" : "طاقم",
-    "Cast" : "الممثلين"
+    "Cast" : "الممثلين",
+    "User not found" : "المستخدم غير موجود",
+    "Go back home" :    "العودة إلى المنزل" ,
+    "An error occurred" :  "لقد حدث خطأ",
+    "Page not found" : "الصفحة غير موجودة",
+    "Go Home" : "العودة"
   }
   

@@ -70,7 +70,7 @@ export default {
         url: "/torrent/" + this.$route.params.hash,
         poster:
           "https://hcdevilsadvocate.com/wp-content/uploads/2019/01/netflix-background-9.jpg",
-        volume: 0,
+        volume: 6,
         textTrack: [],
         textTrackStyle: {
           "background-color": "#000",

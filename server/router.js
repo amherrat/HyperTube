@@ -18,7 +18,7 @@ router.put('/update', jwttoken, User.update_account);
 router.put('/updatepassword', jwttoken, User.update_account_password);
 router.post('/authenticate', User.Login);
 router.get('/userdata/:login', User.userdata);
-
+router.post('/updatelang', jwttoken, User.update_preferedlang);
 router.get('/whoAmi/:token', jwttoken, (req, res) => {
   console.log(req.jwt);
   res.json({

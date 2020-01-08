@@ -81,5 +81,10 @@
   "More" : "Plus",
   "WATCH_NOW" : "REGARDER MAINTENANT",
   "Crew" : "Équipe",
-  "Cast" : "Acteurs"
+  "Cast" : "Acteurs",
+  "User not found" : "Utilisateur n'exist pas",
+  "Go back home" :  "Rentrer à la maison",
+  "An error occurred" : "Une erreur est survenue",
+  "Page not found" : "Page n'exist pas",
+  "Go Home" : "Retour"
 }

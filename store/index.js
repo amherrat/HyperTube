@@ -13,8 +13,16 @@ import createPersistedState from "vuex-persistedstate";
                 //console.log(data);
                 state.data = data;
             }
+            , changelang(state, lang) {
+                //console.log('mutations changedata ');
+                //console.log(data);
+                state.data.preferedlang = lang;
+            }
         }
         export const actions = {
+            changelang({ commit }, lang) {   
+                    commit('changelang', lang);
+            },
             getdata({ commit }, username) {
                     //console.log('actions getdata ', username);
                     this.$axios.$get('/api/userdata/' + username).then((res) => {

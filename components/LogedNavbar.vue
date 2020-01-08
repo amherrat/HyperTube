@@ -3,17 +3,17 @@
     <mdb-navbar-brand href="/home">
       <!-- class="animated bounce infinite" -->
       <nuxt-link to="/home">
-      <img src="~/assets/Hbrand.png" height="50" alt />
+        <img src="~/assets/Hbrand.png" height="50" alt />
       </nuxt-link>
     </mdb-navbar-brand>
     <mdb-navbar-toggler>
       <mdb-navbar-nav left>
-      <select v-model="lang" id="selector" @change="changelang">
-      <option value="en"> 🇬🇧 </option>
-      <option value="fr"> 🇫🇷 </option>
-      <option value="dr"> 🇲🇦 </option>
-      <option value="ar"> 🇸🇦 </option>
-      </select>
+        <select v-model="lang" id="selector" @change="changelang">
+          <option value="en">🇬🇧</option>
+          <option value="fr">🇫🇷</option>
+          <option value="dr">🇲🇦</option>
+          <option value="ar">🇸🇦</option>
+        </select>
         <!-- <nuxt-link to="film" no-prefetch>
           <mdb-nav-item>
             <span>
@@ -29,23 +29,23 @@
               <br />Shows
             </span>
           </mdb-nav-item>
-        </nuxt-link> -->
+        </nuxt-link>-->
       </mdb-navbar-nav>
       <mdb-navbar-nav right>
         <form @submit.prevent="gotoProfil">
-        <div class="md-form form-sm">
-          <mdb-input
-                    type="text"
-                    id="search"
-                    :label="$t('searchu')"
-                    v-model="customValues.login"
-                    :customValidation="validation.login.validated"
-                    :isValid="validation.login.valid"
-                    @change="validate('login')"
-                    validFeedback="login look's good."
-                    :invalidFeedback="validation.login.invalidFeedback"
-                  />
-        </div>
+          <div class="md-form form-sm">
+            <mdb-input
+              type="text"
+              id="search"
+              :label="$t('searchu')"
+              v-model="customValues.login"
+              :customValidation="validation.login.validated"
+              :isValid="validation.login.valid"
+              @change="validate('login')"
+              validFeedback="login look's good."
+              :invalidFeedback="validation.login.invalidFeedback"
+            />
+          </div>
         </form>
         <mdb-dropdown style="margin-left: 30px;">
           <mdb-dropdown-toggle class="profile-icon-toggle" slot="toggle">
@@ -58,7 +58,7 @@
             />
           </mdb-dropdown-toggle>
           <mdb-dropdown-menu>
-            <mdb-dropdown-item :to="`/profile/${user.login}`" >
+            <mdb-dropdown-item :to="`/profile/${user.login}`">
               <nuxt-link :to="`/profile/${user.login}`" no-prefetch>{{$t('Profile')}}</nuxt-link>
             </mdb-dropdown-item>
             <mdb-dropdown-item to="/settings">
@@ -69,20 +69,20 @@
             </mdb-dropdown-item>
           </mdb-dropdown-menu>
         </mdb-dropdown>
-       <h3 style="min-width:80px; color:white; margin-top: 10px;">{{user.login}}</h3>
+        <h3 style="min-width:80px; color:white; margin-top: 10px;">{{user.login}}</h3>
       </mdb-navbar-nav>
     </mdb-navbar-toggler>
   </mdb-navbar>
 </template>
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-  data : () =>  {
+  data: () => {
     return {
-      lang : "en",
-      customValues :{
-        login :""
+      lang: "en",
+      customValues: {
+        login: ""
       },
       validation: {
         login: {
@@ -90,86 +90,100 @@ export default {
           validated: false,
           invalidFeedback: ""
         }
-        },
-      userprofil:""
+      },
+      userprofil: ""
     };
   },
-  computed:{
-   user: function() {
+  computed: {
+    user: function() {
       return this.$store.getters.getdata;
     }
   },
-  
-  mounted(){
+
+  mounted() {
     this.$root.$on("refreshAvatar", () => {
       this.update();
+      this.lang = this.user.preferedlang;
+      this.$i18n.locale = this.lang;
     });
   },
   created() {
+    this.update();
     this.lang = this.user.preferedlang;
-   this.update();
+    this.$i18n.locale = this.lang;
   },
   methods: {
-    changelang() { 
+    changelang() {
       //update user's language
+      this.$axios.post('api/updatelang',{ lang : this.lang})
+      .then(res =>{
+        this.$store.dispatch("changelang", this.lang);
+      })
+      .catch(err =>{
+          console.log(err.response);
+      })
       this.$i18n.locale = this.lang;
     },
-    gotoProfil(){
+    gotoProfil() {
       this.isValidForm()
-      .then(res=>{
-        let login = this.customValues.login;
-        let input = document.getElementById('search');
-        this.customValues.login = "";
-        this.validation.login = {};
-        input.focus();
-        input.blur();
-        this.$router.push("/profile/"+login);
-      })
-      .catch(err=> {})
+        .then(res => {
+          let login = this.customValues.login;
+          let input = document.getElementById("search");
+          this.customValues.login = "";
+          this.validation.login = {};
+          input.focus();
+          input.blur();
+          this.$router.push("/profile/" + login);
+        })
+        .catch(err => {});
     },
     isValidForm() {
-      return new Promise((reject, resolve)=>{
-        Object.keys(this.validation).forEach((key)=> {
+      return new Promise((reject, resolve) => {
+        Object.keys(this.validation).forEach(key => {
           if (!this.validation[key].valid) {
             resolve(false);
           }
         });
         reject(true);
-      })},
-    update(){      
-    this.$axios
-    .get(`/api/whoAmi/${localStorage.token}`)
-    .then(res => {
-      console.log(res.data.success);
-      if(res.data.success)
-        this.$store.dispatch("getdata", res.data.data.user);
-    })
-    .catch(err => {
-      //console.log(err);
-      localStorage.removeItem('token');
-      this.$router.push("/login");
-    });
+      });
     },
-        validate(key, value) {
+    update() {
+      this.$axios
+        .get(`/api/whoAmi/${localStorage.token}`)
+        .then(res => {
+          console.log(res.data.success);
+          if (res.data.success)
+            this.$store.dispatch("getdata", res.data.data.user);
+        })
+        .catch(err => {
+          //console.log(err);
+          localStorage.removeItem("token");
+          this.$router.push("/login");
+        });
+    },
+    validate(key, value) {
       if (key === "login") {
-        if (!String(this.customValues[key]).match(/^[a-zA-Z]+([_-]?[a-zA-Z0-9])*$/g) ||
-        this.customValues[key].length > 30 ||
-        this.customValues[key].length < 3) {
-            this.validation[key].valid = false;
-            this.validation[key].invalidFeedback =
-            "Wrong login.";
+        if (
+          !String(this.customValues[key]).match(
+            /^[a-zA-Z]+([_-]?[a-zA-Z0-9])*$/g
+          ) ||
+          this.customValues[key].length > 30 ||
+          this.customValues[key].length < 3
+        ) {
+          this.validation[key].valid = false;
+          this.validation[key].invalidFeedback = "Wrong login.";
         } else {
           this.validation[key].valid = true;
         }
         this.validation[key].validated = true;
       }
-        this.validation[key].validated = true;
-        }
+      this.validation[key].validated = true;
+    }
   }
 };
 </script>
 <style scoped>
-.nav-bar{
+.nav-bar {
   position: fixed;
   z-index: 1030;
   width: 100%;
@@ -187,10 +201,10 @@ export default {
   border: red;
   font-size: 45px;
   -webkit-appearance: none;
-} 
+}
 
 .young-1337 {
-    background-image: -webkit-gradient(
+  background-image: -webkit-gradient(
     linear,
     left top,
     right top,

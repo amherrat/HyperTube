@@ -33,7 +33,7 @@ function send_mail(mail, sbj, msg) {
 
 function validate_signup(user) {
   ////console.log(users);
-  const errors = {};
+  let errors = {};
   if (user) {
     if (user.login && user.fname && user.lname && user.password && user.mail) {
       //user_name check
@@ -76,6 +76,17 @@ function validate_signup(user) {
       )
         errors = { error: "mail", msg: "Email is invalid" };
     } else errors.error = "one of fields is Empty.";
+  } else {
+    errors.error = "empty request";
+  }
+  return errors;
+}
+
+function validate_lang(lang) {
+  let errors = {};
+  if (lang) {
+    if (!String(lang).match("fr") && !String(lang).match("en") && !String(lang).match("ar") && !String(lang).match("dr"))
+      errors = { error: "lang", msg: "lang is invalid" };
   } else {
     errors.error = "empty request";
   }
@@ -395,7 +406,9 @@ exports.resetpassword = (req, res) => {
   ) {
     res.end("invalid email");
   } else {
-    var token = require("crypto").randomBytes(48).toString("hex");
+    var token = require("crypto")
+      .randomBytes(48)
+      .toString("hex");
     var link = "http://0.0.0.0:3000/reset?t=" + token + "&e=" + mail;
     var sbj = "Hypertube | Reset your password";
     var msg =
@@ -403,46 +416,23 @@ exports.resetpassword = (req, res) => {
       link +
       '">Click Here</a> To Rest your password <br> OR Copy this link to your Browser:<br>' +
       link;
-    try {      
-      User.Passwordreset(mail, token).then(result => {
-        if (result === "Ready for reset") {
-          send_mail(mail, sbj, msg);
-          return res.send("sent");
-        } else {
+    try {
+      User.Passwordreset(mail, token)
+        .then(result => {
+          if (result === "Ready for reset") {
+            send_mail(mail, sbj, msg);
+            return res.send("sent");
+          } else {
+            return res.send("not found");
+          }
+        })
+        .catch(err => {
+          console.log(err);
           return res.send("not found");
-        }
-      }).catch(err => {
-        console.log(err);
-        return res.send("not found");});
+        });
     } catch (err) {}
   }
 };
-
-// exports.verifyRset = (req, res) => {
-//   var email = req.body.email;
-//   var token = req.body.token;
-//   if (
-//     !String(email).match(
-//       /^[\-0-9a-zA-Z\.\+_]+@[\-0-9a-zA-Z\.\+_]+\.[a-zA-Z]{2,}$/
-//     ) ||
-//     email.length > 50
-//   ) {
-//     res.end("invalid email");
-//   } else if (!String(token).match(/^[a-zA-Z0-9]*$/) || token.length > 300) {
-//     res.end("invalid token");
-//   } else {
-//     try {
-//       Users.verifyRset(email, token, (err, sqlres) => {
-//         if (err) res.end();
-//         if (sqlres.length) {
-//           res.send("valid");
-//         } else {
-//           res.send("unvalid");
-//         }
-//       });
-//     } catch (err) {}
-//   }
-// };
 
 exports.changePassword = (req, res) => {
   var mail = req.body.mail;
@@ -469,22 +459,22 @@ exports.changePassword = (req, res) => {
       if (err) return next(err);
       password = hash;
       console.log(password);
-        try {
-          User.ValidateResetPassword(mail, token, password)
-            .then(result => {
-                console.log(result);
-                return res.json({
-                success: true
-              });
-            })
-            .catch(err => {
-                console.log(err);
-              return res.json({
-                success: false,
-                msg : err
-              });
+      try {
+        User.ValidateResetPassword(mail, token, password)
+          .then(result => {
+            console.log(result);
+            return res.json({
+              success: true
             });
-        } catch (err) {}
+          })
+          .catch(err => {
+            console.log(err);
+            return res.json({
+              success: false,
+              msg: err
+            });
+          });
+      } catch (err) {}
     });
   }
 };
@@ -520,4 +510,47 @@ exports.userdata = (req, res) => {
         });
     });
   } catch (err) {}
+};
+
+exports.update_preferedlang = function(req, res) {
+  var login = req.jwt.user;
+  var lang = req.body.lang;
+  var errors = validate_lang(lang);
+  if (Object.keys(errors).length != 0)
+    return res.status(400).json({
+      success: false,
+      errors: errors
+    });
+  else {
+    try {
+      User.find({ login: login }, (err, result) => {
+        if (result.length) {
+          User.findOneAndUpdate(
+            { login: login },
+            {
+              preferedlang: lang
+            },
+            { useFindAndModify: false }
+          )
+            .exec()
+            .then(userRes => {
+              if (userRes) {
+                return res.status(201).json({
+                  success: true
+                });
+              } else {
+                return res.status(200).json({
+                  success: false,
+                  errors: "something went wrong"
+                });
+              }
+            });
+        } else
+          return res.status(200).json({
+            success: false,
+            errors: "user dosn't exist"
+          });
+      });
+    } catch (err) {}
+  }
 };
