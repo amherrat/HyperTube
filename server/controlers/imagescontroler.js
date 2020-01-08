@@ -19,7 +19,7 @@ function is_valid_image(image) {
 
 exports.create_a_image = async (req, res) => {
   var image = req.body.img;
-  console.log(image, req.jwt.user);
+  //console.log(image, req.jwt.user);
   var user = req.jwt.user;
   let errors = is_valid_image(image);
   if (Object.keys(errors).length != 0) return res.status(200).json(errors);
@@ -39,6 +39,6 @@ exports.create_a_image = async (req, res) => {
       }
     );
   } catch (err) {
-    console.log(err);
+    //console.log(err);
   }
 };

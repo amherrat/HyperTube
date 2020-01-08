@@ -17,7 +17,7 @@ passport.use(
       callbackURL: 'http://localhost:3000/api/auth/spotify/callback'
     },
     function(accessToken, refreshToken, expires_in, profile, done) {
-         console.log("User ID => ",profile);
+        // console.log("User ID => ",profile);
       // console.log("USER NAME => ",profile.name.givenName[0]+profile.name.familyName);
       // console.log("FIRST NAME => ",profile.name.givenName);
       // console.log("LAST NAME => ",profile.name.familyName);
@@ -41,7 +41,7 @@ passport.use(
             if (result[0].spotifyId === user.spotifyId) {
               let payload = { user: result[0].login, userid: result[0]._id };
               let token = jwt.sign(payload, appSecret);
-              console.log("Loged in mail using spotifyId section");
+              //console.log("Loged in mail using spotifyId section");
               return done(null, token);
             } else if (!result[0].spotifyId) {
               User.findOneAndUpdate(
@@ -51,7 +51,7 @@ passport.use(
               )
                 .exec()
                 .then(userRes => {
-                  console.log("Loged in mail by adding spotifyId section");
+                  //console.log("Loged in mail by adding spotifyId section");
                   if(userRes)
                   {
                     let payload = { user: userRes.login, userid: userRes._id };
@@ -64,35 +64,33 @@ passport.use(
           } else
             User.find({ login: user.login }, (err, result) => {
               if (result[0]) {
-                console.log(result[0].spotifyId, user.spotifyId);
+                // console.log(result[0].spotifyId, user.spotifyId);
                 if (result[0].spotifyId === user.spotifyId) {
                   let payload = { user: result[0].login, userid: result[0]._id };
                   let token = jwt.sign(payload, appSecret);
-                  console.log(
-                    "Loged in login using spotifyId verification section"
-                  );
+                  // console.log("Loged in login using spotifyId verification section");
                   return done(null, token);
                 } else return done("login already exist", null);
               } else {
-                console.log("Loged in new user created section");
+                // console.log("Loged in new user created section");
                 let payload = { user: user.login };
                 let token = jwt.sign(payload, appSecret);
                 user.token = token;
                 user
                   .save()
                   .then(result => {
-                    console.log("Connected", result);
+                    // console.log("Connected", result);
                     return done(null, token);
                   })
                   .catch(err => {
-                    console.log("PRBLM >>>", err);
+                    // console.log("PRBLM >>>", err);
                     return done("something went wrong", null);
                   });
               }
             });
         });
       } catch (err) {
-        console.log(err);
+        //console.log(err);
       }
     }
   )

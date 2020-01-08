@@ -40,7 +40,7 @@ passport.use(new FortyTwoStrategy({
             if (result[0].FortytowId === user.FortytowId) {
               let payload = { user: result[0].login, userid: result[0]._id };
               let token = jwt.sign(payload, appSecret);
-              console.log("Loged in mail using FortytowId section");
+              //console.log("Loged in mail using FortytowId section");
               return done(null, token);
             } else if (!result[0].FortytowId) {
               User.findOneAndUpdate(
@@ -50,7 +50,7 @@ passport.use(new FortyTwoStrategy({
               )
                 .exec()
                 .then(userRes => {
-                  console.log("Loged in mail by adding FortytowId section");
+                  // console.log("Loged in mail by adding FortytowId section");
                   if(userRes)
                   {
                     let payload = { user: userRes.login, userid: userRes._id };
@@ -63,35 +63,33 @@ passport.use(new FortyTwoStrategy({
           } else
             User.find({ login: user.login }, (err, result) => {
               if (result[0]) {
-                console.log(result[0].FortytowId, user.FortytowId);
+                // console.log(result[0].FortytowId, user.FortytowId);
                 if (result[0].FortytowId === user.FortytowId) {
                   let payload = { user: result[0].login, userid: result[0]._id };
                   let token = jwt.sign(payload, appSecret);
-                  console.log(
-                    "Loged in login using FortytowId verification section"
-                  );
+                  //console.log("Loged in login using FortytowId verification section");
                   return done(null, token);
                 } else return done("login already exist", null);
               } else {
-                console.log("Loged in new user created section");
+                //console.log("Loged in new user created section");
                 let payload = { user: user.login };
                 let token = jwt.sign(payload, appSecret);
                 user.token = token;
                 user
                   .save()
                   .then(result => {
-                    console.log("Connected", result);
+                    //console.log("Connected", result);
                     return done(null, token);
                   })
                   .catch(err => {
-                    console.log("PRBLM >>>", err);
+                    //console.log("PRBLM >>>", err);
                     return done("something went wrong", null);
                   });
               }
             });
         });
       } catch (err) {
-        console.log(err);
+        //console.log(err);
       }
     }
   )

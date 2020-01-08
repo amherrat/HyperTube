@@ -51,13 +51,13 @@ exports.confirm = (req, res) => {
     try {
       User.Validate(email, token)
         .then(result => {
-            console.log(result);
+            // console.log(result);
             return res.json({
             success: true
           });
         })
         .catch(err => {
-            console.log(err);
+            // console.log(err);
           return res.json({
             success: false,
             msg : err
