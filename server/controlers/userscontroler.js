@@ -275,7 +275,7 @@ exports.signup = function(req, res) {
                   });
                 })
                 .catch(err => {
-                  console.log("PRBLM >>>", err);
+                  // console.log("PRBLM >>>", err);
                 });
             }
           });
@@ -427,7 +427,7 @@ exports.resetpassword = (req, res) => {
           }
         })
         .catch(err => {
-          console.log(err);
+          //console.log(err);
           return res.send("not found");
         });
     } catch (err) {}
@@ -458,17 +458,17 @@ exports.changePassword = (req, res) => {
     bcrypt.hash(password, 10, (err, hash) => {
       if (err) return next(err);
       password = hash;
-      console.log(password);
+      //console.log(password);
       try {
         User.ValidateResetPassword(mail, token, password)
           .then(result => {
-            console.log(result);
+            //console.log(result);
             return res.json({
               success: true
             });
           })
           .catch(err => {
-            console.log(err);
+            //console.log(err);
             return res.json({
               success: false,
               msg: err
@@ -497,7 +497,7 @@ exports.userdata = (req, res) => {
   }
   try {
     User.findOne({ login: login }).then(result => {
-      console.log(result);
+      //console.log(result);
       if (result) {
         return res.status(200).json({
           success: true,

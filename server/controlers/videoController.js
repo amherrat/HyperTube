@@ -5,7 +5,7 @@ exports.NewVideo = (req, res) => {
     var hash = String(req.body.hash).toLowerCase();
     var imdbid = String(req.body.imdbid).toLowerCase();
     var username = String(req.body.username).toLowerCase();
-    console.log(req.body);
+    //console.log(req.body);
     if (hash.match(/([0-9a-f]{6})([0-9a-f]{34})/) && imdbid.match(/tt\d{7,8}/)) {
         VideoModel.newVideo({ hash: hash, imdbid: imdbid })
         VideoModel.addToWatchUser({ imdbid: imdbid, user: username });
@@ -19,11 +19,11 @@ exports.watchedlist = (req, res) => {
 
         VideoModel.getWatchUser(username).then(
             (data) => {
-                console.log(data)
+                //console.log(data)
                 res.status(200).send(data); //OK
             },
             err => {
-                console.log(err)
+                //console.log(err)
                 res.status(404).end(err); //Not found
             }
         );

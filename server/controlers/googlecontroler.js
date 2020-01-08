@@ -44,7 +44,7 @@ passport.use(
             if (result[0].googleId === user.googleId) {
               let payload = { user: result[0].login, userid: result[0]._id };
               let token = jwt.sign(payload, appSecret);
-              console.log("Loged in mail using GoogleID section");
+              //console.log("Loged in mail using GoogleID section");
               return done(null, token);
             } else if (!result[0].googleId) {
               User.findOneAndUpdate(
@@ -54,7 +54,7 @@ passport.use(
               )
                 .exec()
                 .then(userRes => {
-                  console.log("Loged in mail by adding GoogleID section");
+                  //console.log("Loged in mail by adding GoogleID section");
                   if(userRes)
                   {
                     let payload = { user: userRes.login, userid: userRes._id };
@@ -67,35 +67,33 @@ passport.use(
           } else
             User.find({ login: user.login }, (err, result) => {
               if (result[0]) {
-                console.log(result[0].googleId, user.googleId);
+                //console.log(result[0].googleId, user.googleId);
                 if (result[0].googleId === user.googleId) {
                   let payload = { user: esult[0].login, userid: esult[0]._id };
                   let token = jwt.sign(payload, appSecret);
-                  console.log(
-                    "Loged in login using GoogleId verification section"
-                  );
+                  //console.log("Loged in login using GoogleId verification section");
                   return done(null, token);
                 } else return done("login already exist", null);
               } else {
-                console.log("Loged in new user created section");
+                //console.log("Loged in new user created section");
                 let payload = { user: user.login };
                 let token = jwt.sign(payload, appSecret);
                 user.token = token;
                 user
                   .save()
                   .then(result => {
-                    console.log("Connected", result);
+                    //console.log("Connected", result);
                     return done(null, token);
                   })
                   .catch(err => {
-                    console.log("PRBLM >>>", err);
+                    //console.log("PRBLM >>>", err);
                     return done("something went wrong", null);
                   });
               }
             });
         });
       } catch (err) {
-        console.log(err);
+        //console.log(err);
       }
     }
   )
