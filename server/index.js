@@ -18,6 +18,8 @@ var fs = require('fs');
 var cron = require('node-cron');
 var rimraf = require("rimraf");
 var videosModel = require('./models/videosModel');
+var timeout = require('connect-timeout');
+
 async function start() {
   // Init Nuxt.js
   const nuxt = new Nuxt(config)
@@ -31,8 +33,17 @@ async function start() {
   } else {
     await nuxt.ready()
   }
+  
+  // Timeout
+  app.use(timeout('60s'));
+  app.use(haltOnTimedout);
+  
+  // Torrent stream
+  app.use('/torrent/:hash', require('./TorrentStream'));
 
-
+  function haltOnTimedout (req, res, next) {
+    if (!req.timedout) next()
+  }
   // Use Body Parser and Cors
   var jsonParser = bodyParser.json()
   var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -84,8 +95,6 @@ async function start() {
   //   console.log(params);
   // });
 
-  // Torrent stream
-  app.use('/torrent/:hash', require('./TorrentStream'));
 
   // Give nuxt middleware to express
   app.use(nuxt.render)

@@ -18,7 +18,7 @@ var trackers = [
 ]
 var engines = [];
 var VideoStream = async function (req, res) {
-    // console.log(req.params.hash);
+    console.log(req.params.hash);
     var hash = String(req.params.hash).toLowerCase();
     if (hash && req.method === 'GET') {
         if (hash.match(/([0-9a-f]{6})([0-9a-f]{34})/) && req.headers.range) {
@@ -37,8 +37,8 @@ var VideoStream = async function (req, res) {
                 //get file ext
                 var re = /(?:\.([^.]+))?$/;
                 var ext = re.exec(file.name)[1];
-                // console.log('file name: ' + file.name);
-                // console.log(`file ext: ${ext}`);
+                console.log('file name: ' + file.name);
+                console.log(`file ext: ${ext}`);
                 file.select();
                 var len = file.length;
                 // console.log(req.headers.range);
@@ -54,7 +54,7 @@ var VideoStream = async function (req, res) {
                             'Content-Length': 1+range.end - range.start,
                             'Content-Range': `bytes ${range.start}-${range.end}/${len}`
                         });
-                        // console.log('supported format');
+                        console.log('supported format');
                         res.set({ 'Content-Type': `video/${ext === 'ogv' ? 'ogg' : ext}` })
                         //torrent-stream
                         var stream = file.createReadStream({ start: range.start, end: range.end });
@@ -65,8 +65,8 @@ var VideoStream = async function (req, res) {
                             'Content-Length': 1 + range.end - range.start,
                             'Content-Range': `bytes ${range.start}-${range.end}/${len}`
                         });    
-                        // console.log('unsupported format');
-                        // console.log(ffmpegInstaller.path, ffmpegInstaller.version);
+                        console.log('unsupported format');
+                        console.log(ffmpegInstaller.path, ffmpegInstaller.version);
                         res.set({ 'Content-Type': 'video/webm' })
                         var stream = file.createReadStream();
                         ffmpeg(stream).setFfmpegPath(ffmpegPath)
@@ -81,19 +81,19 @@ var VideoStream = async function (req, res) {
                           '-error-resilient 1'
                         ])
                         .on('start', function (cmd) {
-                            // console.log("--- ffmpeg start process ---")
-                            // console.log(`cmd: ${cmd}`)
+                            console.log("--- ffmpeg start process ---")
+                            console.log(`cmd: ${cmd}`)
                         })
                         .on('end', function () {
-                            // console.log('Finished processing');
+                            console.log('Finished processing');
                         })
                         .on('error', function (err) {
-                            // console.log("--- ffmpeg meets error ---")
-                            // console.log(err)
+                            console.log("--- ffmpeg meets error ---")
+                            console.log(err)
                         })
                         .on('progress', function(progress) {
-                            // console.log("--- ffmpeg progress ---")
-                            // console.log(progress);
+                            console.log("--- ffmpeg progress ---")
+                            console.log(progress);
                         })                        
                         .pipe(res, { end: true });
                     }else
@@ -103,13 +103,13 @@ var VideoStream = async function (req, res) {
                 }
             });
             engine.on('download', function (index) {
-                // console.log(engine.swarm.downloaded, '/', engine.files[0].length);
-                // console.log("download - " + index);
+                console.log(engine.swarm.downloaded, '/', engine.files[0].length);
+                console.log("download - " + index);
             });
             engine.on('upload', function (index, offset, length) {
             });
             engine.on('idle', function () {
-                // console.log('download is done');
+                console.log('download is done');
             });
             engine.on('error', function (err, info) {
                 console.log(err, info);
