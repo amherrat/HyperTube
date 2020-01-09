@@ -2,7 +2,7 @@
   <div class="comments">
     <div class="input_comment">
       <div class="input_profile">
-        <img :src="this.$store.getters.getdata.profil ? this.$store.getters.getdata.profil : 'http://localhost:3000/default-profile.png'" width="60px" height="60px" />
+        <img :src="this.$store.getters.getdata ? this.$store.getters.getdata.profil : 'http://localhost:3000/default-profile.png'" width="60px" height="60px" />
       </div>
       <div class="input_textarea">
         <input v-model="inputComment" class="textarea" v-on:keyup.enter="NewComment()" />
@@ -12,7 +12,7 @@
     <div class="other_comment">
       <div style="margin-top: 2%;" class="userscomment" v-for="(com, index) in this.comment" v-bind:key="index">
         <div class="user_profile" style="margin-top: 1%;">
-          <img :src="pics.filter(p => p.login === com.username)[0]['profil'] ? pics.filter(p => p.login === com.username)[0]['profil'] : 'http://localhost:3000/default-profile.png'" width="60px" height="60px" />
+          <img :src="pics.filter(p => p.login === com.username)[0] ? pics.filter(p => p.login === com.username)[0]['profil'] : 'http://localhost:3000/default-profile.png'" width="60px" height="60px" />
         </div>
         <div class="user_comment">
           <span>{{com.comment}}</span>
@@ -40,7 +40,8 @@ export default {
   },
   created(){
     this.getComment();
-    console.log(this.$store.getters.getdata.profil);
+    //console.log("---------------->",this.$store.getters.getdata)
+    //console.log(this.$store.getters.getdata.profil);
     
   },
   methods: {
