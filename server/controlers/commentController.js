@@ -40,7 +40,7 @@ exports.commentCount = (req, res) => {
     const params = {
       username:  req.params.username || ""
     }
-    console.log(params);
+    // console.log(params);
     if ( params.username.length < 1 ){
         res.json({
             success: false,
@@ -52,14 +52,14 @@ exports.commentCount = (req, res) => {
             CommentModel
                 .commentGet(params)
                 .then(result => {
-                    console.log("heeeere ===> ", result);
+                    // console.log("heeeere ===> ", result);
                     res.json({
                         success: true,
                         nb: result.length || 0
                     }); 
                 })
                 .catch(err => {
-                    console.log(err);
+                    // console.log(err);
                 });
             
         } catch (error) {
@@ -73,7 +73,7 @@ exports.commentCount = (req, res) => {
 
 exports.commentAdd = (req, res) => {
     const params = {
-      username: String(req.jwt.user),
+      user_id: String(req.jwt.userid),
       id_film: String(req.body.id_film) || "",
       hash_film: String(req.body.hash_film) || "",
       comment: String(req.body.comment) || "",

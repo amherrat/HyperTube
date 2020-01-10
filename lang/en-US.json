@@ -17,6 +17,7 @@
   "Change password" : "Change password",
   "Old password" : "Old password",
   "Password" : "Password",
+  "Email" :"Email",
   "Wrong login." : "Wrong login",
   "Mail already exist" :  "Mail already exist", 
   "Login already exist" :"Login already exist",

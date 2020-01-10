@@ -6,7 +6,6 @@
       </div>
       <div class="input_textarea">
         <input v-model="inputComment" class="textarea" v-on:keyup.enter="NewComment()" />
-        <!-- <at-textarea v-model="inputComment" placeholder="Please input..." class="textarea"  v-on:keyup.enter="NewComment()"></at-textarea> -->
       </div>
     </div>
     <div class="other_comment">
