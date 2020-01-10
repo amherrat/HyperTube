@@ -18,11 +18,9 @@ exports.commentGet = (req, res) => {
             CommentModel
                 .commentGet(params)
                 .then(async result => {
-                    let users = await UserModel.userGet();
                     res.json({
                         success: true,
-                        data: result,
-                        users: users
+                        data: result
                     }); 
                 })
                 .catch(err => {
@@ -79,6 +77,7 @@ exports.commentAdd = (req, res) => {
       id_film: String(req.body.id_film) || "",
       hash_film: String(req.body.hash_film) || "",
       comment: String(req.body.comment) || "",
+      user: req.body._id || 0,
       date: new Date()
     }
     if (params.id_film.length < 1 || params.hash_film.length < 1 || params.comment.length < 1 || params.comment.length > 150){

@@ -12,13 +12,13 @@
     <div class="other_comment">
       <div style="margin-top: 2%;" class="userscomment" v-for="(com, index) in this.comment" v-bind:key="index">
         <div class="user_profile" style="margin-top: 1%;">
-          <img :src="pics.filter(p => p.login === com.username)[0] ? pics.filter(p => p.login === com.username)[0]['profil'] : 'http://localhost:3000/default-profile.png'" width="60px" height="60px" />
+          <img :src="com.user && com.user.profil ? com.user.profil : 'http://localhost:3000/default-profile.png'" width="60px" height="60px" />
         </div>
         <div class="user_comment">
           <span>{{com.comment}}</span>
         </div>
         <div class="userNameDate">
-          <span>{{com.username}},{{new Date(com.date).toLocaleString()}}</span>
+          <span>{{com.user && com.user.login ? com.user.login : ''}},{{new Date(com.date).toLocaleString()}}</span>
         </div>
       </div>
     </div>
@@ -34,7 +34,7 @@ export default {
       hash: this.$route.params.hash,
       id: this.$route.query.id,
       token: localStorage.token,
-      pics: [],
+      userId: this.$store.getters.getdata,
       comment: []
     };
   },
@@ -53,9 +53,9 @@ export default {
       this.$axios
             .$get(`/api/comment/get/${this.token}/${theComment.id_film}/${theComment.hash_film}`)
             .then(res => {
+              console.log(res.data);
               if (res.success)
                 this.comment = res.data.reverse();
-                this.pics = res.users;
             })
             .catch(err => {
               console.log(err);
@@ -66,7 +66,8 @@ export default {
         id_film: this.id,
         hash_film: this.hash,
         comment: this.inputComment,
-        token: this.token 
+        token: this.token,
+        _id: this.userId
       }
       this.$axios
           .$post('/api/comment/add', theComment)
