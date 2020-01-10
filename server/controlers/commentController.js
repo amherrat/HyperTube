@@ -18,12 +18,14 @@ exports.commentGet = (req, res) => {
             CommentModel
                 .commentGet(params)
                 .then(async result => {
-                    let users = await UserModel.userGet();
+                    let users = {profil :result[0].user_id.profil, login:result[0].user_id.login};
+                    // console.log(result[0]);
+                    delete result[0].user_id;
                     res.json({
                         success: true,
                         data: result,
                         users: users
-                    }); 
+                    });
                 })
                 .catch(err => {
                     console.log(err);
@@ -42,7 +44,7 @@ exports.commentCount = (req, res) => {
     const params = {
       username:  req.params.username || ""
     }
-    console.log(params);
+    // console.log(params);
     if ( params.username.length < 1 ){
         res.json({
             success: false,
@@ -54,14 +56,14 @@ exports.commentCount = (req, res) => {
             CommentModel
                 .commentGet(params)
                 .then(result => {
-                    console.log("heeeere ===> ", result);
+                    // console.log("heeeere ===> ", result);
                     res.json({
                         success: true,
                         nb: result.length || 0
                     }); 
                 })
                 .catch(err => {
-                    console.log(err);
+                    // console.log(err);
                 });
             
         } catch (error) {
@@ -75,7 +77,7 @@ exports.commentCount = (req, res) => {
 
 exports.commentAdd = (req, res) => {
     const params = {
-      username: String(req.jwt.user),
+      user_id: String(req.jwt.userid),
       id_film: String(req.body.id_film) || "",
       hash_film: String(req.body.hash_film) || "",
       comment: String(req.body.comment) || "",

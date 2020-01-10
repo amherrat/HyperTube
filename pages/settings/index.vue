@@ -117,7 +117,7 @@
                     <mdb-col>
                       <mdb-input
                         type="email"
-                        label="Email"
+                        :label="$t('Email')"
                         v-model="customValues.mail"
                         :customValidation="validation.mail.validated"
                         :isValid="validation.mail.valid"

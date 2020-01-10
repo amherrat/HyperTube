@@ -6,19 +6,18 @@
       </div>
       <div class="input_textarea">
         <input v-model="inputComment" class="textarea" v-on:keyup.enter="NewComment()" />
-        <!-- <at-textarea v-model="inputComment" placeholder="Please input..." class="textarea"  v-on:keyup.enter="NewComment()"></at-textarea> -->
       </div>
     </div>
     <div class="other_comment">
       <div style="margin-top: 2%;" class="userscomment" v-for="(com, index) in this.comment" v-bind:key="index">
         <div class="user_profile" style="margin-top: 1%;">
-          <img :src="pics.filter(p => p.login === com.username)[0] ? pics.filter(p => p.login === com.username)[0]['profil'] : 'http://localhost:3000/default-profile.png'" width="60px" height="60px" />
+          <img :src="comment.user.profil ? comment.user.profil : 'http://localhost:3000/default-profile.png'" width="60px" height="60px" />
         </div>
         <div class="user_comment">
           <span>{{com.comment}}</span>
         </div>
         <div class="userNameDate">
-          <span>{{com.username}},{{new Date(com.date).toLocaleString()}}</span>
+          <span>{{comment.user.login}},{{new Date(com.date).toLocaleString()}}</span>
         </div>
       </div>
     </div>
@@ -34,7 +33,7 @@ export default {
       hash: this.$route.params.hash,
       id: this.$route.query.id,
       token: localStorage.token,
-      pics: [],
+      // pics: [],
       comment: []
     };
   },
@@ -55,7 +54,7 @@ export default {
             .then(res => {
               if (res.success)
                 this.comment = res.data.reverse();
-                this.pics = res.users;
+                this.comment.user = res.users;
             })
             .catch(err => {
               console.log(err);
