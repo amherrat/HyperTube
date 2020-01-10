@@ -259,7 +259,7 @@ export default {
   },
   created(){
     const username = this.userdata.login;
-    this.$axios.$get(`/api/watchedlist/${username}`).then(res => {
+    this.$axios.$post(`/api/watchedlist`, {user: this.userdata}).then(res => {
       for (var i in res){
         this.watchedMovies.push(res[i].imdbid);
       }

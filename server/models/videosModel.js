@@ -8,8 +8,11 @@ var videosSchema = new Schema({
 });
 
 var UsersWatch = new Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users'  
+    },
     imdbid: String,
-    user: String,
     date: Date
 })
 

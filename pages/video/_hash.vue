@@ -159,7 +159,7 @@ export default {
           this.$axios
             .$post("/api/addvideo", {
               hash: this.$route.params.hash,
-              username: this.userdata.login,
+              user: this.userdata,
               imdbid: imdbid
             })
             .then(res => {
