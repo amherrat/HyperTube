@@ -18,7 +18,7 @@ var fs = require('fs');
 var cron = require('node-cron');
 var rimraf = require("rimraf");
 var videosModel = require('./models/videosModel');
-var timeout = require('connect-timeout');
+var timeout = require('express-timeout-handler');
 
 async function start() {
   // Init Nuxt.js
@@ -35,15 +35,17 @@ async function start() {
   }
   
   // Timeout
-  app.use(timeout('60s'));
-  app.use(haltOnTimedout);
+  var options = {
+    onTimeout: function(req, res) {
+      console.log('Timed out..');
+      res.status(408).send('408 Request Timeout.');
+    }
+  };
+  app.use(timeout.handler(options)); 
   
   // Torrent stream
   app.use('/torrent/:hash', require('./TorrentStream'));
 
-  function haltOnTimedout (req, res, next) {
-    if (!req.timedout) next()
-  }
   // Use Body Parser and Cors
   var jsonParser = bodyParser.json()
   var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -66,8 +68,8 @@ async function start() {
   // API routes
   app.use('/api', require('./router'));
 
-  //remove unwatched videos for 30days or more (0 1 * * *)
-  cron.schedule('0 1 * * *', () => {
+  //remove unwatched videos for 30days or more (0 0 * * *) => everyday at midnight
+  cron.schedule('0 0 * * *', () => {
     // last time watched from database
     var videos = videosModel.getVideos();
     videos.then((res) => {

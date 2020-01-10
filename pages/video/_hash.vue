@@ -62,12 +62,13 @@ export default {
   },
   data() {
     return {
+      magnet_link: '',
       title: '',
       done: false,
       movie_details: [],
       inputComment: "",
       playerOptions: {
-        url: "/torrent/" + this.$route.params.hash,
+        url: '',
         poster:
           "https://hcdevilsadvocate.com/wp-content/uploads/2019/01/netflix-background-9.jpg",
         volume: 1,
@@ -111,6 +112,8 @@ export default {
             ){
               this.title = `${data.title} ${data.items[i].quality}`
               fine = 1;
+              this.magnet_link = data.items[i].torrent_magnet.substring(60);
+              this.playerOptions.url = `/torrent/${this.$route.params.hash}?magnet=${this.magnet_link}`;
             }
           }
         } else this.$nuxt.error({ statusCode: 404 });
@@ -146,6 +149,7 @@ export default {
                   default: res[lang].langShort === preferedlang ? true : false
                 });
               }
+              console.log(this.magnet_link);
               this.done = true;
             })
             .catch(err => {

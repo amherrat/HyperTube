@@ -18,6 +18,14 @@ var trackers = [
 ]
 var engines = [];
 var VideoStream = async function (req, res) {
+    console.log(req.query.magnet, req.query.dn, req.query.tr);
+    var magnet_trackers = req.query.tr;
+    magnet_trackers.forEach(tracker => {
+        if (!trackers.includes(tracker)){
+            trackers.push(tracker);
+            console.log(trackers);
+        }
+    });
     console.log(req.params.hash);
     var hash = String(req.params.hash).toLowerCase();
     if (hash && req.method === 'GET') {
