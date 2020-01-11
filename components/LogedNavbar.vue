@@ -32,12 +32,15 @@
         </nuxt-link>-->
       </mdb-navbar-nav>
       <mdb-navbar-nav right>
+        <!-- <form @submit.prevent="gotoProfil">
+          <mdb-input type="text" class="text-white" placeholder="Search" aria-label="Search"/>
+        </form> -->
         <form @submit.prevent="gotoProfil">
-          <div class="md-form form-sm">
             <mdb-input
+            class="text-white"
               type="text"
               id="search"
-              :label="$t('searchu')"
+              :placeholder="$t('searchu')"
               v-model="customValues.login"
               :customValidation="validation.login.validated"
               :isValid="validation.login.valid"
@@ -45,10 +48,9 @@
               validFeedback="login look's good."
               :invalidFeedback="validation.login.invalidFeedback"
             />
-          </div>
         </form>
         <mdb-dropdown style="margin-left: 30px;">
-          <mdb-dropdown-toggle class="profile-icon-toggle" slot="toggle">
+          <mdb-dropdown-toggle class="diskonly profile-icon-toggle" slot="toggle">
             <img
               :src="user.profil ? user.profil : 'http://localhost:3000/default-profile.png'"
               class="rounded-circle z-depth-0"
@@ -57,6 +59,8 @@
               height="60px"
             />
           </mdb-dropdown-toggle>
+          <mdb-dropdown-toggle class="mobileonly profile-icon-toggle" slot="toggle" style="min-width:80px; font-size: 1.5rem; color:white; margin-top: 10px;">{{user.login}}</mdb-dropdown-toggle>
+
           <mdb-dropdown-menu>
             <mdb-dropdown-item :to="`/profile/${user.login}`">
               <nuxt-link :to="`/profile/${user.login}`" no-prefetch>{{$t('Profile')}}</nuxt-link>
@@ -69,7 +73,8 @@
             </mdb-dropdown-item>
           </mdb-dropdown-menu>
         </mdb-dropdown>
-        <h3 style="min-width:80px; color:white; margin-top: 10px;">{{user.login}}</h3>
+        <h3 class="diskonly" style="min-width:80px; color:white; margin-top: 10px;">{{user.login}}</h3>
+
       </mdb-navbar-nav>
     </mdb-navbar-toggler>
   </mdb-navbar>
@@ -224,5 +229,21 @@ export default {
     #941c1cfa 78%,
     #000000 100%
   );
+}
+@media (max-width: 992px) {
+  .diskonly{
+    display: none;
+  }
+  .mobileonly{
+    display: unset;
+  }
+}
+@media (min-width: 992px) {
+  .diskonly{
+    display: unset;
+  }
+  .mobileonly{
+    display: none;
+  }
 }
 </style>

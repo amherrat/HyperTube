@@ -215,7 +215,7 @@ exports.Login = function(req, res) {
         });
       },
       err => {
-        return res.status(200).json({
+        return res.status(401).json({
           success: false,
           errors: err
         });
@@ -236,14 +236,14 @@ exports.signup = function(req, res) {
     try {
       User.find({ login: new_user.login }, (err, result) => {
         if (result.length)
-          return res.status(200).json({
+          return res.status(403).json({
             success: false,
             errors: "login already exist"
           });
         else
           User.find({ mail: new_user.mail }, (err, result) => {
             if (result.length)
-              return res.status(200).json({
+              return res.status(403).json({
                 success: false,
                 errors: "mail already exist"
               });
@@ -276,6 +276,7 @@ exports.signup = function(req, res) {
                 })
                 .catch(err => {
                   // console.log("PRBLM >>>", err);
+                  res.status(304).end();
                 });
             }
           });
@@ -288,7 +289,7 @@ exports.update_account = function(req, res) {
   var newuser = req.body;
   var errors = validate_update(newuser);
   if (Object.keys(errors).length != 0)
-    return res.status(200).json({
+    return res.status(400).json({
       success: false,
       errors: errors
     });
@@ -315,31 +316,31 @@ exports.update_account = function(req, res) {
                       if (userRes) {
                         let payload = { user: newuser.login };
                         let token = jwt.sign(payload, appSecret);
-                        return res.status(201).json({
+                        return res.status(200).json({
                           success: true,
                           update: token
                         });
                       } else {
-                        return res.status(200).json({
+                        return res.status(304).json({
                           success: false,
                           errors: "something went wrong"
                         });
                       }
                     });
                 } else
-                  return res.status(200).json({
+                  return res.status(403).json({
                     success: false,
                     errors: "mail already exist"
                   });
               });
             } else
-              return res.status(200).json({
+              return res.status(403).json({
                 success: false,
                 errors: "login already exist"
               });
           });
         } else
-          return res.status(200).json({
+          return res.status(404).json({
             success: false,
             errors: "user dosn't exist"
           });
@@ -353,7 +354,7 @@ exports.update_account_password = function(req, res) {
   var password = req.body;
   var errors = validate_update_password(password);
   if (Object.keys(errors).length != 0)
-    return res.status(200).json({
+    return res.status(400).json({
       success: false,
       errors: errors
     });
@@ -372,12 +373,12 @@ exports.update_account_password = function(req, res) {
               .exec()
               .then(userRes => {
                 if (userRes) {
-                  return res.status(201).json({
+                  return res.status(200).json({
                     success: true,
                     update: "password successfully updated"
                   });
                 } else {
-                  return res.status(200).json({
+                  return res.status(304).json({
                     success: false,
                     errors: "something went wrong"
                   });
@@ -386,7 +387,7 @@ exports.update_account_password = function(req, res) {
           }
         },
         err => {
-          return res.status(200).json({
+          return res.status(401).json({
             success: false,
             errors: err
           });
@@ -504,7 +505,7 @@ exports.userdata = (req, res) => {
           data: { user: result }
         });
       } else
-        return res.status(200).json({
+        return res.status(404).json({
           success: false,
           error: "user not found!"
         });
@@ -535,18 +536,18 @@ exports.update_preferedlang = function(req, res) {
             .exec()
             .then(userRes => {
               if (userRes) {
-                return res.status(201).json({
+                return res.status(200).json({
                   success: true
                 });
               } else {
-                return res.status(200).json({
+                return res.status(304).json({
                   success: false,
                   errors: "something went wrong"
                 });
               }
             });
         } else
-          return res.status(200).json({
+          return res.status(404).json({
             success: false,
             errors: "user dosn't exist"
           });

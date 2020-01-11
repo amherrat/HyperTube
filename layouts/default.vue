@@ -75,4 +75,7 @@ html {
     padding-top: 25%;
   }
 }
+.xgplayer-enter{
+ z-index: 0;
+}
 </style>

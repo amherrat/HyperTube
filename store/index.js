@@ -9,13 +9,9 @@ import createPersistedState from "vuex-persistedstate";
         export const plugins = [createPersistedState()]
         export const mutations = {
             changedata(state, data) {
-                //console.log('mutations changedata ');
-                //console.log(data);
                 state.data = data;
             }
             , changelang(state, lang) {
-                //console.log('mutations changedata ');
-                //console.log(data);
                 state.data.preferedlang = lang;
             }
         }
@@ -24,12 +20,12 @@ import createPersistedState from "vuex-persistedstate";
                     commit('changelang', lang);
             },
             getdata({ commit }, username) {
-                    //console.log('actions getdata ', username);
                     this.$axios.$get('/api/userdata/' + username).then((res) => {
-                        //console.log(res.data.user);
                         commit('changedata', res.data.user);
                     }).catch(err => {
-                        console.error(err);
+                        // console.error(err);
+                        localStorage.removeItem('token');
+                        this.$router.push('/');
                     });
             }
         }
