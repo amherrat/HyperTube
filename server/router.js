@@ -60,6 +60,6 @@ router.get('/subtitles/:imdbid', jwttoken, require('./controlers/subtitles'));
 //add video
 router.post('/addvideo', jwttoken, require('./controlers/videoController').NewVideo);
 //watchlist
-router.post('/watchedlist', jwttoken, require('./controlers/videoController').watchedlist);
+router.get('/watchedlist/:username', jwttoken, require('./controlers/videoController').watchedlist);
 
 module.exports = router;

@@ -36,12 +36,12 @@ exports.commentGet = (req, res) => {
     }
 };
 
-exports.commentCount = (req, res) => {
+exports.commentCount = async (req, res) => {
     const params = {
-      username:  req.params.username || ""
+      login:  req.params.username || ""
     }
-    // console.log(params);
-    if ( params.username.length < 1 ){
+    console.log("----->", params);
+    if (params.login.length < 1){
         res.json({
             success: false,
             nb: 0
@@ -49,17 +49,16 @@ exports.commentCount = (req, res) => {
     }
     else {
         try {
+            let user = await  UserModel.getUser(params.login);
             CommentModel
-                .commentGet(params)
+                .commentNB(user)
                 .then(result => {
-                    // console.log("heeeere ===> ", result);
                     res.json({
                         success: true,
                         nb: result.length || 0
                     }); 
                 })
                 .catch(err => {
-                    // console.log(err);
                 });
             
         } catch (error) {
@@ -73,7 +72,7 @@ exports.commentCount = (req, res) => {
 
 exports.commentAdd = (req, res) => {
     const params = {
-      user_id: String(req.jwt.userid),
+    //   user_id: String(req.jwt.userid),
       id_film: String(req.body.id_film) || "",
       hash_film: String(req.body.hash_film) || "",
       comment: String(req.body.comment) || "",

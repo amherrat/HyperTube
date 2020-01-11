@@ -24,6 +24,7 @@ passport.use(
       // console.log("MAIL => ",profile.emails[0].value);
       // console.log("IMG URL => ",profile.photos[0].value);
       /*Check Values Impo Email fname spotifyId */
+      console.log(profile);
       var user = new User({
         login: "u"+String(Math.round(new Date().getTime()/1000)), //profil.username
         fname: profile.displayName,

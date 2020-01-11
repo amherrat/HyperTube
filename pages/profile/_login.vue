@@ -127,7 +127,7 @@ export default {
     if (this.userdata) {
       this.ShowProfile(this.$route.params.login);
       this.$axios
-        .post(`/api/watchedlist`, { user: this.userdata })
+        .get(`/api/watchedlist/${this.$route.params.login}`)
         .then(res => {
           if (res.data) {
             this.nb_films = res.data.length;

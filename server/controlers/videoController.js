@@ -1,5 +1,6 @@
 
 var VideoModel = require('../models/videosModel');
+var UserModel = require('../models/userModel');
 
 exports.NewVideo = (req, res) => {
     var hash = String(req.body.hash).toLowerCase();
@@ -13,11 +14,12 @@ exports.NewVideo = (req, res) => {
     } else res.status(400).end("hash or imdbid is wrong"); //Bad Request
 }
 
-exports.watchedlist = (req, res) => {
+exports.watchedlist = async (req, res) => {
     // var username = String(req.params.username).toLowerCase();
-    var user = req.body.user;
-    // if (username.match(/^[a-z]+([_-]?[a-z0-9])*$/g) && username.length < 50) {
-    VideoModel.getWatchUser(user).then(
+    var user = req.params.username;
+    if (user.match(/^[a-z]+([_-]?[a-z0-9])*$/g) && user.length < 50) {
+    let usr = await UserModel.getUser(user);
+    VideoModel.getWatchUser(usr).then(
         (data) => {
             //console.log(data)
             res.status(200).send(data); //OK
@@ -27,5 +29,5 @@ exports.watchedlist = (req, res) => {
             res.status(404).end(err); //Not found
         }
     );
-    // }else res.status(400).end("username is wrong"); //Bad Request
+    }else res.status(400).end("username is wrong"); //Bad Request
 }

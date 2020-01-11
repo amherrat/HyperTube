@@ -102,7 +102,7 @@ export default {
     };
   },
   mounted() {
-      if (localStorage.token) this.$router.push({ path: "/home" });
+      if (localStorage.token) this.$router.push({ path: "/" });
   },
   methods: {
     Login() {
@@ -136,7 +136,7 @@ export default {
               } else {
                 // success
                 localStorage.setItem("token", res.data.token);
-                this.$router.push({ path: "/home" });
+                this.$router.push({ path: "/" });
                 console.log("DONE")
               }
             })

@@ -27,3 +27,7 @@ exports.commentGet = async (objComment) => {
         }
     );
 }
+
+exports.commentNB = async (objComment) => {
+    return await Comment.find({ user: objComment});
+}
