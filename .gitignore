@@ -4,3 +4,4 @@ server/subtitles
 server/torrent-stream
 server/uploads
 dist/
+.nuxt/
