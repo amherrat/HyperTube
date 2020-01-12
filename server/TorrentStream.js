@@ -120,9 +120,9 @@ var VideoStream = async function (req, res) {
                 // console.log(err, info);
             });
         } else
-            res.end();
+            res.status(400).end();
     } else
-        res.end();
+        res.status(400).end();
 }
 
 module.exports = VideoStream;

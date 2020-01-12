@@ -36,16 +36,15 @@ async function start() {
   
   // Timeout
   var options = {
+    timeout: 60000, //60s
     onTimeout: function(req, res) {
       console.log('Timed out..');
       res.status(408).send('408 Request Timeout.');
     }
   };
+  
   app.use(timeout.handler(options)); 
   
-  // Torrent stream
-  app.use('/torrent/:hash', require('./TorrentStream'));
-
   // Use Body Parser and Cors
   var jsonParser = bodyParser.json()
   var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -64,10 +63,13 @@ async function start() {
     }
     next();
   });
-
+  
   // API routes
   app.use('/api', require('./router'));
 
+  // Torrent stream
+  app.use('/torrent/:hash', require('./TorrentStream'));
+  
   //remove unwatched videos for 30days or more (0 0 * * *) => everyday at midnight
   cron.schedule('0 0 * * *', () => {
     // last time watched from database
