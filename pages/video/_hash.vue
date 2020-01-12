@@ -62,13 +62,13 @@ export default {
   },
   data() {
     return {
-      magnet_link: '',
-      title: '',
+      magnet_link: "",
+      title: "",
       done: false,
       movie_details: [],
       inputComment: "",
       playerOptions: {
-        url: '',
+        url: "",
         poster:
           "https://hcdevilsadvocate.com/wp-content/uploads/2019/01/netflix-background-9.jpg",
         volume: 1,
@@ -84,8 +84,8 @@ export default {
       }
     };
   },
-  computed:{
-    userdata: function () {
+  computed: {
+    userdata: function() {
       return this.$store.getters.getdata;
     }
   },
@@ -109,8 +109,8 @@ export default {
                 .substring(20, 60)
                 .toUpperCase()
                 .includes(this.$route.params.hash.toUpperCase())
-            ){
-              this.title = `${data.title} ${data.items[i].quality}`
+            ) {
+              this.title = `${data.title} ${data.items[i].quality}`;
               fine = 1;
               this.magnet_link = data.items[i].torrent_magnet.substring(60);
               this.playerOptions.url = `/torrent/${this.$route.params.hash}?magnet=${this.magnet_link}`;
@@ -137,10 +137,13 @@ export default {
           this.$axios
             .$get(`/api/subtitles/${imdbid}`)
             .then(res => {
-              // console.log("subtitles");
-              // console.log(res);
+              let exist = res.find(ele => ele.langShort === preferedlang);
+              if (!exist) {
+                exist = res.find(ele => ele.langShort === "en");
+                if (exist) preferedlang = "en";
+                else preferedlang = res.length > 0 ? res[0].langShort : "";
+              }
               for (let lang in res) {
-                console.log(res[lang].langShort, preferedlang, res[lang].langShort === preferedlang ? true : false);
                 this.playerOptions.textTrack.push({
                   src: res[lang].path,
                   kind: "captions",
@@ -149,7 +152,6 @@ export default {
                   default: res[lang].langShort === preferedlang ? true : false
                 });
               }
-              console.log(this.magnet_link);
               this.done = true;
             })
             .catch(err => {
