@@ -156,12 +156,18 @@ export default {
       this.$axios
         .get(`/api/whoAmi/${localStorage.token}`)
         .then(res => {
-          console.log(res.data.success);
+          console.log(res,"chi haja");
           if (res.data.success)
             this.$store.dispatch("getdata", res.data.data.user);
+          else
+          {
+            localStorage.removeItem("token");
+            this.$router.push("/login");
+          }
+
         })
         .catch(err => {
-          //console.log(err);
+          console.log("hahahahahahhahaha222");
           localStorage.removeItem("token");
           this.$router.push("/login");
         });

@@ -24,7 +24,7 @@ passport.use(
       // console.log("MAIL => ",profile.emails[0].value);
       // console.log("IMG URL => ",profile.photos[0].value);
       /*Check Values Impo Email fname spotifyId */
-      console.log(profile);
+     // console.log(profile);
       var user = new User({
         login: "u"+String(Math.round(new Date().getTime()/1000)), //profil.username
         fname: profile.displayName,
@@ -39,39 +39,45 @@ passport.use(
       try {
         User.find({ mail: user.mail }, (err, result) => {
           if (result.length) {
+            //Mail Already existe
             if (result[0].spotifyId === user.spotifyId) {
               let payload = { user: result[0].login, userid: result[0]._id };
               let token = jwt.sign(payload, appSecret);
               //console.log("Loged in mail using spotifyId section");
               return done(null, token);
-            } else if (!result[0].spotifyId) {
-              User.findOneAndUpdate(
-                { mail: user.mail, verified: 1 },
-                { spotifyId: user.spotifyId },
-                { useFindAndModify: false }
-              )
-                .exec()
-                .then(userRes => {
-                  //console.log("Loged in mail by adding spotifyId section");
-                  if(userRes)
-                  {
-                    let payload = { user: userRes.login, userid: userRes._id };
-                    let token = jwt.sign(payload, appSecret);
-                    return done(null, token);
-                  }else
-                    return done("mail already exist but not verified", null);
-                });
-            }
+            }else
+              return done(null,{err: "mail already exist"});
+            // } else if (!result[0].spotifyId) {
+            //   User.findOneAndUpdate(
+            //     { mail: user.mail, verified: 1 },
+            //     { spotifyId: user.spotifyId },
+            //     { useFindAndModify: false }
+            //   )
+            //     .exec()
+            //     .then(userRes => {
+            //       //console.log("Loged in mail by adding spotifyId section");
+            //       if(userRes)
+            //       {
+            //         let payload = { user: userRes.login, userid: userRes._id };
+            //         let token = jwt.sign(payload, appSecret);
+            //         return done(null, token);
+            //       }else
+            //         return done("mail already exist but not verified", null);
+            //     });
+            // }
+            
           } else
             User.find({ login: user.login }, (err, result) => {
               if (result[0]) {
+                //Login Already existe
                 // console.log(result[0].spotifyId, user.spotifyId);
-                if (result[0].spotifyId === user.spotifyId) {
-                  let payload = { user: result[0].login, userid: result[0]._id };
-                  let token = jwt.sign(payload, appSecret);
-                  // console.log("Loged in login using spotifyId verification section");
-                  return done(null, token);
-                } else return done("login already exist", null);
+                // if (result[0].spotifyId === user.spotifyId) {
+                //   let payload = { user: result[0].login, userid: result[0]._id };
+                //   let token = jwt.sign(payload, appSecret);
+                //   // console.log("Loged in login using spotifyId verification section");
+                //   return done(null, token);
+                // } else 
+                return done(null,{err:"login already exist"} );
               } else {
                 // console.log("Loged in new user created section");
                 let payload = { user: user.login };
@@ -85,7 +91,7 @@ passport.use(
                   })
                   .catch(err => {
                     // console.log("PRBLM >>>", err);
-                    return done("something went wrong", null);
+                    return done(null,{err:"something went wrong"});
                   });
               }
             });

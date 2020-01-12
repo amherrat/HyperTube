@@ -25,7 +25,7 @@ function send_mail(mail, sbj, msg) {
         //console.log("stmp.sendMail Error:", err);
         return "error";
       } else {
-        return "sent";
+        return "sent";  
       }
     });
   } catch (err) {}

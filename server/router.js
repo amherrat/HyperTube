@@ -17,9 +17,10 @@ router.post('/create_profile_img',jwttoken, Images.create_a_image);
 router.put('/update', jwttoken, User.update_account);
 router.put('/updatepassword', jwttoken, User.update_account_password);
 router.post('/authenticate', User.Login);
-router.get('/userdata/:login', User.userdata);
+router.get('/userdata/:login', jwttoken, User.userdata);
 router.post('/updatelang', jwttoken, User.update_preferedlang);
 router.get('/whoAmi/:token', jwttoken, (req, res) => {
+  console.log("logged success")
   console.log(req.jwt);
   res.json({
     success: true,
@@ -53,7 +54,11 @@ router.get('/auth/spotify', Spotifypassport.authenticate('spotify', {
 
 router.get('/auth/spotify/callback', Spotifypassport.authenticate('spotify', { failureRedirect: '/login' }),
   function (req, res) {
+    if (req.user.err)
+    res.render('redirect', { err: req.user.err });
+    else
     res.render('redirect', { token: req.user });
+
   });
 // Subtitles
 router.get('/subtitles/:imdbid', jwttoken, require('./controlers/subtitles'));

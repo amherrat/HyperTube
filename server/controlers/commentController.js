@@ -40,7 +40,6 @@ exports.commentCount = async (req, res) => {
     const params = {
       login:  req.params.username || ""
     }
-    console.log("----->", params);
     if (params.login.length < 1){
         res.json({
             success: false,
