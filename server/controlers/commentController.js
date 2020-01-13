@@ -4,10 +4,9 @@ var UserModel = require('../models/userModel');
 
 exports.commentGet = (req, res) => {
     const params = {
-      id_film: String(req.params.id_film) || "",
-      hash_film: String(req.params.hash_film) || ""
+      id_film: String(req.params.id_film) || ""
     }
-    if (params.id_film.length < 1 || params.hash_film.length < 1){
+    if (params.id_film.length < 1){
         res.json({
             success: false,
             data: {}
