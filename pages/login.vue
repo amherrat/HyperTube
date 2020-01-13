@@ -115,7 +115,7 @@ export default {
             })
             .then(res => {
               if (!res.data.success) {
-                console.log(res.data.errors);
+                //console.log(res.data.errors);
                 if(res.data.errors)
                 {
                 if (res.data.errors.error === "login") {
@@ -136,15 +136,16 @@ export default {
               } else {
                 // success
                 localStorage.setItem("token", res.data.token);
-                this.$router.push({ path: "/" });
-                console.log("DONE")
+                this.$router.push({ path: "/home" });
+                //console.log("DONE")
               }
             })
-            .catch(err => console.log(err));
+            .catch(err => {}//console.log(err)
+            );
         }
       ).catch(err=> {
       })
-        console.log("tried to log");
+        //console.log("tried to log");
       //}
     },
      isValidForm() {
@@ -181,11 +182,11 @@ export default {
             }
             //console.log(res);
           })
-          .catch(err => console.log(err));
+          .catch(err => {} /*console.log(err)*/);
       }
     },
     validate_reset(email) {
-      if (
+      if (!email ||
         !String(email).match(
           /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/gi
         )
@@ -206,7 +207,7 @@ export default {
     },
     validate(key, value) {
       if (key === "login") {
-        if (!String(this.customValues[key]).match(/^[a-zA-Z]+([_-]?[a-zA-Z0-9])*$/g) ||
+        if (!this.customValues[key] || !String(this.customValues[key]).match(/^[a-zA-Z]+([_-]?[a-zA-Z0-9])*$/g) ||
         this.customValues[key].length > 30 ||
         this.customValues[key].length < 3) {
             this.validation[key].valid = false;
@@ -238,7 +239,7 @@ export default {
       ];
       //Password
       if (key === "password") {
-        if (this.customValues[key].length > 7) {
+        if (!this.customValues[key] || this.customValues[key].length > 7) {
           for (let item of regexer) {
             if (!String(this.customValues[key]).match(item.regex)) {
               this.validation[key].valid = false;

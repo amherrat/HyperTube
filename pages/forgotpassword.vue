@@ -111,7 +111,7 @@ export default {
     },
     validate(key, value) {
       if (key === "mail") {
-        if (
+        if (!this.customValues[key] ||
           !String(this.customValues[key]).match(
             /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/gi
           ) ||

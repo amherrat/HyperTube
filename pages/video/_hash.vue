@@ -6,7 +6,7 @@
         <div
           v-else
           class="loading spinner-grow text-danger"
-          style="width: 5rem; height: 5rem;"
+          style="width: 5rem; height: 5rem; z-index: 100;"
           role="status"
         >
           <span class="sr-only">Loading...</span>
@@ -131,7 +131,7 @@ export default {
                 this.playerOptions.poster = `http://image.tmdb.org/t/p/original${data.backdrops[0].file_path}`;
             })
             .catch(err => {
-              console.log(err);
+              //console.log(err);
             });
           //subtitles
           this.$axios
@@ -155,7 +155,7 @@ export default {
               this.done = true;
             })
             .catch(err => {
-              console.log(err);
+              //console.log(err);
             });
           // api/addvideo
           this.$axios
@@ -165,15 +165,15 @@ export default {
               imdbid: imdbid
             })
             .then(res => {
-              console.log(res);
+              //console.log(res);
             })
             .catch(err => {
-              console.log(err);
+              //console.log(err);
             });
         } else this.$nuxt.error({ statusCode: 404 });
       })
       .catch(err => {
-        console.log(err);
+        //console.log(err);
         axios
           .get(`https://tv-v2.api-fetch.website/movie/${id}`)
           .then(res => {
@@ -201,7 +201,7 @@ export default {
                   // console.log("subtitles");
                   // console.log(res);
                   for (let lang in res) {
-                    console.log(res[lang].langShort);
+                    //console.log(res[lang].langShort);
                     this.playerOptions.textTrack.push({
                       src: res[lang].path,
                       kind: "captions",
@@ -213,7 +213,7 @@ export default {
                   this.done = true;
                 })
                 .catch(err => {
-                  console.log(err);
+                  //console.log(err);
                 });
               // api/addvideo
               this.$axios
@@ -223,15 +223,15 @@ export default {
                   imdbid: imdbid
                 })
                 .then(res => {
-                  console.log(res);
+                  //console.log(res);
                 })
                 .catch(err => {
-                  console.log(err);
+                  //console.log(err);
                 });
             } else this.$nuxt.error({ statusCode: 404 });
           })
           .catch(err => {
-            console.log(err);
+            //console.log(err);
           });
       });
   },

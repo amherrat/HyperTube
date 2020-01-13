@@ -174,7 +174,7 @@ export default {
       ];
       //oldPassword
       if (key === "oldpassword") {
-        if (this.customValues[key].length > 7) {
+        if (!this.customValues[key] || this.customValues[key].length > 7) {
           for (let item of regexer) {
             if (!String(this.customValues[key]).match(item.regex)) {
               this.validation[key].valid = false;
@@ -192,7 +192,7 @@ export default {
       }
       //Password
       if (key === "password") {
-        if (this.customValues[key].length > 7) {
+        if (!this.customValues[key] || this.customValues[key].length > 7) {
           for (let item of regexer) {
             if (!String(this.customValues[key]).match(item.regex)) {
               this.validation[key].valid = false;
@@ -216,7 +216,7 @@ export default {
       }
       //Confirm password
       if (key === "confirmpassword") {
-        if (this.customValues[key].length > 7) {
+        if (!this.customValues[key] || this.customValues[key].length > 7) {
           for (let item of regexer) {
             if (!String(this.customValues[key]).match(item.regex)) {
               this.validation[key].valid = false;

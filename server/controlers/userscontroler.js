@@ -215,7 +215,7 @@ exports.Login = function(req, res) {
         });
       },
       err => {
-        return res.status(401).json({
+        return res.status(200).json({ //401
           success: false,
           errors: err
         });
@@ -236,14 +236,14 @@ exports.signup = function(req, res) {
     try {
       User.find({ login: new_user.login }, (err, result) => {
         if (result.length)
-          return res.status(403).json({
+          return res.status(200).json({
             success: false,
             errors: "login already exist"
           });
         else
           User.find({ mail: new_user.mail }, (err, result) => {
             if (result.length)
-              return res.status(403).json({
+              return res.status(200).json({
                 success: false,
                 errors: "mail already exist"
               });
@@ -328,19 +328,19 @@ exports.update_account = function(req, res) {
                       }
                     });
                 } else
-                  return res.status(403).json({
+                  return res.status(200).json({ //403
                     success: false,
                     errors: "mail already exist"
                   });
               });
             } else
-              return res.status(403).json({
+              return res.status(200).json({ //403
                 success: false,
                 errors: "login already exist"
               });
           });
         } else
-          return res.status(404).json({
+          return res.status(200).json({ //403
             success: false,
             errors: "user dosn't exist"
           });
@@ -387,7 +387,7 @@ exports.update_account_password = function(req, res) {
           }
         },
         err => {
-          return res.status(401).json({
+          return res.status(200).json({ //401
             success: false,
             errors: err
           });

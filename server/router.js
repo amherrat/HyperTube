@@ -20,8 +20,8 @@ router.post('/authenticate', User.Login);
 router.get('/userdata/:login', jwttoken, User.userdata);
 router.post('/updatelang', jwttoken, User.update_preferedlang);
 router.get('/whoAmi/:token', jwttoken, (req, res) => {
-  console.log("logged success")
-  console.log(req.jwt);
+  // console.log("")
+  // console.log(req.jwt);
   res.json({
     success: true,
     data: req.jwt

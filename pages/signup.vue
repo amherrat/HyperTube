@@ -213,7 +213,7 @@ export default {
       })
     },
     Signup() {
-      //this.validateForm();
+      this.validateForm();
       this.isValidForm().then((res) => {
         this.$axios
           .post("/api/signup", {
@@ -225,7 +225,7 @@ export default {
           })
           .then(res => {
             if (!res.data.success) {
-              console.log(res.data);
+              //console.log(res.data);
               if (res.data.errors) {
                 if (res.data.errors === "login already exist") {
                   this.validation.login.valid = false;
@@ -239,7 +239,7 @@ export default {
                 }
               } else {
 
-                console.log(res.data);
+                //console.log(res.data);
               }
             }else
             {
@@ -252,7 +252,7 @@ export default {
     },
     validate(key, value) {
       if (key === "login") {
-        if (
+        if (!this.customValues[key] ||
           !String(this.customValues[key]).match(
             /^[a-zA-Z]+([_-]?[a-zA-Z0-9])*$/g
           ) ||
@@ -268,7 +268,7 @@ export default {
       }
       //First Name
       if (key === "fname") {
-        if (
+        if (!this.customValues[key] ||
           !String(this.customValues[key]).match(
             /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g
           ) ||
@@ -284,7 +284,7 @@ export default {
       }
       //Last Name
       if (key === "lname") {
-        if (
+        if (!this.customValues[key] ||
           !String(this.customValues[key]).match(
             /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g
           ) ||
@@ -300,7 +300,7 @@ export default {
       }
       //Mail
       if (key === "mail") {
-        if (
+        if (!this.customValues[key] ||
           !String(this.customValues[key]).match(
             /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/gi
           ) ||
@@ -335,7 +335,7 @@ export default {
       ];
       //Password
       if (key === "password") {
-        if (this.customValues[key].length > 7) {
+        if (!this.customValues[key] || this.customValues[key].length > 7) {
           for (let item of regexer) {
             if (!String(this.customValues[key]).match(item.regex)) {
               this.validation[key].valid = false;
@@ -353,7 +353,7 @@ export default {
       }
       //Confirm password
       if (key === "confirmpassword") {
-        if (this.customValues[key].length > 7) {
+        if (!this.customValues[key] || this.customValues[key].length > 7) {
           for (let item of regexer) {
             if (!String(this.customValues[key]).match(item.regex)) {
               this.validation[key].valid = false;
