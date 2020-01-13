@@ -36,9 +36,8 @@ async function start() {
   
   // Timeout
   var options = {
-    timeout: 60000, //60s
+    timeout: 120000, //120s
     onTimeout: function(req, res) {
-      console.log('Timed out..');
       res.status(408).send('408 Request Timeout.');
     }
   };
