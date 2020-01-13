@@ -7,30 +7,7 @@
       </nuxt-link>
     </mdb-navbar-brand>
     <mdb-navbar-toggler>
-      <mdb-navbar-nav left>
-        <select v-model="lang" id="selector" @change="changelang">
-          <option value="en">🇬🇧</option>
-          <option value="fr">🇫🇷</option>
-          <option value="dr">🇲🇦</option>
-          <option value="ar">🇸🇦</option>
-        </select>
-        <!-- <nuxt-link to="film" no-prefetch>
-          <mdb-nav-item>
-            <span>
-              <font-awesome-icon :icon="['fas', 'film']" size="2x" />
-              <br />Films
-            </span>
-          </mdb-nav-item>
-        </nuxt-link>
-        <nuxt-link to="shows">
-          <mdb-nav-item>
-            <span>
-              <font-awesome-icon :icon="['fas', 'tv']" size="2x" />
-              <br />Shows
-            </span>
-          </mdb-nav-item>
-        </nuxt-link>-->
-      </mdb-navbar-nav>
+      
       <mdb-navbar-nav right>
         <!-- <form @submit.prevent="gotoProfil">
           <mdb-input type="text" class="text-white" placeholder="Search" aria-label="Search"/>
@@ -85,7 +62,6 @@ import axios from "axios";
 export default {
   data: () => {
     return {
-      lang: "en",
       customValues: {
         login: ""
       },
@@ -108,27 +84,13 @@ export default {
   mounted() {
     this.$root.$on("refreshAvatar", () => {
       this.update();
-      this.lang = this.user.preferedlang;
-      this.$i18n.locale = this.lang;
     });
   },
   created() {
     this.update();
-    this.lang = this.user.preferedlang;
-    this.$i18n.locale = this.lang;
+
   },
   methods: {
-    changelang() {
-      //update user's language
-      this.$axios.post('api/updatelang',{ lang : this.lang})
-      .then(res =>{
-        this.$store.dispatch("changelang", this.lang);
-      })
-      .catch(err =>{
-          console.log(err.response);
-      })
-      this.$i18n.locale = this.lang;
-    },
     gotoProfil() {
       this.isValidForm()
         .then(res => {
@@ -194,6 +156,7 @@ export default {
 };
 </script>
 <style scoped>
+
 .nav-bar {
   position: fixed;
   z-index: 1030;

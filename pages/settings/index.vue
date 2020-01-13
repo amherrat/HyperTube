@@ -127,10 +127,24 @@
                       />
                     </mdb-col>
                   </mdb-row>
-                  <p class="font-small blue-text d-flex justify-content-end mb-5">
-                    <nuxt-link to="settings/update_password">{{$t('Change password')}}</nuxt-link>
-                  </p>
-                  <p></p>
+                  <mdb-row>
+                    <mdb-col>
+                      <select v-model="lang" id="selector" @change="changelang">
+                        <option value="en">🇬🇧</option>
+                        <option value="fr">🇫🇷</option>
+                        <option value="dr">🇲🇦</option>
+                        <option value="ar">🇸🇦</option>
+                      </select>
+                    </mdb-col>
+                    <mdb-col>
+                      <br />
+                      <p class="font-small blue-text d-flex justify-content-end mb-5">
+                        <nuxt-link to="settings/update_password">{{$t('Change password')}}</nuxt-link>
+                      </p>
+                      <p></p>
+                    </mdb-col>
+                  </mdb-row>
+                  
                   <div class="text-center mb-3">
                     <mdb-btn gradient="aqua" block type="submit">{{$t('Update')}}</mdb-btn>
                   </div>
@@ -158,6 +172,7 @@ export default {
 	},
   data() {
     return {
+      lang: "en",
       Uploadedimg: false,
       done: false,
       customValues: {
@@ -212,7 +227,22 @@ export default {
     // this.customValues.Profileimg = this.user.profil;
     this.done = true;
   },
+  mounted() {
+      this.lang = this.user.preferedlang;
+      this.$i18n.locale = this.lang;
+  },
   methods: {
+    changelang() {
+      //update user's language
+      this.$axios.post('api/updatelang',{ lang : this.lang})
+      .then(res =>{
+        this.$store.dispatch("changelang", this.lang);
+      })
+      .catch(err =>{
+          console.log(err.response);
+      })
+      this.$i18n.locale = this.lang;
+    },
     // update(){
     // this.$axios
     // .get(`/api/whoAmi/${localStorage.token}`)
@@ -388,4 +418,10 @@ export default {
 </script>
 
 <style scoped>
+#selector {
+  background-color: #d2c2c200;
+  border: red;
+  font-size: 45px;
+  -webkit-appearance: none;
+}
 </style>
