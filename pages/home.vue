@@ -265,32 +265,29 @@ export default {
       }
       console.log(res);
     }).catch(err => {console.log(err)});
-  },
-  mounted() {
     this.infinteScroll();
-    // axios.get(`https://yts.ms/api/v2/list_movies.json?sort=seeds&page=${this.page}`)
     axios
-      .get(
+    .get(
         `https://api.apiumadomain.com/list?sort=seeds&short=1&cb=&quality=720p,1080p,3d&page=${this.page}`
       )
-      .then(res => {
-        let data = res.data;
-        //  if (data.status === "ok")
-        if (res.status === 200) {
-          this.films = data.MovieList;
-          this.allFilm = data.MovieList;
-          this.page = this.page + 1;
-          this.filmsExist = 1;
-          //  this.films = data.data.movies;
-          //  this.allFilm = data.data.movies;
-          //  this.filmsExist = 1;
-          //  this.page = this.page + 1;
-        }
-        this.scroll(this);
-      })
-      .catch(err => {});
-  },
+    .then(res => {
+      let data = res.data;
+      //  if (data.status === "ok")
+      if (res.status === 200) {
+        this.films = data.MovieList;
+        this.allFilm = data.MovieList;
+        this.page = this.page + 1;
+        this.filmsExist = 1;
+        //  this.films = data.data.movies;
+        //  this.allFilm = data.data.movies;
+        //  this.filmsExist = 1;
+        //  this.page = this.page + 1;
+      }
+      this.scroll(this);
+    })
+    .catch(err => {});
 
+  },
   destroyed() {
     window.removeEventListener("scroll", this.scroll);
   },
@@ -473,67 +470,8 @@ export default {
           this.getMoreData();
         }
       };
-    },
-    scroll(state) {
-      window.addEventListener(
-        "scroll",
-        function() {
-          /* var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-          var clientHeight = document.documentElement.clientHeight;
-          const ele = document.querySelector('body');
-          if (ele.scrollHeight <= (scrollTop + clientHeight + 150))
-          {
-            state.page = state.page + 1;
-            state.loadDone = 0;
-            window.outerHeight = window.outerHeight + window.outerHeight;
-            let link = "";
-            if (state.activeScroll === 1 && state.choosedQuality === "All" && state.choosedRate === 0 && state.term === '' && state.choosedGenre === "All")
-              link = `https://yts.lt/api/v2/list_movies.json?sort=seeds&page=${state.page}`;
-            else
-            {
-              if ( state.choosedGenre === "All" )
-                state.choosedGenre = 0;
-              if ( state.sortvalue === "None" )
-                state.sortvalue = "date_added";
-              if (state.choosedQuality === "All")
-                state.choosedQuality = 0;
-              link = `https://yts.lt/api/v2/list_movies.json?sort_by=${state.sortvalue}&page=${state.page}&query_term=${state.term}&quality=${state.choosedQuality}&minimum_rating=${state.choosedRate}&genre=${state.choosedGenre}`;
-              console.log("here", link);
-              if (state.choosedGenre === 0)
-                state.choosedGenre = "All";
-              if (state.choosedQuality === 0)
-                state.choosedQuality = "All";
-              if ( state.sortvalue === "date_added" )
-                state.sortvalue = "None";
-            }
-            axios.get(link)
-            .then(res => {
-              let data = res.data;
-              if (data.status === "ok")
-              {
-                state.allFilm = [...state.allFilm, ...data.data.movies];
-                state.films = [...state.films, ...data.data.movies];
-                let min = state.filmyear[0];
-                let max = state.filmyear[1];
-                state.films = state.films.filter(film => film.year >= min && film.year <= max);
-              }
-              state.loadDone = 1;
-            })
-            .catch(err => {
-              state.loadDone = 1;
-              console.log(err);
-            });
-          }
-          else
-          {
-            
-          }*/
-        },
-        false
-      );
     }
-  },
-  components: {}
+  }
 };
 </script>
 
