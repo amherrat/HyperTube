@@ -405,7 +405,6 @@ export default {
           } else {
             this.validation.Profileimg.valid = false;
             this.validation.Profileimg.invalidFeedback = res.data.message;
-            console.log(res.data.message);
           }
         },
         err => {

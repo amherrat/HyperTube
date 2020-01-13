@@ -256,9 +256,7 @@ exports.signup = function(req, res) {
                 .then(result => {
                   //send mail to new user
                   var link =
-                    "http://" +
-                    host +
-                    ":3000/verify?t=" +
+                    "http://localhost:3000/verify?t=" +
                     token +
                     "&u=" +
                     new_user.mail;
@@ -410,7 +408,7 @@ exports.resetpassword = (req, res) => {
     var token = require("crypto")
       .randomBytes(48)
       .toString("hex");
-    var link = "http://0.0.0.0:3000/reset?t=" + token + "&e=" + mail;
+    var link = "http://localhost:3000/reset?t=" + token + "&e=" + mail;
     var sbj = "Hypertube | Reset your password";
     var msg =
       '</br><a href="' +

@@ -12,8 +12,8 @@ function is_valid_image(image) {
           /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
         )
       )
-        errors.msg = ["Image invalide"];
-  } else errors.error = ["Data wrong format"];
+        errors.message = "Image invalid";
+  } else errors.message = "Data wrong format";
   return errors;
 }
 
