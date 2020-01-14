@@ -6,7 +6,7 @@
         range
         show-stops
         :max="2020"
-        :min="1950"
+        :min="1850"
         v-on:change="yearGap()"
       ></el-slider>
     </div>
@@ -210,7 +210,7 @@ export default {
     return {
       nothingFound: false,
       busy: false,
-      filmyear: [1950, 2020],
+      filmyear: [1850, 2020],
       allFilm: [],
       films: [],
       term: "",
@@ -369,7 +369,7 @@ export default {
           if (res.status === 200 && data.MovieList.length) {
             let min = this.filmyear[0];
             let max = this.filmyear[1];
-            // this.films = data.MovieList;
+            //  this.films = data.MovieList;
             this.films = data.MovieList.filter(
               film => film.year >= min && film.year <= max
             );
@@ -377,7 +377,6 @@ export default {
             this.page = this.page + 1;
             this.filmsExist = 1;
           } else {
-            //2end Api
             this.sortvalue =
               this.sortvalue === "dateadded" ? "last added" : this.sortvalue;
             this.sortvalue =
