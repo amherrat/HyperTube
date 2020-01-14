@@ -87,8 +87,8 @@ export default {
     });
   },
   created() {
-    this.update();
-
+    // this.update();
+    this.$i18n.locale = this.user.preferedlang;
   },
   methods: {
     gotoProfil() {
@@ -118,7 +118,6 @@ export default {
       this.$axios
         .get(`/api/whoAmi/${localStorage.token}`)
         .then(res => {
-          console.log(res,"chi haja");
           if (res.data.success)
             this.$store.dispatch("getdata", res.data.data.user);
           else
@@ -129,7 +128,6 @@ export default {
 
         })
         .catch(err => {
-          console.log("hahahahahahhahaha222");
           localStorage.removeItem("token");
           this.$router.push("/login");
         });

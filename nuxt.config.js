@@ -1,6 +1,9 @@
 const bodyParser = require('body-parser')
 module.exports = {
   mode: 'spa',
+  router: {
+    middleware: 'auth'
+  },
   /*
   ** Headers of the page
   */

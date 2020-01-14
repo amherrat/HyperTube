@@ -19,42 +19,46 @@
       <div class="col-md-2"></div>
       <div class="col-md-8">
         <h1 style="text-align: center;">{{$t('Search&Filter engine')}}</h1>
-          <div class="form-row">
-            <div class="col-md-12">
-              <label for="searchTerm">
-                <h3>{{$t('Your term')}}</h3>
-              </label>
-              <input
-                type="text"
-                class="form-control"
-                v-model="term"
-                id="searchTerm"
-                v-on:keyup.enter="search"
-              />
-            </div>
+        <div class="form-row">
+          <div class="col-md-12">
+            <label for="searchTerm">
+              <h3>{{$t('Your term')}}</h3>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              v-model="term"
+              id="searchTerm"
+              v-on:keyup.enter="search"
+            />
           </div>
-          <br />
+        </div>
+        <br />
 
-          <div class="class-row">
-            <div class="row">
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label for="quality">{{$t('Quality')}}</label>
-                  <select v-model="choosedQuality" id="quality" class="form-control">
-                    <option selected>All</option>
-                    <option v-for="(qua, index) in this.quality" v-bind:key="index">{{qua}}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label for="genre">{{$t('Genre')}}</label>
-                  <select id="genre" v-model="choosedGenre" class="form-control">
-                <option v-for="(gen, index) in this.genre" :value="gen" v-bind:key="index">{{$t(gen)}}</option>   
+        <div class="class-row">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="quality">{{$t('Quality')}}</label>
+                <select v-model="choosedQuality" id="quality" class="form-control">
+                  <option selected>All</option>
+                  <option v-for="(qua, index) in this.quality" v-bind:key="index">{{qua}}</option>
                 </select>
-                </div>
               </div>
-              <!-- <div class="col-md-3">
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="genre">{{$t('Genre')}}</label>
+                <select id="genre" v-model="choosedGenre" class="form-control">
+                  <option
+                    v-for="(gen, index) in this.genre"
+                    :value="gen"
+                    v-bind:key="index"
+                  >{{$t(gen)}}</option>
+                </select>
+              </div>
+            </div>
+            <!-- <div class="col-md-3">
                     <div class="form-group">
                       <label for="rating">Rating</label>
                       <select id="rating" v-model="choosedRate" class="form-control">
@@ -62,34 +66,35 @@
                         <option v-for="(rate, index) in this.rating" v-bind:key="index">{{rate}}</option>
                       </select>
                     </div>
-              </div>-->
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label for="sortby">{{$t('Sort by')}}</label>
-                  <select id="sortby" v-model="sortvalue" class="form-control">
-                    <option selected>None</option>
-                    <option v-for="(ele, index) in this.sortby" v-bind:key="index">{{ele}}</option>
-                  </select>
-                </div>
+            </div>-->
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="sortby">{{$t('Sort by')}}</label>
+                <select id="sortby" v-model="sortvalue" class="form-control">
+                  <option selected>None</option>
+                  <option v-for="(ele, index) in this.sortby" v-bind:key="index">{{ele}}</option>
+                </select>
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-4" />
-            <div class="col-md-4">
-              <center>
-                <button
-                  v-on:click="search()"
-                  type="button"
-                  style="color: black;width: 100%;"
-                  class="btn btn-danger"
-                >
-                  <font-awesome-icon :icon="['fas', 'search']" size="1x" />{{$t('Done')}}
-                </button>
-              </center>
-            </div>
-            <div class="col-md-4" />
+        </div>
+        <div class="row">
+          <div class="col-md-4" />
+          <div class="col-md-4">
+            <center>
+              <button
+                v-on:click="search()"
+                type="button"
+                style="color: black;width: 100%;"
+                class="btn btn-danger"
+              >
+                <font-awesome-icon :icon="['fas', 'search']" size="1x" />
+                {{$t('Done')}}
+              </button>
+            </center>
           </div>
+          <div class="col-md-4" />
+        </div>
       </div>
       <div class="col-md-2"></div>
     </div>
@@ -116,8 +121,8 @@
       >
         <div class="card" ref="mycard" id="mycard">
           <div class="image" v-if="watchedMovies.includes(film.imdb)">
-              <div class="watchedback"></div>
-              <img :src="film.poster_big" class="watched" />
+            <div class="watchedback"></div>
+            <img :src="film.poster_big" class="watched" />
           </div>
           <div class="image" v-else>
             <!-- <img :src="film.medium_cover_image" /> -->
@@ -196,10 +201,10 @@ export default {
   //     next('/login');
   //   });
   // },
-  head () {
+  head() {
     return {
-      title: this.$t('title_Home')
-    }
+      title: this.$t("title_Home")
+    };
   },
   data: () => {
     return {
@@ -252,41 +257,48 @@ export default {
       watchedMovies: []
     };
   },
-  computed:{
-    userdata: function () {
+  computed: {
+    userdata: function() {
       return this.$store.getters.getdata;
     }
   },
-  created(){
-    const username = this.userdata.login;
-    this.$axios.$get(`/api/watchedlist/${username}`).then(res => {
-      for (var i in res){
-        this.watchedMovies.push(res[i].imdbid);
-      }
-      console.log(res);
-    }).catch(err => {console.log(err)});
+  created() {
     this.infinteScroll();
     axios
-    .get(
+      .get(
         `https://api.apiumadomain.com/list?sort=seeds&short=1&cb=&quality=720p,1080p,3d&page=${this.page}`
       )
-    .then(res => {
-      let data = res.data;
-      //  if (data.status === "ok")
-      if (res.status === 200) {
-        this.films = data.MovieList;
-        this.allFilm = data.MovieList;
-        this.page = this.page + 1;
-        this.filmsExist = 1;
-        //  this.films = data.data.movies;
-        //  this.allFilm = data.data.movies;
-        //  this.filmsExist = 1;
-        //  this.page = this.page + 1;
-      }
-      this.scroll(this);
-    })
-    .catch(err => {});
-
+      .then(res => {
+        let data = res.data;
+        //  if (data.status === "ok")
+        if (res.status === 200) {
+          this.films = data.MovieList;
+          this.allFilm = data.MovieList;
+          this.page = this.page + 1;
+          this.filmsExist = 1;
+          //  this.films = data.data.movies;
+          //  this.allFilm = data.data.movies;
+          //  this.filmsExist = 1;
+          //  this.page = this.page + 1;
+        }
+        this.scroll(this);
+      })
+      .catch(err => {});
+  },
+  mounted() {
+    this.$nextTick(function() {
+      const username = this.userdata.login;
+      this.$axios
+        .$get(`/api/watchedlist/${username}`)
+        .then(res => {
+          for (var i in res) {
+            this.watchedMovies.push(res[i].imdbid);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
   },
   destroyed() {
     window.removeEventListener("scroll", this.scroll);
@@ -329,10 +341,13 @@ export default {
         //   this.choosedQuality = 0;
         // link = `https://yts.lt/api/v2/list_movies.json?sort_by=${this.sortvalue}&query_term=${this.term}&quality=${this.choosedQuality}&minimum_rating=${this.choosedRate}&genre=${this.choosedGenre}`;
         this.sortvalue = this.sortvalue === "None" ? 0 : this.sortvalue;
-        this.sortvalue = this.sortvalue === "popularity" ? "seeds" : this.sortvalue;
-        this.sortvalue = this.sortvalue === "date added" ? "dateadded" : this.sortvalue;
+        this.sortvalue =
+          this.sortvalue === "popularity" ? "seeds" : this.sortvalue;
+        this.sortvalue =
+          this.sortvalue === "date added" ? "dateadded" : this.sortvalue;
         this.choosedGenre = this.choosedGenre === "All" ? 0 : this.choosedGenre;
-        this.choosedQuality = this.choosedQuality === "All" ? 0 : this.choosedQuality;
+        this.choosedQuality =
+          this.choosedQuality === "All" ? 0 : this.choosedQuality;
         link = `https://api.apiumadomain.com/list?sort=${
           this.sortvalue ? this.sortvalue : ""
         }&short=1&cb=&quality=${
@@ -363,8 +378,10 @@ export default {
             this.filmsExist = 1;
           } else {
             //2end Api
-            this.sortvalue = this.sortvalue === "dateadded" ? "last added" : this.sortvalue;
-            this.sortvalue = this.sortvalue === "seeds" ? "trending" : this.sortvalue;
+            this.sortvalue =
+              this.sortvalue === "dateadded" ? "last added" : this.sortvalue;
+            this.sortvalue =
+              this.sortvalue === "seeds" ? "trending" : this.sortvalue;
             link = `https://tv-v2.api-fetch.website/movies/${
               this.page
             }?&order=1sort=${this.sortvalue ? this.sortvalue : ""}&quality=${
@@ -378,7 +395,14 @@ export default {
                 let data = res.data;
                 if (res.status === 200 && data.length) {
                   for (let i in data) {
-                    this.films.push({description: data[i].synopsis, imdb: data[i].imdb_id, poster_big: data[i].images.poster, rating: data[i].rating.percentage/10, title: data[i].title, year: data[i].year});                   
+                    this.films.push({
+                      description: data[i].synopsis,
+                      imdb: data[i].imdb_id,
+                      poster_big: data[i].images.poster,
+                      rating: data[i].rating.percentage / 10,
+                      title: data[i].title,
+                      year: data[i].year
+                    });
                   }
                   let min = this.filmyear[0];
                   let max = this.filmyear[1];
@@ -391,7 +415,7 @@ export default {
                 } else this.nothingFound = true;
               })
               .catch(err => {
-                console.log(err);
+                //console.log(err);
               });
           }
           this.filmsExist = 1;
@@ -400,7 +424,7 @@ export default {
         .catch(err => {
           this.filterbarshow = false;
           this.filmsExist = 1;
-          console.log(err);
+          // console.log(err);
         });
     },
     getMoreData() {
@@ -425,7 +449,7 @@ export default {
               this.films = this.films.concat(data.MovieList);
               this.page += 1;
               this.filmsExist = 1;
-              console.log(this.films);
+              //console.log(this.films);
               this.empty = false;
             }
           })
@@ -448,7 +472,7 @@ export default {
               );
               this.page += 1;
               this.filmsExist = 1;
-              console.log(this.films);
+              //console.log(this.films);
               this.empty = false;
             }
           })
@@ -476,8 +500,8 @@ export default {
 </script>
 
 <style scoped>
-.watched{
- opacity: 0.15;
+.watched {
+  opacity: 0.15;
 }
 .nothingFound {
   font-size: 2rem;

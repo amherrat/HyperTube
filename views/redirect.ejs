@@ -10,9 +10,8 @@
 	<script>
 		"<%if ( typeof token !== 'undefined' ){%>"
 			localStorage.setItem('token', '<%= token %>')
-			window.location = '/'
+			window.location = '/home'
 		"<%}else{%>"
-			console.log('weeeeewewewe');
 			window.location = '/error?err=<%= err %>'
 		"<%}%>"
 	</script>

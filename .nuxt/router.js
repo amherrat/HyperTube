@@ -3,20 +3,20 @@ import Router from 'vue-router'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-const _b5488ab0 = () => interopDefault(import('../pages/error.vue' /* webpackChunkName: "pages/error" */))
-const _c8958564 = () => interopDefault(import('../pages/forgotpassword.vue' /* webpackChunkName: "pages/forgotpassword" */))
-const _08b044ef = () => interopDefault(import('../pages/home.vue' /* webpackChunkName: "pages/home" */))
-const _2b3d3f89 = () => interopDefault(import('../pages/login.vue' /* webpackChunkName: "pages/login" */))
-const _ed088bcc = () => interopDefault(import('../pages/logout.vue' /* webpackChunkName: "pages/logout" */))
-const _0a580a6f = () => interopDefault(import('../pages/reset.vue' /* webpackChunkName: "pages/reset" */))
-const _64416276 = () => interopDefault(import('../pages/settings/index.vue' /* webpackChunkName: "pages/settings/index" */))
-const _ee76c2b0 = () => interopDefault(import('../pages/signup.vue' /* webpackChunkName: "pages/signup" */))
-const _69a31d89 = () => interopDefault(import('../pages/verify.vue' /* webpackChunkName: "pages/verify" */))
-const _2c75c875 = () => interopDefault(import('../pages/settings/update_password.vue' /* webpackChunkName: "pages/settings/update_password" */))
-const _6f5b8d0a = () => interopDefault(import('../pages/movie/_id.vue' /* webpackChunkName: "pages/movie/_id" */))
-const _08d239c0 = () => interopDefault(import('../pages/profile/_login.vue' /* webpackChunkName: "pages/profile/_login" */))
-const _3564fd79 = () => interopDefault(import('../pages/video/_hash.vue' /* webpackChunkName: "pages/video/_hash" */))
-const _61959c72 = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
+const _93bb835c = () => interopDefault(import('../pages/error.vue' /* webpackChunkName: "pages/error" */))
+const _51518e38 = () => interopDefault(import('../pages/forgotpassword.vue' /* webpackChunkName: "pages/forgotpassword" */))
+const _7495a405 = () => interopDefault(import('../pages/home.vue' /* webpackChunkName: "pages/home" */))
+const _3c03c333 = () => interopDefault(import('../pages/login.vue' /* webpackChunkName: "pages/login" */))
+const _dcf4a8a0 = () => interopDefault(import('../pages/logout.vue' /* webpackChunkName: "pages/logout" */))
+const _1b1e8e19 = () => interopDefault(import('../pages/reset.vue' /* webpackChunkName: "pages/reset" */))
+const _c03943e8 = () => interopDefault(import('../pages/settings/index.vue' /* webpackChunkName: "pages/settings/index" */))
+const _de62df84 = () => interopDefault(import('../pages/signup.vue' /* webpackChunkName: "pages/signup" */))
+const _71ad0f1f = () => interopDefault(import('../pages/verify.vue' /* webpackChunkName: "pages/verify" */))
+const _e7ca7eea = () => interopDefault(import('../pages/settings/update_password.vue' /* webpackChunkName: "pages/settings/update_password" */))
+const _457ad825 = () => interopDefault(import('../pages/movie/_id.vue' /* webpackChunkName: "pages/movie/_id" */))
+const _3738deb6 = () => interopDefault(import('../pages/profile/_login.vue' /* webpackChunkName: "pages/profile/_login" */))
+const _0ae099a3 = () => interopDefault(import('../pages/video/_hash.vue' /* webpackChunkName: "pages/video/_hash" */))
+const _725c201c = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
 
 Vue.use(Router)
 
@@ -29,59 +29,59 @@ export const routerOptions = {
 
   routes: [{
     path: "/error",
-    component: _b5488ab0,
+    component: _93bb835c,
     name: "error"
   }, {
     path: "/forgotpassword",
-    component: _c8958564,
+    component: _51518e38,
     name: "forgotpassword"
   }, {
     path: "/home",
-    component: _08b044ef,
+    component: _7495a405,
     name: "home"
   }, {
     path: "/login",
-    component: _2b3d3f89,
+    component: _3c03c333,
     name: "login"
   }, {
     path: "/logout",
-    component: _ed088bcc,
+    component: _dcf4a8a0,
     name: "logout"
   }, {
     path: "/reset",
-    component: _0a580a6f,
+    component: _1b1e8e19,
     name: "reset"
   }, {
     path: "/settings",
-    component: _64416276,
+    component: _c03943e8,
     name: "settings"
   }, {
     path: "/signup",
-    component: _ee76c2b0,
+    component: _de62df84,
     name: "signup"
   }, {
     path: "/verify",
-    component: _69a31d89,
+    component: _71ad0f1f,
     name: "verify"
   }, {
     path: "/settings/update_password",
-    component: _2c75c875,
+    component: _e7ca7eea,
     name: "settings-update_password"
   }, {
     path: "/movie/:id?",
-    component: _6f5b8d0a,
+    component: _457ad825,
     name: "movie-id"
   }, {
     path: "/profile/:login?",
-    component: _08d239c0,
+    component: _3738deb6,
     name: "profile-login"
   }, {
     path: "/video/:hash?",
-    component: _3564fd79,
+    component: _0ae099a3,
     name: "video-hash"
   }, {
     path: "/",
-    component: _61959c72,
+    component: _725c201c,
     name: "index"
   }],
 

@@ -29,6 +29,7 @@
                   />
                   <mdb-input
                     type="password"
+                    autocomplete="on"
                     label="Password"
                     v-model="customValues.password"
                     :customValidation="validation.password.validated"
@@ -102,7 +103,7 @@ export default {
     };
   },
   mounted() {
-      if (localStorage.token) this.$router.push({ path: "/" });
+      if (localStorage.token) this.$router.push({ path: "/home" });
   },
   methods: {
     Login() {
