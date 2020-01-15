@@ -20,14 +20,6 @@ Vue.js + Nuxt.js + Node.js + Express.js + MongoDB
 ![6](./static/screenshots/6.png)
 ![7](./static/screenshots/7.png)
 
-## Configure
-`.env` file
-```
-
-env variables
-
-```
-
 ## Build Setup
 
 ``` bash
