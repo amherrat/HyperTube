@@ -5,7 +5,7 @@
 </p>
 
 ## Introduction
-**Video Streaming web app using Bittorrent**
+**Video Streaming web app with Bittorrent movies**
 **Using [popcornTime](https://popcorntime.api-docs.io/) & [apiumadomain](https://api.apiumadomain.com/list?sort=seeds&short=1&cb=&quality=720p,1080p,3d&page=1) APIs**
 
 ## Tech Stack
