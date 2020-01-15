@@ -1,6 +1,8 @@
 # HyperTube
 
-*logo here*
+<p align="center">
+  <img width="460" height="300" src="./static/Hbrand.png">
+</p>
 
 ## Introduction
 **Video Streaming web app using Bittorrent**
