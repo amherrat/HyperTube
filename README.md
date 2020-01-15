@@ -1,7 +1,7 @@
 # HyperTube
 
 <p align="center">
-  <img width="460" height="300" src="./static/Hbrand.png">
+  <img width="400" height="100" src="./static/Hbrand.png">
 </p>
 
 ## Introduction
