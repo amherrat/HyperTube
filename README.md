@@ -6,7 +6,7 @@
 
 ## Introduction
 **Video Streaming web app using Bittorrent**
-**we used [popcornTime](https://popcorntime.api-docs.io/) & [apiumadomain](https://api.apiumadomain.com/list?sort=seeds&short=1&cb=&quality=720p,1080p,3d&page=1) Api to get Torrent Movies**
+**Using [popcornTime](https://popcorntime.api-docs.io/) & [apiumadomain](https://api.apiumadomain.com/list?sort=seeds&short=1&cb=&quality=720p,1080p,3d&page=1) APIs**
 
 ## Tech Stack
 Vue.js + Nuxt.js + Node.js + Express.js + MongoDB
